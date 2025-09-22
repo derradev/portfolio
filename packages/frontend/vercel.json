@@ -6,5 +6,5 @@
       "use": "@vercel/next"
     }
   ],
-  "ignoreCommand": "bash ../scripts/ignore-build-step.sh frontend"
+  "ignoreCommand": "bash ignore-build-step.sh frontend"
 }

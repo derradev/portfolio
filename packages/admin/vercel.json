@@ -16,5 +16,5 @@
       "dest": "/index.html"
     }
   ],
-  "ignoreCommand": "bash ../scripts/ignore-build-step.sh admin"
+  "ignoreCommand": "bash ignore-build-step.sh admin"
 }

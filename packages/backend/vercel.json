@@ -15,5 +15,5 @@
       "dest": "src/vercel.ts"
     }
   ],
-  "ignoreCommand": "bash ../scripts/ignore-build-step.sh backend"
+  "ignoreCommand": "bash ignore-build-step.sh backend"
 }
