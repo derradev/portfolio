@@ -284,7 +284,7 @@ router.put('/:id', [
     const { supabaseService } = getServices()
 
     // Check if post exists
-    const existingPost = await supabaseService.queryOne('SELECT * FROM blog_posts WHERE id = $1', [id])
+    const existingPost = await supabaseService.selectOne('blog_posts', id)
 
     if (!existingPost) {
       return res.status(404).json({
@@ -318,7 +318,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedPost = await supabaseService.queryOne(updateQuery, updateValues)
+    const updatedPost = await supabaseService.update('blog_posts', id, updateData)
 
     return res.json({
       success: true,
@@ -350,8 +350,42 @@ router.put('/:id', [
   }
 })
 
-// Delete blog post (admin only)
-router.delete('/:slug', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
+// Delete blog post by ID (admin only)
+router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params
+    const { supabaseService } = getServices()
+
+    // Check if post exists and delete it
+    const { data: deletedPost, error } = await supabaseService.getClient()
+      .from('blog_posts')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error || !deletedPost) {
+      return res.status(404).json({
+        success: false,
+        error: 'Blog post not found'
+      })
+    }
+
+    return res.json({
+      success: true,
+      message: 'Blog post deleted successfully'
+    })
+  } catch (error) {
+    console.error('Delete blog post error:', error)
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    })
+  }
+})
+
+// Delete blog post by slug (public API)
+router.delete('/slug/:slug', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { slug } = req.params
     const { supabaseService } = getServices()

@@ -157,7 +157,7 @@ router.put('/:id', [
     const { supabaseService } = getServices()
 
     // Check if project exists
-    const existingProject = await supabaseService.queryOne('SELECT * FROM projects WHERE id = $1', [id])
+    const existingProject = await supabaseService.selectOne('projects', id)
 
     if (!existingProject) {
       return res.status(404).json({
@@ -191,7 +191,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedProject = await supabaseService.queryOne(updateQuery, updateValues)
+    const updatedProject = await supabaseService.update('projects', id, updateData)
 
     return res.json({
       success: true,

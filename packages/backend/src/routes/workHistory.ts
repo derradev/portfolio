@@ -274,7 +274,7 @@ router.put('/:id', [
     const { supabaseService } = getServices()
 
     // Check if work history entry exists
-    const existingJob = await supabaseService.queryOne('SELECT * FROM work_history WHERE id = $1', [id])
+    const existingJob = await supabaseService.selectOne('work_history', id)
 
     if (!existingJob) {
       return res.status(404).json({
@@ -313,7 +313,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedItem = await supabaseService.queryOne(updateQuery, updateValues)
+    const updatedItem = await supabaseService.update('work_history', id, updateData)
 
     return res.json({
       success: true,
