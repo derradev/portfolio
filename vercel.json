@@ -10,7 +10,10 @@
     },
     {
       "src": "packages/backend/src/vercel.ts",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "maxDuration": 30
+      }
     }
   ],
   "routes": [
@@ -32,11 +35,6 @@
     "env": {
       "NEXT_PUBLIC_API_URL": "@next_public_api_url",
       "VITE_API_URL": "@vite_api_url"
-    }
-  },
-  "functions": {
-    "packages/backend/src/vercel.ts": {
-      "maxDuration": 30
     }
   }
 }
