@@ -118,8 +118,6 @@ app.use('/api/work-history', workHistoryRouter)
 app.use('/api/blog', blogRouter)
 app.use('/api/skills', skillsRouter)
 app.use('/api/education', educationRoutes)
-app.use('/api/experience', educationRoutes) // Alias for education
-app.use('/api/experiance', educationRoutes) // Handle common misspelling
 app.use('/api/certifications', certificationsRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/feature-flags', featureFlagsRoutes)

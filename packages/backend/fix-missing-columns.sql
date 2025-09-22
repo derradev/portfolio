@@ -17,6 +17,10 @@ ADD COLUMN IF NOT EXISTS event_type VARCHAR(100) NOT NULL DEFAULT 'page_view';
 ALTER TABLE education
 ADD COLUMN IF NOT EXISTS location VARCHAR(255);
 
+-- Add missing columns to certifications table
+ALTER TABLE certifications
+ADD COLUMN IF NOT EXISTS expiry_date DATE;
+
 -- Update existing blog posts to have author and read_time
 UPDATE blog_posts 
 SET author = 'Demi Taylor Nimmo', read_time = 5 
@@ -25,5 +29,5 @@ WHERE author IS NULL OR read_time IS NULL;
 -- Verify columns were added
 SELECT column_name, data_type, is_nullable, column_default
 FROM information_schema.columns 
-WHERE table_name IN ('blog_posts', 'analytics')
+WHERE table_name IN ('blog_posts', 'analytics', 'education', 'certifications')
 ORDER BY table_name, ordinal_position;

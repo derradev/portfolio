@@ -60,7 +60,7 @@ export async function fetchWorkHistory() {
 
 export async function fetchEducation() {
   try {
-    const response = await fetch(`${API_BASE_URL}/work-history/education`)
+    const response = await fetch(`${API_BASE_URL}/education`)
     if (!response.ok) {
       throw new Error('Failed to fetch education')
     }
