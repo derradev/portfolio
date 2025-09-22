@@ -1,13 +1,13 @@
-✅ UPDATED: Vercel Configuration Structure
+🔧 FIXING: Local Development Issues
 
-📁 New Structure:
-- Frontend: packages/frontend/vercel.json
-- Backend: packages/backend/vercel.json  
-- Admin: packages/admin/vercel.json
+❌ Issues Found:
+1. Admin Panel: Rollup/Vite module error (@rollup/rollup-darwin-arm64)
+2. Backend: Supabase environment variables not loading
 
-✅ Changes Made:
-- Moved root vercel.json into packages/frontend/
-- Updated frontend vercel.json for proper deployment from frontend directory
-- Updated DEPLOYMENT_GUIDE.md with new structure
+✅ Fixes Applied:
+- Cleared all node_modules and package-lock.json files
+- Reinstalled all dependencies with npm install
+- Enhanced backend environment variable loading (multiple .env paths)
+- Added environment variable debugging to backend startup
 
-🚀 Each service now has its own vercel.json in its respective directory for cleaner deployment!
+🔄 Next: Try npm run dev again - both issues should be resolved

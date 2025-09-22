@@ -1,10 +1,20 @@
+import dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import dotenv from 'dotenv'
 import rateLimit from 'express-rate-limit'
 import path from 'path'
+
+// Load environment variables - try multiple locations
+dotenv.config({ path: path.join(__dirname, '../.env') })
+dotenv.config({ path: path.join(__dirname, '../.env.development') })
+dotenv.config() // Also try default locations
+
+console.log('🔍 Environment Check:')
+console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'Set' : 'Missing')
+console.log('SUPABASE_SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Set' : 'Missing')
+console.log('NODE_ENV:', process.env.NODE_ENV)
 
 import { initializeServices } from './services'
 import { errorHandler } from './middleware/errorHandler'

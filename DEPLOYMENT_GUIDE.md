@@ -66,9 +66,25 @@ After deploying all three projects:
 2. **Backend**: Set custom domain to `api.demitaylornimmo.com`
 3. **Admin**: Set custom domain to `admin.demitaylornimmo.com`
 
+## Conditional Deployments
+
+Each service includes an `ignoreCommand` that only triggers builds when relevant files change:
+
+- **Frontend**: Only deploys when `packages/frontend/` or shared files change
+- **Backend**: Only deploys when `packages/backend/` or shared files change  
+- **Admin**: Only deploys when `packages/admin/` or shared files change
+
+This saves build minutes and prevents unnecessary deployments.
+
+### Shared Files That Trigger All Deployments:
+- `package.json` (root dependencies)
+- `scripts/` (build scripts)
+- `.github/` (CI/CD workflows)
+
 ## Why Separate Projects?
 
 - **Better isolation**: Each service can be deployed independently
 - **Easier debugging**: Logs and errors are separated
 - **Better performance**: Each service is optimized for its specific needs
 - **Simpler configuration**: No complex routing between services
+- **Conditional deployments**: Only build what changed
