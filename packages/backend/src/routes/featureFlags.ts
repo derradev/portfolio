@@ -13,11 +13,12 @@ router.get('/', [
 ], async (req: AuthRequest, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const featureFlags = await supabaseService.query(`
-      SELECT id, name, description, enabled, created_at, updated_at
-      FROM feature_flags
-      ORDER BY name ASC
-    `)
+    const { data: featureFlags, error } = await supabaseService.getClient()
+      .from('feature_flags')
+      .select('id, name, description, enabled, created_at, updated_at')
+      .order('name', { ascending: true })
+    
+    if (error) throw error
 
     return res.json({
       success: true,
@@ -188,9 +189,14 @@ router.delete('/:id', [
     const { id } = req.params
     const { supabaseService } = getServices()
 
-    const result = await supabaseService.query('DELETE FROM feature_flags WHERE id = $1 RETURNING *', [id])
+    const { data: deletedFlag, error } = await supabaseService.getClient()
+      .from('feature_flags')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (result.length === 0) {
+    if (error || !deletedFlag) {
       return res.status(404).json({
         success: false,
         error: 'Feature flag not found'

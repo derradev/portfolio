@@ -19,7 +19,8 @@ ADD COLUMN IF NOT EXISTS location VARCHAR(255);
 
 -- Add missing columns to certifications table
 ALTER TABLE certifications
-ADD COLUMN IF NOT EXISTS expiry_date DATE;
+ADD COLUMN IF NOT EXISTS expiry_date DATE,
+ADD COLUMN IF NOT EXISTS skills JSONB;
 
 -- Update existing blog posts to have author and read_time
 UPDATE blog_posts 

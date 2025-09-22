@@ -44,11 +44,11 @@ router.get('/:id', async (req: Request, res: Response) => {
     const { supabaseService } = getServices()
     const { id } = req.params
 
-    const education = await supabaseService.queryOne(`
-      SELECT id, institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements
-      FROM education
-      WHERE id = $1
-    `, [id])
+    const education = await supabaseService.selectOne(
+      'education',
+      id,
+      'id, institution, degree, field_of_study, location, start_date, end_date, gpa, description, achievements'
+    )
 
     if (!education) {
       return res.status(404).json({
@@ -158,24 +158,18 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
       })
     }
 
-    const result = await supabaseService.queryOne(`
-      UPDATE education 
-      SET institution = $1, degree = $2, field_of_study = $3, location = $4, start_date = $5, 
-          end_date = $6, grade = $7, description = $8, achievements = $9, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $10
-      RETURNING *
-    `, [
+    const result = await supabaseService.update('education', id, {
       institution, 
       degree, 
       field_of_study, 
       location, 
       start_date, 
       end_date, 
-      grade, 
+      gpa: grade, 
       description, 
-      JSON.stringify(achievements || []), 
-      id
-    ])
+      achievements: achievements || [],
+      updated_at: new Date().toISOString()
+    })
 
     if (!result) {
       return res.status(404).json({
@@ -208,16 +202,17 @@ router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res
     const { supabaseService } = getServices()
     const { id } = req.params
 
-    const result = await supabaseService.queryOne(`
-      DELETE FROM education 
-      WHERE id = $1 
-      RETURNING id
-    `, [id])
+    const { data: deletedEducation, error } = await supabaseService.getClient()
+      .from('education')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (!result) {
+    if (error || !deletedEducation) {
       return res.status(404).json({
         success: false,
-        error: 'Education not found'
+        error: 'Education record not found'
       })
     }
 

@@ -37,12 +37,14 @@ router.get('/category/:category', async (req: Request, res: Response) => {
   try {
     const { category } = req.params
     const { supabaseService } = getServices()
-    const skills = await supabaseService.query(`
-      SELECT id, name, category, level, description
-      FROM skills
-      WHERE category = $1
-      ORDER BY name
-    `, [category])
+    const { data: skills, error } = await supabaseService.getClient()
+      .from('skills')
+      .select('id, name, category, level, description')
+      .eq('category', category)
+      .order('level', { ascending: false })
+      .order('name', { ascending: true })
+    
+    if (error) throw error
 
     return res.json({
       success: true,

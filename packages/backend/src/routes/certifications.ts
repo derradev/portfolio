@@ -44,11 +44,11 @@ router.get('/:id', async (req: Request, res: Response) => {
     const { supabaseService } = getServices()
     const { id } = req.params
 
-    const certification = await supabaseService.queryOne(`
-      SELECT id, name, issuer, issue_date, expiry_date, credential_id, credential_url, description, skills
-      FROM certifications
-      WHERE id = $1
-    `, [id])
+    const certification = await supabaseService.selectOne(
+      'certifications',
+      id,
+      'id, name, issuer, issue_date, expiry_date, credential_id, credential_url, description, skills'
+    )
 
     if (!certification) {
       return res.status(404).json({
@@ -102,11 +102,7 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
       })
     }
 
-    const result = await supabaseService.queryOne(`
-      INSERT INTO certifications (name, issuer, issue_date, expiry_date, credential_id, credential_url, description, skills)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING *
-    `, [
+    const result = await supabaseService.insert('certifications', {
       name, 
       issuer, 
       issue_date, 
@@ -114,8 +110,8 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
       credential_id, 
       credential_url, 
       description, 
-      JSON.stringify(skills || [])
-    ])
+      skills: skills || []
+    })
 
     const parsedResult = {
       ...result,
@@ -165,13 +161,7 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
       })
     }
 
-    const result = await supabaseService.queryOne(`
-      UPDATE certifications 
-      SET name = $1, issuer = $2, issue_date = $3, expiry_date = $4, credential_id = $5, 
-          credential_url = $6, description = $7, skills = $8, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $9
-      RETURNING *
-    `, [
+    const result = await supabaseService.update('certifications', id, {
       name, 
       issuer, 
       issue_date, 
@@ -179,9 +169,9 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
       credential_id, 
       credential_url, 
       description, 
-      JSON.stringify(skills || []), 
-      id
-    ])
+      skills: skills || [],
+      updated_at: new Date().toISOString()
+    })
 
     if (!result) {
       return res.status(404).json({
@@ -220,13 +210,14 @@ router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res
     const { supabaseService } = getServices()
     const { id } = req.params
 
-    const result = await supabaseService.queryOne(`
-      DELETE FROM certifications 
-      WHERE id = $1 
-      RETURNING id
-    `, [id])
+    const { data: deletedCertification, error } = await supabaseService.getClient()
+      .from('certifications')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (!result) {
+    if (error || !deletedCertification) {
       return res.status(404).json({
         success: false,
         error: 'Certification not found'
