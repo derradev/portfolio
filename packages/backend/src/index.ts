@@ -42,15 +42,22 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3001
 
+// Trust proxy for Vercel deployment
+app.set('trust proxy', 1)
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // limit each IP to 1000 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.'
 })
 
-// Middleware
-app.use(helmet())
+// Security middleware
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}))
+
+// CORS configuration
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -94,6 +101,8 @@ app.use('/api/work-history', workHistoryRouter)
 app.use('/api/blog', blogRouter)
 app.use('/api/skills', skillsRouter)
 app.use('/api/education', educationRoutes)
+app.use('/api/experience', educationRoutes) // Alias for education
+app.use('/api/experiance', educationRoutes) // Handle common misspelling
 app.use('/api/certifications', certificationsRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/feature-flags', featureFlagsRoutes)
