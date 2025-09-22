@@ -3,10 +3,7 @@
   "builds": [
     {
       "src": "packages/frontend/package.json",
-      "use": "@vercel/next",
-      "config": {
-        "buildCommand": "npm run build"
-      }
+      "use": "@vercel/next"
     },
     {
       "src": "packages/backend/src/vercel.ts",
@@ -25,8 +22,5 @@
       "src": "/(.*)",
       "dest": "packages/frontend/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
