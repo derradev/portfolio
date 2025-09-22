@@ -98,7 +98,8 @@ router.get('/overview', [authenticate, authorize('admin')], async (req: AuthRequ
     const totalVisits = { count: totalVisitsData || 0 }
     
     // Get unique visitors (by session_id) - simplified for now
-    const uniqueVisitors = { count: Math.floor((totalVisitsData || 0) * 0.7) } // Estimate
+    const totalVisitsCount = typeof totalVisitsData === 'number' ? totalVisitsData : 0
+    const uniqueVisitors = { count: Math.floor(totalVisitsCount * 0.7) } // Estimate
     
     // Get page views by path - simplified for now
     const { data: pageViewsData, error: pageViewsError } = await supabaseService.getClient()
@@ -128,7 +129,7 @@ router.get('/overview', [authenticate, authorize('admin')], async (req: AuthRequ
     
     // Get daily visits - simplified to last 7 days for now
     const sevenDaysAgo = new Date()
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+    sevenDaysAgo.setTime(sevenDaysAgo.getTime() - (7 * 24 * 60 * 60 * 1000))
     
     const { data: dailyVisitsData, error: dailyError } = await supabaseService.getClient()
       .from('analytics')
@@ -172,8 +173,8 @@ router.get('/overview', [authenticate, authorize('admin')], async (req: AuthRequ
     return res.json({
       success: true,
       data: {
-        totalVisits: parseInt(totalVisits.count),
-        uniqueVisitors: parseInt(uniqueVisitors.count),
+        totalVisits: totalVisits.count,
+        uniqueVisitors: uniqueVisitors.count,
         pageViews: pageViews.map((pv: any) => ({
           ...pv,
           views: parseInt(pv.views),
@@ -204,48 +205,65 @@ router.get('/detailed', [authenticate, authorize('admin')], async (req: AuthRequ
     const { page, limit = 50, page_path, date_from, date_to } = req.query
     const offset = page ? (parseInt(page as string) - 1) * parseInt(limit as string) : 0
 
-    let whereClause = 'WHERE 1=1'
-    const queryParams: any[] = []
-    let paramIndex = 1
+    const { supabaseService } = getServices()
+    
+    // Build query with filters
+    let query = supabaseService.getClient()
+      .from('analytics')
+      .select('id, page_path, user_agent, ip_address, referrer, session_id, visit_duration, created_at')
 
+    // Add filters
     if (page_path) {
-      whereClause += ` AND page_path = $${paramIndex++}`
-      queryParams.push(page_path)
+      query = query.eq('page_path', page_path as string)
     }
 
     if (date_from) {
-      whereClause += ` AND created_at >= $${paramIndex++}`
-      queryParams.push(date_from)
+      query = query.gte('created_at', date_from as string)
     }
 
     if (date_to) {
-      whereClause += ` AND created_at <= $${paramIndex++}`
-      queryParams.push(date_to)
+      query = query.lte('created_at', date_to as string)
     }
 
-    const { supabaseService } = getServices()
-    
-    const analytics = await supabaseService.query(`
-      SELECT id, page_path, page_title, user_agent, ip_address, referrer, session_id, visit_duration, created_at
-      FROM analytics 
-      ${whereClause}
-      ORDER BY created_at DESC
-      LIMIT $${paramIndex++} OFFSET $${paramIndex++}
-    `, [...queryParams, limit, offset])
+    // Add ordering and pagination
+    query = query
+      .order('created_at', { ascending: false })
+      .range(offset, offset + parseInt(limit as string) - 1)
 
-    const totalCount = await supabaseService.queryOne(`
-      SELECT COUNT(*) as count FROM analytics ${whereClause}
-    `, queryParams)
+    const { data: analytics, error, count } = await query
+
+    if (error) throw error
+
+    // Get total count for pagination
+    let countQuery = supabaseService.getClient()
+      .from('analytics')
+      .select('*', { count: 'exact', head: true })
+
+    // Apply same filters for count
+    if (page_path) {
+      countQuery = countQuery.eq('page_path', page_path as string)
+    }
+
+    if (date_from) {
+      countQuery = countQuery.gte('created_at', date_from as string)
+    }
+
+    if (date_to) {
+      countQuery = countQuery.lte('created_at', date_to as string)
+    }
+
+    const { count: totalCount, error: countError } = await countQuery
+    if (countError) throw countError
 
     return res.json({
       success: true,
       data: {
-        analytics: analytics,
+        analytics: analytics || [],
         pagination: {
-          total: parseInt(totalCount.count),
+          total: totalCount || 0,
           page: page ? parseInt(page as string) : 1,
           limit: parseInt(limit as string),
-          totalPages: Math.ceil(parseInt(totalCount.count) / parseInt(limit as string))
+          totalPages: Math.ceil((totalCount || 0) / parseInt(limit as string))
         }
       }
     })

@@ -49,11 +49,13 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/education', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const education = await supabaseService.query(`
-      SELECT id, institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements
-      FROM education
-      ORDER BY start_date DESC
-    `)
+    
+    const { data: education, error } = await supabaseService.getClient()
+      .from('education')
+      .select('id, institution, degree, field_of_study, location, start_date, end_date, gpa, description, achievements')
+      .order('start_date', { ascending: false })
+    
+    if (error) throw error
 
     const parsedEducation = education.map((edu: any) => ({
       ...edu,
@@ -79,16 +81,18 @@ router.get('/education', async (req: Request, res: Response) => {
   }
 })
 
-// Get certifications entries
+// Get work history entries with certifications
 router.get('/certifications', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const workHistory = await supabaseService.query(`
-      SELECT id, company, position, location, start_date, end_date, description, achievements, technologies, company_url
-      FROM work_history
-      WHERE position ILIKE '%certification%' OR position ILIKE '%certificate%' OR description ILIKE '%certified%'
-      ORDER BY start_date DESC
-    `)
+    
+    const { data: workHistory, error } = await supabaseService.getClient()
+      .from('work_history')
+      .select('id, company, position, location, start_date, end_date, description, achievements, technologies, company_url')
+      .or('position.ilike.%certification%,position.ilike.%certificate%,description.ilike.%certified%')
+      .order('start_date', { ascending: false })
+    
+    if (error) throw error
 
     const parsedWorkHistory = workHistory.map((job: any) => ({
       ...job,

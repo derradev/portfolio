@@ -1,24 +1,33 @@
-✅ FIXED: Certifications & Education Issues
+2025-09-22T22:33:23.787Z [error] Get education error: Error: Raw SQL queries deprecated. Use Supabase client methods: select(), insert(), update(), delete()
+    at SupabaseService.query (/var/task/packages/backend/src/services/SupabaseService.js:34:15)
+    at /var/task/packages/backend/src/routes/workHistory.js:45:49
+    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)
+    at next (/var/task/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/var/task/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)
+    at /var/task/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/var/task/node_modules/express/lib/router/index.js:346:12)
+    at next (/var/task/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/var/task/node_modules/express/lib/router/index.js:175:3)
 
-❌ Issues Found:
-1. Certifications route using deprecated query() at line 10
-2. Education table missing 'location' column (42703 error)
+✅ FIXED: Work History Sub-routes Using Deprecated Methods
+
+❌ Issue: Work history route had additional sub-routes still using deprecated query()
+- GET /work-history/education → using query() at line 52
+- GET /work-history/certifications → using query() at line 88
+- These were missed in previous work history fixes
 
 ✅ FIXES APPLIED:
 
-**1. Certifications Route:**
-- OLD: `query('SELECT id, name, issuer... FROM certifications...')`
-- NEW: `getClient().from('certifications').select().order()`
-- Converted to proper Supabase client method
+**1. Work History Education Sub-route:**
+- OLD: `query('SELECT ... FROM education ORDER BY...')`
+- NEW: `getClient().from('education').select().order()`
 
-**2. Education Location Column:**
-- ADDED: `location VARCHAR(255)` column to education table in SQL script
-- KEPT: All location references in education route code
-- SOLUTION: Add missing column instead of removing functionality
+**2. Work History Certifications Sub-route:**
+- OLD: `query('SELECT ... WHERE position ILIKE...')`
+- NEW: `getClient().from('work_history').select().or().order()`
+- Used Supabase .or() method for multiple ILIKE conditions
 
-**3. Updated SQL Fix Script:**
-- Added `ALTER TABLE education ADD COLUMN IF NOT EXISTS location VARCHAR(255)`
-- Will add location column when run in Supabase
-
-🔧 NEXT: Run updated fix-missing-columns.sql to add location column
-🚀 RESULT: Both certifications and education APIs should work properly!
+🚀 RESULT: All work history sub-routes now use proper Supabase client methods!
+    at next (/var/task/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/var/task/node_modules/express/lib/router/index.js:175:3)
