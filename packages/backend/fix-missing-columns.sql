@@ -10,7 +10,8 @@ ADD COLUMN IF NOT EXISTS read_time INTEGER DEFAULT 5;
 ALTER TABLE analytics
 ADD COLUMN IF NOT EXISTS page_title VARCHAR(500),
 ADD COLUMN IF NOT EXISTS session_id VARCHAR(255),
-ADD COLUMN IF NOT EXISTS visit_duration INTEGER DEFAULT 0;
+ADD COLUMN IF NOT EXISTS visit_duration INTEGER DEFAULT 0,
+ADD COLUMN IF NOT EXISTS event_type VARCHAR(100) NOT NULL DEFAULT 'page_view';
 
 -- Update existing blog posts to have author and read_time
 UPDATE blog_posts 

@@ -1,11 +1,28 @@
-✅ FIXED: Blog Routes Raw SQL Queries
+🚨 MULTIPLE CRITICAL ISSUES FIXED
 
-❌ Previous Error: "Raw SQL queries deprecated" in blog.js:109:45
+❌ Issues Found:
+1. Analytics overview using deprecated queryOne() at line 76
+2. Trust proxy still not working (X-Forwarded-For error)  
+3. Analytics missing required 'event_type' column (NOT NULL constraint)
 
 ✅ FIXES APPLIED:
-- GET /:slug → Converted queryOne() to getClient().from().select().eq().single()
-- GET /admin/all → Converted query() to getClient().from().select().order()
-- Removed references to missing columns (author, read_time)
-- All blog routes now use proper Supabase client methods
 
-🚀 Blog API should now work without deprecated method errors!
+**1. Analytics Overview Route:**
+- Converted queryOne() to getClient().select() with count
+- Simplified unique visitors calculation (estimate for now)
+- Partially converted - some complex queries still need work
+
+**2. Analytics Insert Fixed:**
+- Added required 'event_type': 'page_view' to all analytics inserts
+- Should resolve NOT NULL constraint violations
+
+**3. Updated SQL Fix Script:**
+- Added event_type column with NOT NULL DEFAULT 'page_view'
+- Will fix existing data when run in Supabase
+
+⚠️ REMAINING ISSUES:
+- Trust proxy error persists (may need Vercel deployment to test)
+- Some analytics queries still use deprecated methods
+- TypeScript errors in analytics route need fixing
+
+🔧 NEXT: Run updated fix-missing-columns.sql in Supabase SQL Editor
