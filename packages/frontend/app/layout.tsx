@@ -4,6 +4,7 @@ import './globals.css'
 import Navigation from '@/components/Navigation'
 import AnalyticsProvider from '@/components/AnalyticsProvider'
 import Footer from '@/components/Footer'
+import MaintenanceWrapper from '@/components/MaintenanceWrapper'
 
 const poppins = Poppins({ 
   subsets: ['latin'],
@@ -35,13 +36,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} min-h-screen`}>
-        <AnalyticsProvider>
-          <Navigation />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </AnalyticsProvider>
+        <MaintenanceWrapper>
+          <AnalyticsProvider>
+            <Navigation />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </AnalyticsProvider>
+        </MaintenanceWrapper>
       </body>
     </html>
   )
