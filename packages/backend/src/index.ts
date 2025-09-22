@@ -53,7 +53,10 @@ app.use(cors({
     // Add Vercel preview URLs
     /^https:\/\/.*\.vercel\.app$/
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
 }))
 app.use(morgan('combined'))
 app.use(limiter)

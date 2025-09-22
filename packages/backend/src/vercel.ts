@@ -46,10 +46,14 @@ app.use(cors({
     'https://demitaylornimmo.com',
     'https://www.demitaylornimmo.com',
     'https://admin.demitaylornimmo.com',
+    'https://api.demitaylornimmo.com',
     // Add Vercel preview URLs
     /^https:\/\/.*\.vercel\.app$/
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
 }))
 
 // Only use morgan in development
