@@ -3,14 +3,14 @@
 This portfolio consists of 3 separate applications that should be deployed as individual Vercel projects:
 
 ## 1. Frontend (Main Website)
-**Deploy from**: Root directory `/`
+**Deploy from**: `/packages/frontend`
 **Domain**: `demitaylornimmo.com`
-**Vercel Config**: `/vercel.json`
+**Vercel Config**: `/packages/frontend/vercel.json`
 
 ### Steps:
 1. Create new Vercel project
 2. Connect to GitHub repo
-3. Set root directory to `/`
+3. Set root directory to `packages/frontend`
 4. Deploy
 
 ### Environment Variables:

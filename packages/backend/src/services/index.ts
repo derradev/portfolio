@@ -4,12 +4,19 @@ import { SupabaseService } from './SupabaseService'
 let supabaseService: SupabaseService | null = null
 
 export async function initializeServices(): Promise<{ supabaseService: SupabaseService }> {
-  if (!supabaseService) {
-    supabaseService = new SupabaseService()
-    await supabaseService.initialize()
+  try {
+    if (!supabaseService) {
+      console.log('🔄 Initializing SupabaseService...')
+      supabaseService = new SupabaseService()
+      await supabaseService.initialize()
+      console.log('✅ SupabaseService initialized successfully')
+    }
+    
+    return { supabaseService }
+  } catch (error) {
+    console.error('❌ SupabaseService initialization failed:', error)
+    throw error
   }
-  
-  return { supabaseService }
 }
 
 export function getServices(): { supabaseService: SupabaseService } {
