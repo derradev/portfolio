@@ -202,13 +202,15 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     const { supabaseService } = getServices()
     const { id } = req.params
 
-    const result = await supabaseService.queryOne(`
-      DELETE FROM education 
-      WHERE id = $1 
-      RETURNING id
-    `, [id])
+    // Check if education exists and delete it
+    const { data: deletedEducation, error } = await supabaseService.getClient()
+      .from('education')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (!result) {
+    if (error || !deletedEducation) {
       return res.status(404).json({
         success: false,
         error: 'Education not found'

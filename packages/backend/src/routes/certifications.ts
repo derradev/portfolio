@@ -210,13 +210,15 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     const { supabaseService } = getServices()
     const { id } = req.params
 
-    const result = await supabaseService.queryOne(`
-      DELETE FROM certifications 
-      WHERE id = $1 
-      RETURNING id
-    `, [id])
+    // Check if certification exists and delete it
+    const { data: deletedCertification, error } = await supabaseService.getClient()
+      .from('certifications')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (!result) {
+    if (error || !deletedCertification) {
       return res.status(404).json({
         success: false,
         error: 'Certification not found'
