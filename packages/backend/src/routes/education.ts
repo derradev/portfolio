@@ -229,4 +229,36 @@ router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res
   }
 })
 
+// Delete education (admin only)
+router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
+  try {
+    const { supabaseService } = getServices()
+    const { id } = req.params
+
+    const result = await supabaseService.queryOne(`
+      DELETE FROM education 
+      WHERE id = $1 
+      RETURNING id
+    `, [id])
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        error: 'Education not found'
+      })
+    }
+
+    return res.json({
+      success: true,
+      message: 'Education deleted successfully'
+    })
+  } catch (error) {
+    console.error('Delete education error:', error)
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    })
+  }
+})
+
 export default router

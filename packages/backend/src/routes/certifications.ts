@@ -237,4 +237,36 @@ router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res
   }
 })
 
+// Delete certification (admin only)
+router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
+  try {
+    const { supabaseService } = getServices()
+    const { id } = req.params
+
+    const result = await supabaseService.queryOne(`
+      DELETE FROM certifications 
+      WHERE id = $1 
+      RETURNING id
+    `, [id])
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        error: 'Certification not found'
+      })
+    }
+
+    return res.json({
+      success: true,
+      message: 'Certification deleted successfully'
+    })
+  } catch (error) {
+    console.error('Delete certification error:', error)
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    })
+  }
+})
+
 export default router

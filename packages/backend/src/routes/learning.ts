@@ -40,100 +40,34 @@ router.get('/', async (req: Request, res: Response) => {
   }
 })
 
-// Get all skills (admin expects this under /learning/skills)
+// Get learning items by skills category (public)
 router.get('/skills', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
     
-    const { data: skills, error } = await supabaseService.getClient()
-      .from('skills')
-      .select('id, name, category, level, description, created_at, updated_at')
-      .order('category', { ascending: true })
-      .order('name', { ascending: true })
+    const { data: learning, error } = await supabaseService.getClient()
+      .from('learning')
+      .select('id, title, description, progress, category, start_date, estimated_completion, resources, status')
+      .eq('category', 'skills')
+      .order('start_date', { ascending: false })
     
     if (error) throw error
 
-    return res.json({
-      success: true,
-      data: skills
-    })
-  } catch (error) {
-    console.error('Get skills error:', error)
-    return res.status(500).json({
-      success: false,
-      error: 'Internal server error'
-    })
-  }
-})
-
-// Create skill (admin expects this under /learning/skills)
-router.post('/skills', [
-  authenticate,
-  authorize('admin'),
-  body('name').isLength({ min: 1 }).trim(),
-  body('category').isLength({ min: 1 }).trim(),
-  body('level').isInt({ min: 1, max: 10 }),
-  body('description').optional().trim()
-], async (req: AuthRequest, res: Response) => {
-  try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid input',
-        details: errors.array()
-      })
-    }
-
-    const { name, category, level, description } = req.body
-    const { supabaseService } = getServices()
-
-    const result = await supabaseService.insert('skills', {
-      name,
-      category,
-      level,
-      description
-    })
-
-    return res.status(201).json({
-      success: true,
-      data: result
-    })
-  } catch (error) {
-    console.error('Create skill error:', error)
-    return res.status(500).json({
-      success: false,
-      error: 'Internal server error'
-    })
-  }
-})
-
-// Delete skill (admin expects this under /learning/skills)
-router.delete('/skills/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
-  try {
-    const { id } = req.params
-    const { supabaseService } = getServices()
-
-    const { data: deletedSkill, error } = await supabaseService.getClient()
-      .from('skills')
-      .delete()
-      .eq('id', id)
-      .select()
-      .single()
-
-    if (error || !deletedSkill) {
-      return res.status(404).json({
-        success: false,
-        error: 'Skill not found'
-      })
-    }
+    const parsedLearning = learning.map((item: any) => ({
+      ...item,
+      resources: item.resources ? (
+        typeof item.resources === 'string' ? 
+          (item.resources.startsWith('[') ? JSON.parse(item.resources) : [item.resources]) :
+          item.resources
+      ) : []
+    }))
 
     return res.json({
       success: true,
-      message: 'Skill deleted successfully'
+      data: parsedLearning
     })
   } catch (error) {
-    console.error('Delete skill error:', error)
+    console.error('Get learning skills error:', error)
     return res.status(500).json({
       success: false,
       error: 'Internal server error'
@@ -146,13 +80,12 @@ router.get('/category/:category', async (req: Request, res: Response) => {
   try {
     const { category } = req.params
     const { supabaseService } = getServices()
-    const { data: learning, error } = await supabaseService.getClient()
-      .from('learning')
-      .select('id, title, description, progress, category, start_date, estimated_completion, resources, status')
-      .eq('category', category)
-      .order('start_date', { ascending: false })
-    
-    if (error) throw error
+    const learning = await supabaseService.query(`
+      SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
+      FROM learning
+      WHERE category = $1
+      ORDER BY start_date DESC
+    `, [category])
 
     const parsedLearning = learning.map((item: any) => ({
       ...item,
@@ -190,11 +123,11 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
     
     const { supabaseService } = getServices()
-    const learningItem = await supabaseService.selectOne(
-      'learning',
-      id,
-      'id, title, description, progress, category, start_date, estimated_completion, resources, status'
-    )
+    const learningItem = await supabaseService.queryOne(`
+      SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
+      FROM learning
+      WHERE id = $1
+    `, [id])
 
     if (!learningItem) {
       return res.status(404).json({
@@ -327,7 +260,7 @@ router.put('/:id', [
     const { supabaseService } = getServices()
 
     // Check if learning item exists
-    const existingItem = await supabaseService.selectOne('learning', id)
+    const existingItem = await supabaseService.queryOne('SELECT * FROM learning WHERE id = $1', [id])
 
     if (!existingItem) {
       return res.status(404).json({
@@ -366,7 +299,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedItem = await supabaseService.update('learning', id, updateData)
+    const updatedItem = await supabaseService.queryOne(updateQuery, updateValues)
 
     return res.json({
       success: true,
