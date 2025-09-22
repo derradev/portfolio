@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
 import { getServices } from '../services'
-import { authenticate, authorize } from '../middleware/auth'
+import { authenticate, authorize, AuthRequest } from '../middleware/auth'
 
 const router = Router()
 
@@ -197,40 +197,7 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
 })
 
 // Delete education (admin only)
-router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
-  try {
-    const { supabaseService } = getServices()
-    const { id } = req.params
-
-    const { data: deletedEducation, error } = await supabaseService.getClient()
-      .from('education')
-      .delete()
-      .eq('id', id)
-      .select()
-      .single()
-
-    if (error || !deletedEducation) {
-      return res.status(404).json({
-        success: false,
-        error: 'Education record not found'
-      })
-    }
-
-    return res.json({
-      success: true,
-      message: 'Education deleted successfully'
-    })
-  } catch (error) {
-    console.error('Delete education error:', error)
-    return res.status(500).json({
-      success: false,
-      error: 'Internal server error'
-    })
-  }
-})
-
-// Delete education (admin only)
-router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
+router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { supabaseService } = getServices()
     const { id } = req.params

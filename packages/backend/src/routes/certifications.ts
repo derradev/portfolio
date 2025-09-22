@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
 import { getServices } from '../services'
-import { authenticate, authorize } from '../middleware/auth'
+import { authenticate, authorize, AuthRequest } from '../middleware/auth'
 
 const router = Router()
 
@@ -205,40 +205,7 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
 })
 
 // Delete certification (admin only)
-router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
-  try {
-    const { supabaseService } = getServices()
-    const { id } = req.params
-
-    const { data: deletedCertification, error } = await supabaseService.getClient()
-      .from('certifications')
-      .delete()
-      .eq('id', id)
-      .select()
-      .single()
-
-    if (error || !deletedCertification) {
-      return res.status(404).json({
-        success: false,
-        error: 'Certification not found'
-      })
-    }
-
-    return res.json({
-      success: true,
-      message: 'Certification deleted successfully'
-    })
-  } catch (error) {
-    console.error('Delete certification error:', error)
-    return res.status(500).json({
-      success: false,
-      error: 'Internal server error'
-    })
-  }
-})
-
-// Delete certification (admin only)
-router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
+router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { supabaseService } = getServices()
     const { id } = req.params
