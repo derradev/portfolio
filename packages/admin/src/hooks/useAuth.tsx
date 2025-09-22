@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const response = await api.post('/auth/login', { email, password })
       const data = response.data?.data
       
-      if (!data?.session || !data?.user) {
+      if (!data?.user || !data?.session) {
         throw new Error('Invalid response format')
       }
       

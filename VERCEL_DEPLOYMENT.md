@@ -16,8 +16,14 @@ Your portfolio is now configured for Vercel and Supabase deployment with your cu
 After running the script, you should have:
 - ✅ All database tables created
 - ✅ Sample data inserted (projects, work history, skills, etc.)
-- ✅ Admin user created (email: `admin@example.com`, password: `admin123`)
 - ✅ Row Level Security policies configured
+
+### Create Admin User
+**Important**: You must create an admin user in Supabase Dashboard:
+1. Go to **Authentication** → **Users**
+2. Click **"Add User"**
+3. Set your email and secure password
+4. Add **User Metadata**: `{"name": "Your Name", "role": "admin"}`
 
 ## 2. Vercel Deployment
 
@@ -35,8 +41,6 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 
 # Authentication
 JWT_SECRET=8c653503e73f6cd2afc47a6c66ec768ecd56d59f792eea58cf22178dc35de431f49087f1d79fe13218ac9ed131925493944f38c5ab522400759ffdba0769cbee
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=admin123
 
 # Configuration
 NODE_ENV=production

@@ -223,16 +223,12 @@ CREATE POLICY "Admin full access users" ON users FOR ALL USING (true);
 -- INSERT SAMPLE DATA
 -- =====================================================
 
--- Insert admin user (password is 'admin123' hashed with bcrypt)
-INSERT INTO users (email, password, name, role) VALUES 
-('admin@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Admin User', 'admin');
-
--- Create admin user in Supabase Auth
--- Note: You'll need to create this user manually in Supabase Dashboard > Authentication > Users
--- Or run this after the tables are created:
--- Email: admin@example.com
--- Password: admin123
--- User Metadata: {"name": "Admin User", "role": "admin"}
+-- NOTE: Create admin user in Supabase Dashboard > Authentication > Users
+-- Email: your-email@example.com
+-- Password: your-secure-password
+-- User Metadata: {"name": "Your Name", "role": "admin"}
+-- 
+-- No hardcoded users - use Supabase Auth only!
 
 -- Insert sample projects
 INSERT INTO projects (title, description, content, technologies, github_url, live_url, featured, date) VALUES 

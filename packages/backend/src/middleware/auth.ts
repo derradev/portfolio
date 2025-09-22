@@ -22,11 +22,24 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
       })
     }
 
-    const { vaultService, dbService } = getServices()
-    const jwtSecret = await vaultService.getJWTSecret()
-    const decoded = jwt.verify(token, jwtSecret) as any
+    const { supabaseService } = getServices()
     
-    const user = await dbService.queryOne('SELECT id, email, name, role FROM users WHERE id = $1', [decoded.userId])
+    // Verify token with Supabase Auth
+    const { data, error } = await supabaseService.getClient().auth.getUser(token)
+    
+    if (error || !data.user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid token.'
+      })
+    }
+    
+    const user = {
+      id: data.user.id,
+      email: data.user.email,
+      name: data.user.user_metadata?.name || data.user.email,
+      role: data.user.user_metadata?.role || 'admin'
+    }
     
     if (!user) {
       return res.status(401).json({

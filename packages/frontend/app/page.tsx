@@ -36,6 +36,7 @@ export default function Home() {
 
     loadProjects()
   }, [])
+  
   const skills = [
     { icon: Globe, name: 'Frontend Development', description: 'Angular, StencilJS, VITE'},
     { icon: Database, name: 'Backend Development', description: 'Node.js, Express, PostgreSQL' },
