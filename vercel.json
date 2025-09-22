@@ -27,14 +27,6 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production",
-    "NEXT_PUBLIC_API_URL": "@next_public_api_url",
-    "VITE_API_URL": "@vite_api_url"
-  },
-  "build": {
-    "env": {
-      "NEXT_PUBLIC_API_URL": "@next_public_api_url",
-      "VITE_API_URL": "@vite_api_url"
-    }
+    "NODE_ENV": "production"
   }
 }
