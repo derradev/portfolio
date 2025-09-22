@@ -94,15 +94,26 @@ router.post('/', [
 
     const { supabaseService } = getServices()
     
-    const result = await supabaseService.query(`
-      INSERT INTO feature_flags (name, description, enabled)
-      VALUES ($1, $2, $3)
-      RETURNING id, name, description, enabled, created_at, updated_at
-    `, [name, description, enabled])
+    const { data: newFlag, error } = await supabaseService.getClient()
+      .from('feature_flags')
+      .insert({
+        name,
+        description,
+        enabled
+      })
+      .select()
+      .single()
+
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.message
+      })
+    }
 
     return res.status(201).json({
       success: true,
-      data: result[0]
+      data: newFlag
     })
   } catch (error) {
     console.error('Create feature flag error:', error)
@@ -135,37 +146,23 @@ router.put('/:id', [
     const updateData = req.body
     const { supabaseService } = getServices()
 
-    // Check if feature flag exists
-    const existingFlag = await supabaseService.queryOne('SELECT * FROM feature_flags WHERE id = $1', [id])
+    // Update the feature flag
+    const { data: updatedFlag, error } = await supabaseService.getClient()
+      .from('feature_flags')
+      .update({
+        ...updateData,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (!existingFlag) {
+    if (error || !updatedFlag) {
       return res.status(404).json({
         success: false,
         error: 'Feature flag not found'
       })
     }
-
-    // Build update query dynamically
-    const updateFields = []
-    const updateValues = []
-    let paramIndex = 1
-
-    Object.keys(updateData).forEach(key => {
-      updateFields.push(`${key} = $${paramIndex++}`)
-      updateValues.push(updateData[key])
-    })
-
-    updateFields.push(`updated_at = CURRENT_TIMESTAMP`)
-    updateValues.push(id)
-
-    const updateQuery = `
-      UPDATE feature_flags 
-      SET ${updateFields.join(', ')}
-      WHERE id = $${paramIndex}
-      RETURNING id, name, description, enabled, created_at, updated_at
-    `
-
-    const updatedFlag = await supabaseService.queryOne(updateQuery, updateValues)
 
     return res.json({
       success: true,
