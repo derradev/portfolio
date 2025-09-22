@@ -54,12 +54,8 @@ export const useMaintenanceMode = () => {
       }
     }
 
+    // Only check maintenance mode on first load
     checkMaintenanceMode()
-
-    // Check every 30 seconds for maintenance mode changes
-    const interval = setInterval(checkMaintenanceMode, 30000)
-
-    return () => clearInterval(interval)
   }, [])
 
   return {
