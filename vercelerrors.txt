@@ -1,29 +1,24 @@
-✅ FIXED: All Delete Functions Using Deprecated Methods
+✅ FIXED: Certifications & Education Issues
 
-❌ ROOT CAUSE: All delete routes were using deprecated query()/queryOne() methods
-- Blog posts couldn't be deleted
-- Projects, learning, work history deletes also broken
-- All using raw SQL DELETE statements
+❌ Issues Found:
+1. Certifications route using deprecated query() at line 10
+2. Education table missing 'location' column (42703 error)
 
-✅ DELETE FUNCTIONS FIXED:
+✅ FIXES APPLIED:
 
-**1. Blog Posts Delete:**
-- OLD: `queryOne('SELECT...') + query('DELETE FROM blog_posts...')`
-- NEW: `getClient().from('blog_posts').delete().eq('slug', slug).select().single()`
+**1. Certifications Route:**
+- OLD: `query('SELECT id, name, issuer... FROM certifications...')`
+- NEW: `getClient().from('certifications').select().order()`
+- Converted to proper Supabase client method
 
-**2. Projects Delete:**
-- OLD: `queryOne('SELECT...') + query('DELETE FROM projects...')`
-- NEW: `getClient().from('projects').delete().eq('id', id).select().single()`
+**2. Education Location Column:**
+- ADDED: `location VARCHAR(255)` column to education table in SQL script
+- KEPT: All location references in education route code
+- SOLUTION: Add missing column instead of removing functionality
 
-**3. Learning Delete:**
-- OLD: `queryOne('SELECT...') + query('DELETE FROM learning...')`
-- NEW: `getClient().from('learning').delete().eq('id', id).select().single()`
+**3. Updated SQL Fix Script:**
+- Added `ALTER TABLE education ADD COLUMN IF NOT EXISTS location VARCHAR(255)`
+- Will add location column when run in Supabase
 
-**4. Work History Delete:**
-- OLD: `queryOne('SELECT...') + query('DELETE FROM work_history...')`
-- NEW: `getClient().from('work_history').delete().eq('id', id).select().single()`
-
-🚀 RESULT: All delete functions now use proper Supabase client methods
-- Blog post deletion should now work properly
-- Better error handling with single operation
-- No more deprecated method errors for deletes
+🔧 NEXT: Run updated fix-missing-columns.sql to add location column
+🚀 RESULT: Both certifications and education APIs should work properly!

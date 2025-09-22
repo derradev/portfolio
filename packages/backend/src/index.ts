@@ -83,12 +83,29 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() })
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Portfolio API Server',
+    version: '1.0.0',
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/health',
+      api: '/api/*'
+    }
+  })
 })
 
-// Handle favicon.ico requests
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  })
+})
+
 app.get('/favicon.ico', (req, res) => {
   res.status(204).end()
 })

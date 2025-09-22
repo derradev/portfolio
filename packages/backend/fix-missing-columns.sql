@@ -13,6 +13,10 @@ ADD COLUMN IF NOT EXISTS session_id VARCHAR(255),
 ADD COLUMN IF NOT EXISTS visit_duration INTEGER DEFAULT 0,
 ADD COLUMN IF NOT EXISTS event_type VARCHAR(100) NOT NULL DEFAULT 'page_view';
 
+-- Add missing columns to education table
+ALTER TABLE education
+ADD COLUMN IF NOT EXISTS location VARCHAR(255);
+
 -- Update existing blog posts to have author and read_time
 UPDATE blog_posts 
 SET author = 'Demi Taylor Nimmo', read_time = 5 

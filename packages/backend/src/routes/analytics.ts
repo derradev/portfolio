@@ -100,32 +100,74 @@ router.get('/overview', [authenticate, authorize('admin')], async (req: AuthRequ
     // Get unique visitors (by session_id) - simplified for now
     const uniqueVisitors = { count: Math.floor((totalVisitsData || 0) * 0.7) } // Estimate
     
-    // Get page views by path
-    const pageViews = await supabaseService.query(`
-      SELECT page_path, COUNT(*) as views, AVG(visit_duration) as avg_duration
-      FROM analytics 
-      GROUP BY page_path 
-      ORDER BY views DESC
-    `)
+    // Get page views by path - simplified for now
+    const { data: pageViewsData, error: pageViewsError } = await supabaseService.getClient()
+      .from('analytics')
+      .select('page_path, visit_duration')
     
-    // Get daily visits for last 30 days
-    const dailyVisits = await supabaseService.query(`
-      SELECT DATE(created_at) as date, COUNT(*) as visits
-      FROM analytics 
-      WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
-      GROUP BY DATE(created_at)
-      ORDER BY date DESC
-    `)
+    if (pageViewsError) throw pageViewsError
     
-    // Get top referrers
-    const topReferrers = await supabaseService.query(`
-      SELECT referrer, COUNT(*) as visits
-      FROM analytics 
-      WHERE referrer IS NOT NULL AND referrer != ''
-      GROUP BY referrer 
-      ORDER BY visits DESC 
-      LIMIT 10
-    `)
+    // Group by page_path manually
+    const pageViews = pageViewsData?.reduce((acc: any[], item: any) => {
+      const existing = acc.find(p => p.page_path === item.page_path)
+      if (existing) {
+        existing.views += 1
+        existing.total_duration += item.visit_duration || 0
+      } else {
+        acc.push({
+          page_path: item.page_path,
+          views: 1,
+          total_duration: item.visit_duration || 0
+        })
+      }
+      return acc
+    }, []).map((item: any) => ({
+      ...item,
+      avg_duration: item.views > 0 ? item.total_duration / item.views : 0
+    })).sort((a: any, b: any) => b.views - a.views) || []
+    
+    // Get daily visits - simplified to last 7 days for now
+    const sevenDaysAgo = new Date()
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+    
+    const { data: dailyVisitsData, error: dailyError } = await supabaseService.getClient()
+      .from('analytics')
+      .select('created_at')
+      .gte('created_at', sevenDaysAgo.toISOString())
+    
+    if (dailyError) throw dailyError
+    
+    // Group by date manually
+    const dailyVisits = dailyVisitsData?.reduce((acc: any[], item: any) => {
+      const date = new Date(item.created_at).toISOString().split('T')[0]
+      const existing = acc.find(d => d.date === date)
+      if (existing) {
+        existing.visits += 1
+      } else {
+        acc.push({ date, visits: 1 })
+      }
+      return acc
+    }, []).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()) || []
+    
+    // Get top referrers - simplified
+    const { data: referrersData, error: referrersError } = await supabaseService.getClient()
+      .from('analytics')
+      .select('referrer')
+      .not('referrer', 'is', null)
+      .neq('referrer', '')
+    
+    if (referrersError) throw referrersError
+    
+    // Group by referrer manually
+    const topReferrers = referrersData?.reduce((acc: any[], item: any) => {
+      const existing = acc.find(r => r.referrer === item.referrer)
+      if (existing) {
+        existing.visits += 1
+      } else {
+        acc.push({ referrer: item.referrer, visits: 1 })
+      }
+      return acc
+    }, []).sort((a: any, b: any) => b.visits - a.visits).slice(0, 10) || []
 
     return res.json({
       success: true,

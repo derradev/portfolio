@@ -8,11 +8,13 @@ const router = Router()
 router.get('/', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const certifications = await supabaseService.query(`
-      SELECT id, name, issuer, issue_date, expiry_date, credential_id, credential_url, description, skills
-      FROM certifications
-      ORDER BY issue_date DESC
-    `)
+    
+    const { data: certifications, error } = await supabaseService.getClient()
+      .from('certifications')
+      .select('id, name, issuer, issue_date, expiry_date, credential_id, credential_url, description, skills')
+      .order('issue_date', { ascending: false })
+    
+    if (error) throw error
 
     const parsedCertifications = certifications.map((cert: any) => ({
       ...cert,
