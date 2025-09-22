@@ -270,8 +270,8 @@ const Settings = () => {
             <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
               <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>🔌 API URL</dt>
               <dd className="mt-2">
-                <a href="http://localhost:3001/api" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-500 font-medium hover:underline">
-                  http://localhost:3001/api
+                <a href={`${(import.meta as any).env.VITE_API_URL || 'http://localhost:3001'}/api`} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-500 font-medium hover:underline">
+                  {`${(import.meta as any).env.VITE_API_URL || 'http://localhost:3001'}/api`}
                 </a>
               </dd>
             </div>

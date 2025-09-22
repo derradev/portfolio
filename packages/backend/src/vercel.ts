@@ -92,30 +92,30 @@ app.use('/api/feature-flags', featureFlagsRoutes)
 app.use(notFound)
 app.use(errorHandler)
 
-// Initialize services for serverless
-let servicesInitialized = false
+// Initialize Supabase services for serverless
+let supabaseInitialized = false
 
-async function ensureServicesInitialized() {
-  if (!servicesInitialized) {
+async function ensureSupabaseInitialized() {
+  if (!supabaseInitialized) {
     try {
       await initializeServices()
-      servicesInitialized = true
-      console.log('✅ Services initialized for serverless function')
+      supabaseInitialized = true
+      console.log('✅ Supabase services initialized for serverless function')
     } catch (error) {
-      console.error('❌ Service initialization failed:', error)
+      console.error('❌ Supabase service initialization failed:', error)
       throw error
     }
   }
 }
 
-// Middleware to ensure services are initialized
+// Middleware to ensure Supabase services are initialized
 app.use(async (req, res, next) => {
   try {
-    await ensureServicesInitialized()
+    await ensureSupabaseInitialized()
     next()
   } catch (error) {
-    console.error('Service initialization error:', error)
-    res.status(500).json({ error: 'Service initialization failed' })
+    console.error('Supabase service initialization error:', error)
+    res.status(500).json({ error: 'Supabase service initialization failed' })
   }
 })
 

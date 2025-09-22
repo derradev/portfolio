@@ -9,42 +9,28 @@ const router = express.Router()
 // Get all projects (public)
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const projects = await dbService.query(`
-      SELECT 
-        id, 
-        title, 
-        description, 
-        image_url, 
-        technologies, 
-        github_url, 
-        live_url, 
-        date,
-        featured
-      FROM projects
-      ORDER BY date DESC
-    `)
+    const { supabaseService } = getServices()
+    const projects = await supabaseService.select(
+      'projects', 
+      'id, title, description, image_url, technologies, github_url, live_url, featured, date, created_at, updated_at'
+    )
 
-    // Parse JSON fields
-    const parsedProjects = projects.map((project: any) => ({
-      ...project,
-      technologies: typeof project.technologies === 'string' 
-        ? (project.technologies.startsWith('[') ? JSON.parse(project.technologies) : project.technologies.split(',').map((t: string) => t.trim()))
-        : project.technologies || [],
-      featured: Boolean(project.featured),
-      // Format date as YYYY-MM-DD
-      date: project.date.toISOString().split('T')[0]
-    }))
+    // Sort by featured first, then by created_at desc
+    projects.sort((a, b) => {
+      if (a.featured && !b.featured) return -1
+      if (!a.featured && b.featured) return 1
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })
 
-    return res.json({
+    res.json({
       success: true,
-      data: parsedProjects
+      data: projects
     })
   } catch (error) {
-    console.error('Get projects error:', error)
-    return res.status(500).json({
+    console.error('Error fetching projects:', error)
+    res.status(500).json({
       success: false,
-      error: 'Internal server error'
+      error: 'Failed to fetch projects'
     })
   }
 })
@@ -53,8 +39,8 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const { dbService } = getServices()
-    const project = await dbService.queryOne(`
+    const { supabaseService } = getServices()
+    const project = await supabaseService.queryOne(`
       SELECT 
         id, 
         title, 
@@ -129,15 +115,15 @@ router.post('/', [
       featured = false
     } = req.body
 
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     // Insert new project
-    const result = await dbService.query(`
+    const result = await supabaseService.query(`
       INSERT INTO projects (title, description, image_url, technologies, github_url, live_url, featured)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id
     `, [title, description, image_url, JSON.stringify(technologies), github_url, live_url, featured])
 
-    const newProject = await dbService.queryOne('SELECT * FROM projects WHERE id = $1', [result[0].id])
+    const newProject = await supabaseService.queryOne('SELECT * FROM projects WHERE id = $1', [result[0].id])
 
     return res.status(201).json({
       success: true,
@@ -189,10 +175,10 @@ router.put('/:id', [
 
     const { id } = req.params
     const updateData = req.body
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
     // Check if project exists
-    const existingProject = await dbService.queryOne('SELECT * FROM projects WHERE id = $1', [id])
+    const existingProject = await supabaseService.queryOne('SELECT * FROM projects WHERE id = $1', [id])
 
     if (!existingProject) {
       return res.status(404).json({
@@ -226,7 +212,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedProject = await dbService.queryOne(updateQuery, updateValues)
+    const updatedProject = await supabaseService.queryOne(updateQuery, updateValues)
 
     return res.json({
       success: true,
@@ -255,10 +241,10 @@ router.put('/:id', [
 router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
     // Check if project exists
-    const existingProject = await dbService.queryOne('SELECT id FROM projects WHERE id = $1', [id])
+    const existingProject = await supabaseService.queryOne('SELECT id FROM projects WHERE id = $1', [id])
 
     if (!existingProject) {
       return res.status(404).json({
@@ -268,7 +254,7 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     }
 
     // Delete the project
-    await dbService.query('DELETE FROM projects WHERE id = $1', [id])
+    await supabaseService.query('DELETE FROM projects WHERE id = $1', [id])
 
     return res.json({
       success: true,

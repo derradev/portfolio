@@ -27,7 +27,11 @@ class Analytics {
     visit_duration?: number
   }) {
     try {
-      await fetch('http://localhost:3001/api/analytics/track', {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
+        ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
+        : 'http://localhost:3001/api'
+      
+      await fetch(`${API_BASE_URL}/analytics/track`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +86,10 @@ class Analytics {
         })
         
         if (navigator.sendBeacon) {
-          navigator.sendBeacon('http://localhost:3001/api/analytics/track', data)
+          const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
+            ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
+            : 'http://localhost:3001/api'
+          navigator.sendBeacon(`${API_BASE_URL}/analytics/track`, data)
         }
       }
     }

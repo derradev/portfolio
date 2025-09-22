@@ -27,8 +27,12 @@ export default function Learning() {
     const loadLearningData = async () => {
       try {
         // Fetch learning items from API
-        const learningResponse = await fetch('http://localhost:3001/api/learning')
-        const skillsResponse = await fetch('http://localhost:3001/api/learning/skills')
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
+          ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
+          : 'http://localhost:3001/api'
+        
+        const learningResponse = await fetch(`${API_BASE_URL}/learning`)
+        const skillsResponse = await fetch(`${API_BASE_URL}/learning/skills`)
         
         if (learningResponse.ok) {
           const learningData = await learningResponse.json()

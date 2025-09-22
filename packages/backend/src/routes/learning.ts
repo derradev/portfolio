@@ -9,8 +9,8 @@ const router = express.Router()
 // Get all learning items (public)
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const learning = await dbService.query(`
+    const { supabaseService } = getServices()
+    const learning = await supabaseService.query(`
       SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
       FROM learning
       ORDER BY start_date DESC
@@ -41,8 +41,8 @@ router.get('/', async (req: Request, res: Response) => {
 // Get learning items by skills category (public)
 router.get('/skills', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const learning = await dbService.query(`
+    const { supabaseService } = getServices()
+    const learning = await supabaseService.query(`
       SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
       FROM learning
       WHERE category = 'skills'
@@ -75,8 +75,8 @@ router.get('/skills', async (req: Request, res: Response) => {
 router.get('/category/:category', async (req: Request, res: Response) => {
   try {
     const { category } = req.params
-    const { dbService } = getServices()
-    const learning = await dbService.query(`
+    const { supabaseService } = getServices()
+    const learning = await supabaseService.query(`
       SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
       FROM learning
       WHERE category = $1
@@ -118,8 +118,8 @@ router.get('/:id', async (req: Request, res: Response) => {
       })
     }
     
-    const { dbService } = getServices()
-    const learningItem = await dbService.queryOne(`
+    const { supabaseService } = getServices()
+    const learningItem = await supabaseService.queryOne(`
       SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
       FROM learning
       WHERE id = $1
@@ -190,18 +190,18 @@ router.post('/', [
       status
     } = req.body
 
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     // Handle empty estimated_completion date
     const completionDate = estimated_completion && estimated_completion.trim() !== '' ? estimated_completion : null
     
     // Insert new learning item
-    const result = await dbService.query(`
+    const result = await supabaseService.query(`
       INSERT INTO learning (title, description, progress, category, start_date, estimated_completion, resources, status)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING id
     `, [title, description, progress, category, start_date, completionDate, JSON.stringify(resources), status])
 
-    const newItem = await dbService.queryOne('SELECT * FROM learning WHERE id = $1', [result[0].id])
+    const newItem = await supabaseService.queryOne('SELECT * FROM learning WHERE id = $1', [result[0].id])
 
     return res.status(201).json({
       success: true,
@@ -250,10 +250,10 @@ router.put('/:id', [
 
     const { id } = req.params
     const updateData = req.body
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
     // Check if learning item exists
-    const existingItem = await dbService.queryOne('SELECT * FROM learning WHERE id = $1', [id])
+    const existingItem = await supabaseService.queryOne('SELECT * FROM learning WHERE id = $1', [id])
 
     if (!existingItem) {
       return res.status(404).json({
@@ -292,7 +292,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedItem = await dbService.queryOne(updateQuery, updateValues)
+    const updatedItem = await supabaseService.queryOne(updateQuery, updateValues)
 
     return res.json({
       success: true,
@@ -320,10 +320,10 @@ router.put('/:id', [
 router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
     // Check if learning item exists
-    const existingItem = await dbService.queryOne('SELECT id FROM learning WHERE id = $1', [id])
+    const existingItem = await supabaseService.queryOne('SELECT id FROM learning WHERE id = $1', [id])
 
     if (!existingItem) {
       return res.status(404).json({
@@ -333,7 +333,7 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     }
 
     // Delete the learning item
-    await dbService.query('DELETE FROM learning WHERE id = $1', [id])
+    await supabaseService.query('DELETE FROM learning WHERE id = $1', [id])
 
     return res.json({
       success: true,

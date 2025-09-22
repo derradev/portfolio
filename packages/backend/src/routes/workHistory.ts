@@ -9,8 +9,8 @@ const router = express.Router()
 // Get all work history (public)
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const workHistory = await dbService.query(`
+    const { supabaseService } = getServices()
+    const workHistory = await supabaseService.query(`
       SELECT id, company, position, location, start_date, end_date, description, achievements, technologies, company_url
       FROM work_history
       ORDER BY start_date DESC
@@ -46,8 +46,8 @@ router.get('/', async (req: Request, res: Response) => {
 // Get education entries
 router.get('/education', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const education = await dbService.query(`
+    const { supabaseService } = getServices()
+    const education = await supabaseService.query(`
       SELECT id, institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements
       FROM education
       ORDER BY start_date DESC
@@ -80,8 +80,8 @@ router.get('/education', async (req: Request, res: Response) => {
 // Get certifications entries
 router.get('/certifications', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const workHistory = await dbService.query(`
+    const { supabaseService } = getServices()
+    const workHistory = await supabaseService.query(`
       SELECT id, company, position, location, start_date, end_date, description, achievements, technologies, company_url
       FROM work_history
       WHERE position ILIKE '%certification%' OR position ILIKE '%certificate%' OR description ILIKE '%certified%'
@@ -120,8 +120,8 @@ router.get('/:id', async (req: Request, res: Response) => {
       })
     }
     
-    const { dbService } = getServices()
-    const job = await dbService.queryOne(`
+    const { supabaseService } = getServices()
+    const job = await supabaseService.queryOne(`
       SELECT id, company, position, location, start_date, end_date, description, achievements, technologies, company_url
       FROM work_history
       WHERE id = $1
@@ -191,18 +191,18 @@ router.post('/', [
       company_url
     } = req.body
 
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     // Handle empty end_date
     const endDate = end_date && end_date.trim() !== '' ? end_date : null
     
     // Insert new work history entry
-    const result = await dbService.query(`
+    const result = await supabaseService.query(`
       INSERT INTO work_history (company, position, location, start_date, end_date, description, achievements, technologies, company_url)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING id
     `, [company, position, location, start_date, endDate, description, JSON.stringify(achievements), JSON.stringify(technologies), company_url])
 
-    const newItem = await dbService.queryOne('SELECT * FROM work_history WHERE id = $1', [result[0].id])
+    const newItem = await supabaseService.queryOne('SELECT * FROM work_history WHERE id = $1', [result[0].id])
 
     return res.status(201).json({
       success: true,
@@ -261,10 +261,10 @@ router.put('/:id', [
 
     const { id } = req.params
     const updateData = req.body
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
     // Check if work history entry exists
-    const existingJob = await dbService.queryOne('SELECT * FROM work_history WHERE id = $1', [id])
+    const existingJob = await supabaseService.queryOne('SELECT * FROM work_history WHERE id = $1', [id])
 
     if (!existingJob) {
       return res.status(404).json({
@@ -303,7 +303,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedItem = await dbService.queryOne(updateQuery, updateValues)
+    const updatedItem = await supabaseService.queryOne(updateQuery, updateValues)
 
     return res.json({
       success: true,
@@ -338,10 +338,10 @@ router.put('/:id', [
 router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
     // Check if work history entry exists
-    const existingJob = await dbService.queryOne('SELECT id FROM work_history WHERE id = $1', [id])
+    const existingJob = await supabaseService.queryOne('SELECT id FROM work_history WHERE id = $1', [id])
 
     if (!existingJob) {
       return res.status(404).json({
@@ -351,7 +351,7 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     }
 
     // Delete the work history item
-    await dbService.query('DELETE FROM work_history WHERE id = $1', [id])
+    await supabaseService.query('DELETE FROM work_history WHERE id = $1', [id])
 
     return res.json({
       success: true,

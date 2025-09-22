@@ -7,8 +7,8 @@ const router = Router()
 // Get all certifications (public)
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const certifications = await dbService.query(`
+    const { supabaseService } = getServices()
+    const certifications = await supabaseService.query(`
       SELECT id, name, issuer, issue_date, expiry_date, credential_id, credential_url, description, skills
       FROM certifications
       ORDER BY issue_date DESC
@@ -39,10 +39,10 @@ router.get('/', async (req: Request, res: Response) => {
 // Get single certification by ID (public)
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     const { id } = req.params
 
-    const certification = await dbService.queryOne(`
+    const certification = await supabaseService.queryOne(`
       SELECT id, name, issuer, issue_date, expiry_date, credential_id, credential_url, description, skills
       FROM certifications
       WHERE id = $1
@@ -80,7 +80,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 // Create new certification (admin only)
 router.post('/', authenticate, authorize('admin'), async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     const { 
       name, 
       issuer, 
@@ -100,7 +100,7 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
       })
     }
 
-    const result = await dbService.queryOne(`
+    const result = await supabaseService.queryOne(`
       INSERT INTO certifications (name, issuer, issue_date, expiry_date, credential_id, credential_url, description, skills)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
@@ -142,7 +142,7 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
 // Update certification (admin only)
 router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     const { id } = req.params
     const { 
       name, 
@@ -163,7 +163,7 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
       })
     }
 
-    const result = await dbService.queryOne(`
+    const result = await supabaseService.queryOne(`
       UPDATE certifications 
       SET name = $1, issuer = $2, issue_date = $3, expiry_date = $4, credential_id = $5, 
           credential_url = $6, description = $7, skills = $8, updated_at = CURRENT_TIMESTAMP
@@ -215,10 +215,10 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
 // Delete certification (admin only)
 router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     const { id } = req.params
 
-    const result = await dbService.queryOne(`
+    const result = await supabaseService.queryOne(`
       DELETE FROM certifications 
       WHERE id = $1 
       RETURNING id

@@ -9,8 +9,8 @@ const router = express.Router()
 // Get all skills (public)
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const skills = await dbService.query(`
+    const { supabaseService } = getServices()
+    const skills = await supabaseService.query(`
       SELECT id, name, category, level, description
       FROM skills
       ORDER BY category, name
@@ -33,8 +33,8 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/category/:category', async (req: Request, res: Response) => {
   try {
     const { category } = req.params
-    const { dbService } = getServices()
-    const skills = await dbService.query(`
+    const { supabaseService } = getServices()
+    const skills = await supabaseService.query(`
       SELECT id, name, category, level, description
       FROM skills
       WHERE category = $1
@@ -74,15 +74,15 @@ router.post('/', [
     }
 
     const { name, category, level, description } = req.body
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
-    const result = await dbService.query(`
+    const result = await supabaseService.query(`
       INSERT INTO skills (name, category, level, description)
       VALUES ($1, $2, $3, $4)
       RETURNING id
     `, [name, category, level, description])
 
-    const newSkill = await dbService.queryOne('SELECT * FROM skills WHERE id = $1', [result[0].id])
+    const newSkill = await supabaseService.queryOne('SELECT * FROM skills WHERE id = $1', [result[0].id])
 
     return res.status(201).json({
       success: true,
@@ -118,9 +118,9 @@ router.put('/:id', [
 
     const { id } = req.params
     const updateData = req.body
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
-    const existingSkill = await dbService.queryOne('SELECT * FROM skills WHERE id = $1', [id])
+    const existingSkill = await supabaseService.queryOne('SELECT * FROM skills WHERE id = $1', [id])
     if (!existingSkill) {
       return res.status(404).json({
         success: false,
@@ -147,7 +147,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedSkill = await dbService.queryOne(updateQuery, updateValues)
+    const updatedSkill = await supabaseService.queryOne(updateQuery, updateValues)
 
     return res.json({
       success: true,
@@ -166,9 +166,9 @@ router.put('/:id', [
 router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
-    const existingSkill = await dbService.queryOne('SELECT id FROM skills WHERE id = $1', [id])
+    const existingSkill = await supabaseService.queryOne('SELECT id FROM skills WHERE id = $1', [id])
     if (!existingSkill) {
       return res.status(404).json({
         success: false,
@@ -176,7 +176,7 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
       })
     }
 
-    await dbService.query('DELETE FROM skills WHERE id = $1', [id])
+    await supabaseService.query('DELETE FROM skills WHERE id = $1', [id])
 
     return res.json({
       success: true,

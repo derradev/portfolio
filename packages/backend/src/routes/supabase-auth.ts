@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import { createClient } from '@supabase/supabase-js'
+import { getServices } from '../services'
 
 const router = express.Router()
 

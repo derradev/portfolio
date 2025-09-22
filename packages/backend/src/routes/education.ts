@@ -7,8 +7,8 @@ const router = Router()
 // Get all education (public)
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const education = await dbService.query(`
+    const { supabaseService } = getServices()
+    const education = await supabaseService.query(`
       SELECT id, institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements
       FROM education
       ORDER BY start_date DESC
@@ -39,10 +39,10 @@ router.get('/', async (req: Request, res: Response) => {
 // Get single education by ID (public)
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     const { id } = req.params
 
-    const education = await dbService.queryOne(`
+    const education = await supabaseService.queryOne(`
       SELECT id, institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements
       FROM education
       WHERE id = $1
@@ -80,7 +80,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 // Create new education (admin only)
 router.post('/', authenticate, authorize('admin'), async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     const { 
       institution, 
       degree, 
@@ -101,7 +101,7 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
       })
     }
 
-    const result = await dbService.queryOne(`
+    const result = await supabaseService.queryOne(`
       INSERT INTO education (institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *
@@ -138,7 +138,7 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
 // Update education (admin only)
 router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     const { id } = req.params
     const { 
       institution, 
@@ -160,7 +160,7 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
       })
     }
 
-    const result = await dbService.queryOne(`
+    const result = await supabaseService.queryOne(`
       UPDATE education 
       SET institution = $1, degree = $2, field_of_study = $3, location = $4, start_date = $5, 
           end_date = $6, grade = $7, description = $8, achievements = $9, updated_at = CURRENT_TIMESTAMP
@@ -207,10 +207,10 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
 // Delete education (admin only)
 router.delete('/:id', authenticate, authorize('admin'), async (req: Request, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     const { id } = req.params
 
-    const result = await dbService.queryOne(`
+    const result = await supabaseService.queryOne(`
       DELETE FROM education 
       WHERE id = $1 
       RETURNING id

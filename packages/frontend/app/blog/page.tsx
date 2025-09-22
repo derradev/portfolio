@@ -28,7 +28,11 @@ export default function Blog() {
   useEffect(() => {
     const loadBlogPosts = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/blog')
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
+          ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
+          : 'http://localhost:3001/api'
+        
+        const response = await fetch(`${API_BASE_URL}/blog`)
         const data = await response.json()
         
         if (data.success) {

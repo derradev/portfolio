@@ -38,10 +38,10 @@ router.post('/track', [
     const user_agent = req.headers['user-agent'] || ''
     const ip_address = req.ip || req.connection.remoteAddress || '127.0.0.1'
 
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     
     // Check if this is an update to existing session visit
-    const existingVisit = await dbService.queryOne(`
+    const existingVisit = await supabaseService.queryOne(`
       SELECT id FROM analytics 
       WHERE session_id = $1 AND page_path = $2 
       ORDER BY created_at DESC 
@@ -50,14 +50,14 @@ router.post('/track', [
 
     if (existingVisit && visit_duration > 0) {
       // Update existing visit with duration
-      await dbService.query(`
+      await supabaseService.query(`
         UPDATE analytics 
         SET visit_duration = $1, updated_at = CURRENT_TIMESTAMP 
         WHERE id = $2
       `, [visit_duration, existingVisit.id])
     } else {
       // Insert new visit
-      await dbService.query(`
+      await supabaseService.query(`
         INSERT INTO analytics (page_path, page_title, user_agent, ip_address, referrer, session_id, visit_duration)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
       `, [page_path, page_title, user_agent, ip_address, referrer, session_id, visit_duration])
@@ -79,16 +79,16 @@ router.post('/track', [
 // Get analytics overview (admin only)
 router.get('/overview', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     
     // Get total visits
-    const totalVisits = await dbService.queryOne('SELECT COUNT(*) as count FROM analytics')
+    const totalVisits = await supabaseService.queryOne('SELECT COUNT(*) as count FROM analytics')
     
     // Get unique visitors (by session_id)
-    const uniqueVisitors = await dbService.queryOne('SELECT COUNT(DISTINCT session_id) as count FROM analytics')
+    const uniqueVisitors = await supabaseService.queryOne('SELECT COUNT(DISTINCT session_id) as count FROM analytics')
     
     // Get page views by path
-    const pageViews = await dbService.query(`
+    const pageViews = await supabaseService.query(`
       SELECT page_path, COUNT(*) as views, AVG(visit_duration) as avg_duration
       FROM analytics 
       GROUP BY page_path 
@@ -96,7 +96,7 @@ router.get('/overview', [authenticate, authorize('admin')], async (req: AuthRequ
     `)
     
     // Get daily visits for last 30 days
-    const dailyVisits = await dbService.query(`
+    const dailyVisits = await supabaseService.query(`
       SELECT DATE(created_at) as date, COUNT(*) as visits
       FROM analytics 
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
@@ -105,7 +105,7 @@ router.get('/overview', [authenticate, authorize('admin')], async (req: AuthRequ
     `)
     
     // Get top referrers
-    const topReferrers = await dbService.query(`
+    const topReferrers = await supabaseService.query(`
       SELECT referrer, COUNT(*) as visits
       FROM analytics 
       WHERE referrer IS NOT NULL AND referrer != ''
@@ -168,9 +168,9 @@ router.get('/detailed', [authenticate, authorize('admin')], async (req: AuthRequ
       queryParams.push(date_to)
     }
 
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     
-    const analytics = await dbService.query(`
+    const analytics = await supabaseService.query(`
       SELECT id, page_path, page_title, user_agent, ip_address, referrer, session_id, visit_duration, created_at
       FROM analytics 
       ${whereClause}
@@ -178,7 +178,7 @@ router.get('/detailed', [authenticate, authorize('admin')], async (req: AuthRequ
       LIMIT $${paramIndex++} OFFSET $${paramIndex++}
     `, [...queryParams, limit, offset])
 
-    const totalCount = await dbService.queryOne(`
+    const totalCount = await supabaseService.queryOne(`
       SELECT COUNT(*) as count FROM analytics ${whereClause}
     `, queryParams)
 

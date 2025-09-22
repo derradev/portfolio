@@ -99,13 +99,13 @@ async function startServer() {
     console.log(`🔗 API Base URL: http://localhost:${PORT}/api`)
   })
 
-  // Initialize database in background
+  // Initialize Supabase services in background
   try {
     await initializeServices()
-    console.log('✅ Database initialized successfully')
+    console.log('✅ Supabase services initialized successfully')
   } catch (error) {
-    console.error('❌ Database initialization failed:', error)
-    console.log('⚠️  Server running without database connection')
+    console.error('❌ Supabase service initialization failed:', error)
+    console.log('⚠️  Server running without Supabase connection')
   }
 }
 

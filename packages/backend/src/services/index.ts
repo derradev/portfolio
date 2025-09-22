@@ -1,30 +1,32 @@
-import { VaultService } from './VaultService'
-import { DatabaseService } from './DatabaseService'
-import { vaultConfig } from '../config'
+import { SupabaseService } from './SupabaseService'
 
 // Singleton instances
-let vaultService: VaultService | null = null
-let dbService: DatabaseService | null = null
+let supabaseService: SupabaseService | null = null
 
-export async function initializeServices(): Promise<{ vaultService: VaultService; dbService: DatabaseService }> {
-  if (!vaultService) {
-    vaultService = new VaultService(vaultConfig)
+export async function initializeServices(): Promise<{ supabaseService: SupabaseService }> {
+  if (!supabaseService) {
+    supabaseService = new SupabaseService()
+    await supabaseService.initialize()
   }
   
-  if (!dbService) {
-    dbService = new DatabaseService(vaultService)
-    await dbService.initialize()
-  }
-  
-  return { vaultService, dbService }
+  return { supabaseService }
 }
 
-export function getServices(): { vaultService: VaultService; dbService: DatabaseService } {
-  if (!vaultService || !dbService) {
+export function getServices(): { supabaseService: SupabaseService } {
+  if (!supabaseService) {
     // Initialize services synchronously if not already done
-    vaultService = new VaultService(vaultConfig)
-    dbService = new DatabaseService(vaultService)
-    // Note: Database connection will be attempted on first query
+    supabaseService = new SupabaseService()
+    // Note: Supabase connection will be attempted on first query
   }
-  return { vaultService, dbService }
+  return { supabaseService }
+}
+
+// Legacy compatibility - map old service names to new ones
+export function getSupabaseService(): SupabaseService {
+  return getServices().supabaseService
+}
+
+// For backward compatibility with existing code
+export function getDbService(): SupabaseService {
+  return getServices().supabaseService
 }

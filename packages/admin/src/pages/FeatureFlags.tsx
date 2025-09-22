@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Trash2, Edit, Plus, Flag, ToggleLeft, ToggleRight } from 'lucide-react'
+import { Trash2, Edit, Plus, ToggleLeft, ToggleRight, Flag } from 'lucide-react'
+
+const API_BASE_URL = (import.meta as any).env.VITE_API_URL 
+  ? `${(import.meta as any).env.VITE_API_URL}/api` 
+  : 'http://localhost:3001/api'
 
 interface FeatureFlag {
   id: number
@@ -30,7 +34,7 @@ const FeatureFlags: React.FC = () => {
   const fetchFeatureFlags = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3001/api/feature-flags', {
+      const response = await fetch(`${API_BASE_URL}/feature-flags`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -54,7 +58,7 @@ const FeatureFlags: React.FC = () => {
   const createFeatureFlag = async (flagData: FeatureFlagFormData) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3001/api/feature-flags', {
+      const response = await fetch(`${API_BASE_URL}/feature-flags`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +79,7 @@ const FeatureFlags: React.FC = () => {
   const updateFeatureFlag = async (id: number, flagData: FeatureFlagFormData) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3001/api/feature-flags/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/feature-flags/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +101,7 @@ const FeatureFlags: React.FC = () => {
   const deleteFeatureFlag = async (id: number) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3001/api/feature-flags/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/feature-flags/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -114,7 +118,7 @@ const FeatureFlags: React.FC = () => {
   const toggleFeatureFlag = async (id: number, enabled: boolean) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3001/api/feature-flags/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/feature-flags/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

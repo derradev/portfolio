@@ -11,7 +11,7 @@ router.get('/', async (req: Request, res: Response) => {
   try {
     const { category, search, limit = 10, offset = 0 } = req.query
 
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     let query = `
       SELECT id, title, slug, excerpt, created_at as publish_date, category, tags, featured, author, read_time
       FROM blog_posts
@@ -35,7 +35,7 @@ router.get('/', async (req: Request, res: Response) => {
     query += ` ORDER BY publish_date DESC LIMIT $${paramIndex++} OFFSET $${paramIndex++}`
     params.push(limit, offset)
 
-    const posts = await dbService.query(query, params)
+    const posts = await supabaseService.query(query, params)
 
     const parsedPosts = posts.map((post: any) => {
       let tags = []
@@ -75,8 +75,8 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/:slug', async (req: Request, res: Response) => {
   try {
     const { slug } = req.params
-    const { dbService } = getServices()
-    const post = await dbService.queryOne(`
+    const { supabaseService } = getServices()
+    const post = await supabaseService.queryOne(`
       SELECT id, title, slug, excerpt, content, created_at as publish_date, category, tags, featured, author, read_time
       FROM blog_posts
       WHERE slug = $1 AND published = true
@@ -124,8 +124,8 @@ router.get('/:slug', async (req: Request, res: Response) => {
 // Get all blog posts including drafts (admin only)
 router.get('/admin/all', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
-    const { dbService } = getServices()
-    const posts = await dbService.query(`
+    const { supabaseService } = getServices()
+    const posts = await supabaseService.query(`
       SELECT id, title, slug, excerpt, created_at as publish_date, category, tags, featured, published, author, read_time
       FROM blog_posts
       ORDER BY created_at DESC
@@ -190,7 +190,7 @@ router.post('/', [
 
     const { title, excerpt, content, category, tags, featured = false, published = false, author, read_time, publish_date } = req.body
 
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
     // Create slug from title
     let slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
     
@@ -198,7 +198,7 @@ router.post('/', [
     let uniqueSlug = slug
     let counter = 1
     while (true) {
-      const existingPost = await dbService.queryOne('SELECT id FROM blog_posts WHERE slug = $1', [uniqueSlug])
+      const existingPost = await supabaseService.queryOne('SELECT id FROM blog_posts WHERE slug = $1', [uniqueSlug])
       if (!existingPost) {
         break
       }
@@ -207,13 +207,13 @@ router.post('/', [
     }
 
     // Insert new blog post
-    const result = await dbService.query(`
+    const result = await supabaseService.query(`
       INSERT INTO blog_posts (title, slug, excerpt, content, category, tags, featured, published, author, read_time, publish_date)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING id
     `, [title, uniqueSlug, excerpt, content, category, JSON.stringify(tags), featured, published, author, read_time, publish_date])
 
-    const newPost = await dbService.queryOne('SELECT * FROM blog_posts WHERE id = $1', [result[0].id])
+    const newPost = await supabaseService.queryOne('SELECT * FROM blog_posts WHERE id = $1', [result[0].id])
 
     return res.status(201).json({
       success: true,
@@ -269,10 +269,10 @@ router.put('/:id', [
 
     const { id } = req.params
     const updateData = req.body
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
     // Check if post exists
-    const existingPost = await dbService.queryOne('SELECT * FROM blog_posts WHERE id = $1', [id])
+    const existingPost = await supabaseService.queryOne('SELECT * FROM blog_posts WHERE id = $1', [id])
 
     if (!existingPost) {
       return res.status(404).json({
@@ -306,7 +306,7 @@ router.put('/:id', [
       RETURNING *
     `
 
-    const updatedPost = await dbService.queryOne(updateQuery, updateValues)
+    const updatedPost = await supabaseService.queryOne(updateQuery, updateValues)
 
     return res.json({
       success: true,
@@ -342,10 +342,10 @@ router.put('/:id', [
 router.delete('/:slug', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { slug } = req.params
-    const { dbService } = getServices()
+    const { supabaseService } = getServices()
 
     // Check if post exists
-    const existingPost = await dbService.queryOne('SELECT id FROM blog_posts WHERE slug = $1', [slug])
+    const existingPost = await supabaseService.queryOne('SELECT id FROM blog_posts WHERE slug = $1', [slug])
 
     if (!existingPost) {
       return res.status(404).json({
@@ -355,7 +355,7 @@ router.delete('/:slug', [authenticate, authorize('admin')], async (req: AuthRequ
     }
 
     // Delete the post
-    await dbService.query('DELETE FROM blog_posts WHERE slug = $1', [slug])
+    await supabaseService.query('DELETE FROM blog_posts WHERE slug = $1', [slug])
 
     return res.json({
       success: true,

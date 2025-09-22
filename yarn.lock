@@ -1663,6 +1663,7 @@ babel-preset-jest@^29.6.3:
   version "1.0.0"
   resolved "file:packages/backend"
   dependencies:
+    "@supabase/supabase-js" "^2.57.4"
     bcryptjs "^2.4.3"
     cors "^2.8.5"
     dotenv "^16.3.1"
@@ -3040,7 +3041,6 @@ fresh@0.5.2:
   version "0.1.0"
   resolved "file:packages/frontend"
   dependencies:
-    "@supabase/supabase-js" "^2.57.4"
     "@types/node" "^20.10.5"
     "@types/react" "^18.2.45"
     "@types/react-dom" "^18.2.18"

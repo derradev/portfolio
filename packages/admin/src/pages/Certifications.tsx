@@ -13,7 +13,9 @@ interface Certification {
   skills: string[]
 }
 
-const API_BASE_URL = 'http://localhost:3001/api'
+const API_BASE_URL = (import.meta as any).env.VITE_API_URL 
+  ? `${(import.meta as any).env.VITE_API_URL}/api` 
+  : 'http://localhost:3001/api'
 
 export default function Certifications() {
   const [certifications, setCertifications] = useState<Certification[]>([])

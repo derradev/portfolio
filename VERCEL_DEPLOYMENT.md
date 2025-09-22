@@ -59,24 +59,32 @@ API_URL=https://api.demitaylornimmo.com
 3. Add all environment variables above
 4. Deploy!
 
-## 3. Custom Domain Setup
+## 3. Domain Architecture
 
-### API Domain (api.demitaylornimmo.com)
-1. In Vercel Dashboard → Your Project → Settings → Domains
-2. Add `api.demitaylornimmo.com`
-3. Configure DNS records as instructed by Vercel
-4. The API will be available at `https://api.demitaylornimmo.com/api/*`
+Your portfolio uses a multi-domain setup:
 
-### Frontend Domain (demitaylornimmo.com)
-1. Add `demitaylornimmo.com` and `www.demitaylornimmo.com`
-2. Configure DNS records
-3. Update environment variables with actual domains
+### 🌐 **Domain Structure:**
+- **Frontend**: `https://demitaylornimmo.com` (main portfolio site)
+- **Admin Panel**: `https://admin.demitaylornimmo.com` (admin interface)
+- **Backend API**: `https://api.demitaylornimmo.com` (API endpoints)
 
-### Admin Domain (admin.demitaylornimmo.com)
-If deploying admin separately:
-1. Create new Vercel project for admin
-2. Point to `packages/admin` directory
-3. Add `admin.demitaylornimmo.com` domain
+### **Frontend & Admin → API Communication:**
+- Frontend calls: `https://api.demitaylornimmo.com/api/projects`
+- Admin calls: `https://api.demitaylornimmo.com/api/auth/login`
+- All client apps point to the same backend API domain
+
+### **Vercel Deployment Options:**
+
+#### Option 1: Single Vercel Project (Recommended)
+Deploy everything as one project with domain routing:
+1. **Main domain**: `demitaylornimmo.com` → Frontend
+2. **API subdomain**: `api.demitaylornimmo.com` → Backend API
+3. **Admin subdomain**: `admin.demitaylornimmo.com` → Admin (separate deployment)
+
+#### Option 2: Separate Vercel Projects
+- **Project 1**: Frontend (`demitaylornimmo.com`)
+- **Project 2**: Backend API (`api.demitaylornimmo.com`) 
+- **Project 3**: Admin Panel (`admin.demitaylornimmo.com`)
 
 ## 4. Local Development
 
