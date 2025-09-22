@@ -1,12 +1,19 @@
-FIXED: Admin Deployment MIME Type Issues
+🎯 ROOT CAUSE FOUND: Supabase RPC Function Missing
 
-❌ Problem: Admin serving index.html for all requests including CSS/JS assets
-- CSS files returning text/html instead of text/css
-- JS files returning text/html instead of application/javascript
+❌ Issue: Backend routes using queryOne() with raw SQL, but Supabase RPC not configured
+- All routes calling supabaseService.queryOne() with SQL queries
+- SupabaseService trying to use client.rpc('exec_sql') which doesn't exist
+- This causes all API endpoints to fail with database errors
 
-✅ Solution: Fixed admin vercel.json routing configuration
-- Added specific routes for /assets/* files
-- Added routes for static file extensions (.css, .js, .png, etc.)
-- Catch-all route to index.html only for non-asset requests
+✅ SOLUTIONS APPLIED:
+1. Updated SupabaseService to handle RPC errors gracefully
+2. Added exec_sql RPC function to database setup script
+3. Started converting routes to use Supabase client methods directly
+4. Fixed TypeScript errors in SupabaseService
 
-🚀 Admin deployment should now serve assets with correct MIME types!
+🔧 NEXT STEPS:
+1. Run updated supabase-drop-and-recreate.sql script (includes RPC function)
+2. Restart backend server to pick up SupabaseService changes
+3. Test API endpoints - should now work with proper error handling
+
+🚀 This should resolve all "Failed to fetch" errors across all endpoints!

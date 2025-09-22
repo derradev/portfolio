@@ -35,26 +35,37 @@ export class SupabaseService {
     return this.client
   }
 
-  // Generic query method for raw SQL (if needed)
+  // Generic query method for raw SQL using Supabase RPC
   async query(sql: string, params?: any[]): Promise<any[]> {
     try {
-      const { data, error } = await this.client.rpc('execute_sql', {
-        query: sql,
+      // For now, we'll use the postgres client directly through Supabase
+      // This is a temporary solution - ideally we'd use Supabase client methods
+      const { data, error } = await this.client.rpc('exec_sql', {
+        sql: sql,
         params: params || []
       })
       
-      if (error) throw error
+      if (error) {
+        console.error('Supabase RPC error:', error)
+        throw error
+      }
       return data || []
-    } catch (error) {
+    } catch (error: any) {
       console.error('Supabase query error:', error)
-      throw error
+      // If RPC doesn't exist, we need to handle this gracefully
+      throw new Error(`Database query failed: ${error?.message || 'Unknown error'}`)
     }
   }
 
   // Generic query method that returns single result
   async queryOne(sql: string, params?: any[]): Promise<any> {
-    const results = await this.query(sql, params)
-    return results[0] || null
+    try {
+      const results = await this.query(sql, params)
+      return results[0] || null
+    } catch (error) {
+      console.error('QueryOne error:', error)
+      throw error
+    }
   }
 
   // Table-specific methods using Supabase client

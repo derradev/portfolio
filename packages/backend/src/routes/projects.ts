@@ -40,20 +40,15 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params
     const { supabaseService } = getServices()
-    const project = await supabaseService.queryOne(`
-      SELECT 
-        id, 
-        title, 
-        description, 
-        image_url, 
-        technologies, 
-        github_url, 
-        live_url, 
-        date,
-        featured
-      FROM projects
-      WHERE id = $1
-    `, [id])
+    
+    const { data: projects, error } = await supabaseService.getClient()
+      .from('projects')
+      .select('id, title, description, content, image, technologies, github_url, live_url, featured, date, created_at, updated_at')
+      .eq('id', id)
+      .single()
+    
+    if (error) throw error
+    const project = projects
 
     if (!project) {
       return res.status(404).json({
