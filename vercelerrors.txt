@@ -29,7 +29,20 @@
 3. Toggle back to OFF to restore normal site
 4. Changes reflect within 30 seconds
 
+🔧 MAINTENANCE PAGE & FEATURE FLAGS FIXED:
+- ❌ PROBLEM: Maintenance page not loading - feature flags route required admin auth
+- ✅ SOLUTION: Added public `/feature-flags/maintenance` endpoint for maintenance check
+- ✅ SOLUTION: Updated frontend hook to use new public endpoint
+- ✅ RESULT: Maintenance page should now work with feature flag
+
+🔧 FEATURE FLAGS TOGGLE ISSUE FIXED:
+- ❌ PROBLEM: Feature flags POST/PUT routes using deprecated methods
+- ✅ SOLUTION: Updated POST route to use getClient().from().insert().select().single()
+- ✅ SOLUTION: Updated PUT route to use getClient().from().update().eq().select().single()
+- ✅ RESULT: Feature flag toggles should now work in admin panel
+
 ⚠️ BACKEND FIXES ALSO COMPLETED:
 - ✅ Education & Certifications DELETE routes fixed
 - ✅ All deprecated methods replaced with Supabase client
 - ✅ Consistent authentication across all routes
+- ✅ Feature flags CREATE/UPDATE operations fixed

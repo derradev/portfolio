@@ -6,6 +6,38 @@ import { getServices } from '../services'
 
 const router = express.Router()
 
+// Check maintenance mode (public)
+router.get('/maintenance', async (req: Request, res: Response) => {
+  try {
+    const { supabaseService } = getServices()
+    const { data: maintenanceFlag, error } = await supabaseService.getClient()
+      .from('feature_flags')
+      .select('enabled')
+      .eq('name', 'maintenance_mode')
+      .single()
+    
+    if (error) {
+      // If maintenance flag doesn't exist, default to false
+      return res.json({
+        success: true,
+        maintenance_mode: false
+      })
+    }
+
+    return res.json({
+      success: true,
+      maintenance_mode: maintenanceFlag?.enabled || false
+    })
+  } catch (error) {
+    console.error('Check maintenance mode error:', error)
+    // Default to false on error to avoid blocking users
+    return res.json({
+      success: true,
+      maintenance_mode: false
+    })
+  }
+})
+
 // Get all feature flags (admin only)
 router.get('/', [
   authenticate,

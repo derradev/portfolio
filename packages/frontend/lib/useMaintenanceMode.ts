@@ -24,7 +24,7 @@ export const useMaintenanceMode = () => {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch(`${API_BASE_URL}/feature-flags`, {
+        const response = await fetch(`${API_BASE_URL}/feature-flags/maintenance`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -32,18 +32,11 @@ export const useMaintenanceMode = () => {
         })
 
         if (!response.ok) {
-          throw new Error('Failed to fetch feature flags')
+          throw new Error('Failed to fetch maintenance mode')
         }
 
         const data = await response.json()
-        const featureFlags: FeatureFlag[] = data.data || []
-        
-        // Find the maintenance_mode flag
-        const maintenanceFlag = featureFlags.find(
-          flag => flag.name === 'maintenance_mode'
-        )
-
-        setIsMaintenanceMode(maintenanceFlag?.enabled || false)
+        setIsMaintenanceMode(data.maintenance_mode || false)
       } catch (err) {
         console.error('Error checking maintenance mode:', err)
         setError(err instanceof Error ? err.message : 'Unknown error')
