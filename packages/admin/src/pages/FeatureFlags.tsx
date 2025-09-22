@@ -4,7 +4,7 @@ import { Trash2, Edit, Plus, ToggleLeft, ToggleRight, Flag } from 'lucide-react'
 
 const API_BASE_URL = (import.meta as any).env.VITE_API_URL 
   ? `${(import.meta as any).env.VITE_API_URL}/api` 
-  : 'http://localhost:3001/api'
+  : 'https://api.demitaylornimmo.com/api'
 
 interface FeatureFlag {
   id: number

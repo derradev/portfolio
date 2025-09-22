@@ -34,7 +34,7 @@ export default function BlogPost() {
       try {
         const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
           ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-          : 'http://localhost:3001/api'
+          : 'https://api.demitaylornimmo.com/api'
         
         const response = await fetch(`${API_BASE_URL}/blog/${slug}`)
         const data = await response.json()

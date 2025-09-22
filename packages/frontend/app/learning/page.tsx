@@ -29,7 +29,7 @@ export default function Learning() {
         // Fetch learning items from API
         const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
           ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-          : 'http://localhost:3001/api'
+          : 'https://api.demitaylornimmo.com/api'
         
         const learningResponse = await fetch(`${API_BASE_URL}/learning`)
         const skillsResponse = await fetch(`${API_BASE_URL}/learning/skills`)

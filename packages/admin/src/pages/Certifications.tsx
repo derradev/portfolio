@@ -15,7 +15,7 @@ interface Certification {
 
 const API_BASE_URL = (import.meta as any).env.VITE_API_URL 
   ? `${(import.meta as any).env.VITE_API_URL}/api` 
-  : 'http://localhost:3001/api'
+  : 'https://api.demitaylornimmo.com/api'
 
 export default function Certifications() {
   const [certifications, setCertifications] = useState<Certification[]>([])

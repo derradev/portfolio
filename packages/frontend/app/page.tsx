@@ -37,10 +37,10 @@ export default function Home() {
     loadProjects()
   }, [])
   const skills = [
-    { icon: Globe, name: 'Frontend Development', description: 'React, Next.js, TypeScript' },
+    { icon: Globe, name: 'Frontend Development', description: 'Angular, StencilJS, VITE'},
     { icon: Database, name: 'Backend Development', description: 'Node.js, Express, PostgreSQL' },
     { icon: Code, name: 'Full Stack', description: 'End-to-end application development' },
-    { icon: Smartphone, name: 'Mobile Development', description: 'React Native, Progressive Web Apps' },
+    { icon: Smartphone, name: 'Mobile Development', description: 'Android(JAVA), Progressive Web Apps' },
   ]
 
   return (

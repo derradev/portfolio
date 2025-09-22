@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "packages/frontend/package.json",
-      "use": "@vercel/next"
+      "use": "@vercel/next",
+      "config": {
+        "buildCommand": "npm run build"
+      }
     },
     {
       "src": "packages/backend/src/vercel.ts",
@@ -21,7 +24,15 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NEXT_PUBLIC_API_URL": "@next_public_api_url",
+    "VITE_API_URL": "@vite_api_url"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_API_URL": "@next_public_api_url",
+      "VITE_API_URL": "@vite_api_url"
+    }
   },
   "functions": {
     "packages/backend/src/vercel.ts": {
