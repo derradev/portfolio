@@ -208,7 +208,7 @@ router.post('/', [
       }
     }
 
-    // Insert new blog post
+    // Insert new blog post (temporarily remove author and read_time until columns are added)
     const newPost = await supabaseService.insert('blog_posts', {
       title,
       slug: uniqueSlug,
@@ -218,8 +218,6 @@ router.post('/', [
       tags,
       featured,
       published,
-      author,
-      read_time,
       created_at: publish_date
     })
 

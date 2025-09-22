@@ -1,22 +1,21 @@
-✅ FIXED: Express Configuration Issues
+🚨 CRITICAL: Database Schema Mismatch - Missing Columns
 
-❌ Previous Errors:
-1. ValidationError: X-Forwarded-For header with trust proxy false
-2. Error: Not Found - /api/experiance (misspelled endpoint)
+❌ Issues Found:
+1. blog_posts table missing 'author' column (PGRST204)
+2. analytics table missing 'page_title' column (PGRST204)
+3. Invalid ID format error (trying to use "test" as integer)
 
-✅ FIXES APPLIED:
+✅ IMMEDIATE FIXES APPLIED:
+1. Created fix-missing-columns.sql script to add missing columns
+2. Temporarily removed problematic fields from insert operations
+3. Blog posts now insert without author/read_time fields
+4. Analytics now insert without page_title field
 
-**1. Trust Proxy Configuration:**
-- Added `app.set('trust proxy', 1)` for Vercel deployment
-- Fixes rate limiter X-Forwarded-For header validation
-- Properly handles proxy headers in production
+🔧 NEXT STEPS TO COMPLETE FIX:
+1. Run fix-missing-columns.sql in Supabase SQL Editor
+2. This will add the missing columns:
+   - blog_posts: author, read_time
+   - analytics: page_title, session_id, visit_duration
+3. After running SQL, the API will work with full functionality
 
-**2. Missing Experience/Education Endpoints:**
-- Added `/api/experience` as alias for education routes
-- Added `/api/experiance` to handle common misspelling
-- Both now route to existing education controller
-
-🚀 RESULT:
-- Rate limiter now works properly in Vercel environment
-- No more 404 errors for experience/education endpoints
-- Backend handles both correct and misspelled endpoint names
+⚠️ TEMPORARY STATE: API works but missing some fields until SQL is run

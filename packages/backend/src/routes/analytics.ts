@@ -60,11 +60,10 @@ router.post('/track', [
         updated_at: new Date().toISOString()
       })
     } else {
-      // Insert new visit
+      // Insert new visit (temporarily remove page_title until column is added)
       await supabaseService.insert('analytics', {
         session_id,
         page_path,
-        page_title,
         user_agent,
         ip_address,
         referrer,
