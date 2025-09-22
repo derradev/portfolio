@@ -10,11 +10,13 @@ const router = express.Router()
 router.get('/', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const workHistory = await supabaseService.query(`
-      SELECT id, company, position, location, start_date, end_date, description, achievements, technologies, company_url
-      FROM work_history
-      ORDER BY start_date DESC
-    `)
+    
+    const { data: workHistory, error } = await supabaseService.getClient()
+      .from('work_history')
+      .select('id, company, position, location, start_date, end_date, description, achievements, technologies, company_url')
+      .order('start_date', { ascending: false })
+    
+    if (error) throw error
 
     const parsedWorkHistory = workHistory.map((job: any) => ({
       ...job,
@@ -121,11 +123,11 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
     
     const { supabaseService } = getServices()
-    const job = await supabaseService.queryOne(`
-      SELECT id, company, position, location, start_date, end_date, description, achievements, technologies, company_url
-      FROM work_history
-      WHERE id = $1
-    `, [id])
+    const job = await supabaseService.selectOne(
+      'work_history',
+      id,
+      'id, company, position, location, start_date, end_date, description, achievements, technologies, company_url'
+    )
 
     if (!job) {
       return res.status(404).json({
@@ -196,13 +198,17 @@ router.post('/', [
     const endDate = end_date && end_date.trim() !== '' ? end_date : null
     
     // Insert new work history entry
-    const result = await supabaseService.query(`
-      INSERT INTO work_history (company, position, location, start_date, end_date, description, achievements, technologies, company_url)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      RETURNING id
-    `, [company, position, location, start_date, endDate, description, JSON.stringify(achievements), JSON.stringify(technologies), company_url])
-
-    const newItem = await supabaseService.queryOne('SELECT * FROM work_history WHERE id = $1', [result[0].id])
+    const newItem = await supabaseService.insert('work_history', {
+      company,
+      position,
+      location,
+      start_date,
+      end_date: endDate,
+      description,
+      achievements,
+      technologies,
+      company_url
+    })
 
     return res.status(201).json({
       success: true,
