@@ -356,18 +356,20 @@ router.delete('/:slug', [authenticate, authorize('admin')], async (req: AuthRequ
     const { slug } = req.params
     const { supabaseService } = getServices()
 
-    // Check if post exists
-    const existingPost = await supabaseService.queryOne('SELECT id FROM blog_posts WHERE slug = $1', [slug])
+    // Check if post exists and delete it
+    const { data: deletedPost, error } = await supabaseService.getClient()
+      .from('blog_posts')
+      .delete()
+      .eq('slug', slug)
+      .select()
+      .single()
 
-    if (!existingPost) {
+    if (error || !deletedPost) {
       return res.status(404).json({
         success: false,
         error: 'Blog post not found'
       })
     }
-
-    // Delete the post
-    await supabaseService.query('DELETE FROM blog_posts WHERE slug = $1', [slug])
 
     return res.json({
       success: true,

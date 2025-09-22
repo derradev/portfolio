@@ -222,18 +222,20 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     const { id } = req.params
     const { supabaseService } = getServices()
 
-    // Check if project exists
-    const existingProject = await supabaseService.queryOne('SELECT id FROM projects WHERE id = $1', [id])
+    // Check if project exists and delete it
+    const { data: deletedProject, error } = await supabaseService.getClient()
+      .from('projects')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (!existingProject) {
+    if (error || !deletedProject) {
       return res.status(404).json({
         success: false,
         error: 'Project not found'
       })
     }
-
-    // Delete the project
-    await supabaseService.query('DELETE FROM projects WHERE id = $1', [id])
 
     return res.json({
       success: true,

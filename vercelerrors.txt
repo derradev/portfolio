@@ -1,28 +1,29 @@
-🚨 MULTIPLE CRITICAL ISSUES FIXED
+✅ FIXED: All Delete Functions Using Deprecated Methods
 
-❌ Issues Found:
-1. Analytics overview using deprecated queryOne() at line 76
-2. Trust proxy still not working (X-Forwarded-For error)  
-3. Analytics missing required 'event_type' column (NOT NULL constraint)
+❌ ROOT CAUSE: All delete routes were using deprecated query()/queryOne() methods
+- Blog posts couldn't be deleted
+- Projects, learning, work history deletes also broken
+- All using raw SQL DELETE statements
 
-✅ FIXES APPLIED:
+✅ DELETE FUNCTIONS FIXED:
 
-**1. Analytics Overview Route:**
-- Converted queryOne() to getClient().select() with count
-- Simplified unique visitors calculation (estimate for now)
-- Partially converted - some complex queries still need work
+**1. Blog Posts Delete:**
+- OLD: `queryOne('SELECT...') + query('DELETE FROM blog_posts...')`
+- NEW: `getClient().from('blog_posts').delete().eq('slug', slug).select().single()`
 
-**2. Analytics Insert Fixed:**
-- Added required 'event_type': 'page_view' to all analytics inserts
-- Should resolve NOT NULL constraint violations
+**2. Projects Delete:**
+- OLD: `queryOne('SELECT...') + query('DELETE FROM projects...')`
+- NEW: `getClient().from('projects').delete().eq('id', id).select().single()`
 
-**3. Updated SQL Fix Script:**
-- Added event_type column with NOT NULL DEFAULT 'page_view'
-- Will fix existing data when run in Supabase
+**3. Learning Delete:**
+- OLD: `queryOne('SELECT...') + query('DELETE FROM learning...')`
+- NEW: `getClient().from('learning').delete().eq('id', id).select().single()`
 
-⚠️ REMAINING ISSUES:
-- Trust proxy error persists (may need Vercel deployment to test)
-- Some analytics queries still use deprecated methods
-- TypeScript errors in analytics route need fixing
+**4. Work History Delete:**
+- OLD: `queryOne('SELECT...') + query('DELETE FROM work_history...')`
+- NEW: `getClient().from('work_history').delete().eq('id', id).select().single()`
 
-🔧 NEXT: Run updated fix-missing-columns.sql in Supabase SQL Editor
+🚀 RESULT: All delete functions now use proper Supabase client methods
+- Blog post deletion should now work properly
+- Better error handling with single operation
+- No more deprecated method errors for deletes

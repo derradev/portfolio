@@ -346,18 +346,20 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     const { id } = req.params
     const { supabaseService } = getServices()
 
-    // Check if work history entry exists
-    const existingJob = await supabaseService.queryOne('SELECT id FROM work_history WHERE id = $1', [id])
+    // Check if work history entry exists and delete it
+    const { data: deletedJob, error } = await supabaseService.getClient()
+      .from('work_history')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (!existingJob) {
+    if (error || !deletedJob) {
       return res.status(404).json({
         success: false,
         error: 'Work history item not found'
       })
     }
-
-    // Delete the work history item
-    await supabaseService.query('DELETE FROM work_history WHERE id = $1', [id])
 
     return res.json({
       success: true,

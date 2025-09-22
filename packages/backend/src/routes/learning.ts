@@ -329,18 +329,20 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     const { id } = req.params
     const { supabaseService } = getServices()
 
-    // Check if learning item exists
-    const existingItem = await supabaseService.queryOne('SELECT id FROM learning WHERE id = $1', [id])
+    // Check if learning item exists and delete it
+    const { data: deletedItem, error } = await supabaseService.getClient()
+      .from('learning')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
 
-    if (!existingItem) {
+    if (error || !deletedItem) {
       return res.status(404).json({
         success: false,
         error: 'Learning item not found'
       })
     }
-
-    // Delete the learning item
-    await supabaseService.query('DELETE FROM learning WHERE id = $1', [id])
 
     return res.json({
       success: true,
