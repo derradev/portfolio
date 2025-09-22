@@ -39,7 +39,7 @@ export default function Certifications() {
 
   const fetchCertifications = async () => {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
       const response = await fetch(`${API_BASE_URL}/certifications`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -58,7 +58,7 @@ export default function Certifications() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth_token')
     
     try {
       const url = editingId 
@@ -96,7 +96,7 @@ export default function Certifications() {
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this certification?')) return
     
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth_token')
     try {
       const response = await fetch(`${API_BASE_URL}/certifications/${id}`, {
         method: 'DELETE',

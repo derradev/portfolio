@@ -33,7 +33,7 @@ const FeatureFlags: React.FC = () => {
   // Fetch feature flags
   const fetchFeatureFlags = async () => {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
       const response = await fetch(`${API_BASE_URL}/feature-flags`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -57,7 +57,7 @@ const FeatureFlags: React.FC = () => {
   // Create feature flag
   const createFeatureFlag = async (flagData: FeatureFlagFormData) => {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
       const response = await fetch(`${API_BASE_URL}/feature-flags`, {
         method: 'POST',
         headers: {
@@ -78,7 +78,7 @@ const FeatureFlags: React.FC = () => {
   // Update feature flag
   const updateFeatureFlag = async (id: number, flagData: FeatureFlagFormData) => {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
       const response = await fetch(`${API_BASE_URL}/feature-flags/${id}`, {
         method: 'PUT',
         headers: {
@@ -100,7 +100,7 @@ const FeatureFlags: React.FC = () => {
   // Delete feature flag
   const deleteFeatureFlag = async (id: number) => {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
       const response = await fetch(`${API_BASE_URL}/feature-flags/${id}`, {
         method: 'DELETE',
         headers: {
@@ -117,7 +117,7 @@ const FeatureFlags: React.FC = () => {
   // Toggle feature flag
   const toggleFeatureFlag = async (id: number, enabled: boolean) => {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
       const response = await fetch(`${API_BASE_URL}/feature-flags/${id}`, {
         method: 'PUT',
         headers: {

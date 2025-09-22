@@ -6,8 +6,11 @@ import { getServices } from '../services'
 
 const router = express.Router()
 
-// Get all feature flags (public - for testing, change to admin later)
-router.get('/', async (req: Request, res: Response) => {
+// Get all feature flags (admin only)
+router.get('/', [
+  authenticate,
+  authorize('admin')
+], async (req: AuthRequest, res: Response) => {
   try {
     const { supabaseService } = getServices()
     const { data: featureFlags, error } = await supabaseService.getClient()
