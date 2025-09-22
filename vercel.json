@@ -2,22 +2,11 @@
   "version": 2,
   "builds": [
     {
-      "src": "packages/frontend/next.config.js",
+      "src": "packages/frontend/package.json",
       "use": "@vercel/next"
-    },
-    {
-      "src": "packages/backend/src/vercel.ts",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 30
-      }
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "packages/backend/src/vercel.ts"
-    },
     {
       "src": "/(.*)",
       "dest": "packages/frontend/$1"
