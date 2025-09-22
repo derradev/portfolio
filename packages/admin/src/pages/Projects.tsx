@@ -51,6 +51,10 @@ const Projects = () => {
         toast.success('Project created successfully')
         setIsModalOpen(false)
         reset()
+      },
+      onError: (error: any) => {
+        console.error('Create error:', error)
+        toast.error(error.response?.data?.error || 'Failed to create project')
       }
     }
   )
@@ -67,6 +71,10 @@ const Projects = () => {
         setIsModalOpen(false)
         setEditingProject(null)
         reset()
+      },
+      onError: (error: any) => {
+        console.error('Update error:', error)
+        toast.error(error.response?.data?.error || 'Failed to update project')
       }
     }
   )

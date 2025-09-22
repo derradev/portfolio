@@ -1,17 +1,12 @@
-FIXED: Script Path Issue
+FIXED: Admin Deployment MIME Type Issues
 
-❌ Problem: Vercel couldn't find ignore-build-step.sh script
-Error: "bash: ../scripts/ignore-build-step.sh: No such file or directory"
+❌ Problem: Admin serving index.html for all requests including CSS/JS assets
+- CSS files returning text/html instead of text/css
+- JS files returning text/html instead of application/javascript
 
-✅ Solution Applied:
-- Copied ignore-build-step.sh into each package directory:
-  - packages/frontend/ignore-build-step.sh
-  - packages/backend/ignore-build-step.sh  
-  - packages/admin/ignore-build-step.sh
-- Updated all vercel.json files to use local script: "bash ignore-build-step.sh [service]"
+✅ Solution: Fixed admin vercel.json routing configuration
+- Added specific routes for /assets/* files
+- Added routes for static file extensions (.css, .js, .png, etc.)
+- Catch-all route to index.html only for non-asset requests
 
-🎯 Benefits:
-- No more path issues
-- Each service has its own copy
-- Vercel can always find the script locally
-- More reliable deployments
+🚀 Admin deployment should now serve assets with correct MIME types!
