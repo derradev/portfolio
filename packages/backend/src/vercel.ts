@@ -4,7 +4,6 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import rateLimit from 'express-rate-limit'
-import path from 'path'
 
 import { initializeServices } from './services'
 import { errorHandler } from './middleware/errorHandler'
@@ -21,7 +20,6 @@ import educationRoutes from './routes/education'
 import certificationsRoutes from './routes/certifications'
 import analyticsRoutes from './routes/analytics'
 import featureFlagsRoutes from './routes/featureFlags'
-// import uploadRoutes from './routes/upload'
 
 // Load environment variables
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
@@ -30,12 +28,11 @@ dotenv.config({ path: envFile })
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 3001
 
-// Rate limiting
+// Rate limiting (more lenient for serverless)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // limit each IP to 1000 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs for serverless
   message: 'Too many requests from this IP, please try again later.'
 })
 
@@ -49,23 +46,29 @@ app.use(cors({
     'https://demitaylornimmo.com',
     'https://www.demitaylornimmo.com',
     'https://admin.demitaylornimmo.com',
-    'https://api.demitaylornimmo.com',
     // Add Vercel preview URLs
     /^https:\/\/.*\.vercel\.app$/
   ],
   credentials: true
 }))
-app.use(morgan('combined'))
+
+// Only use morgan in development
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('combined'))
+}
+
 app.use(limiter)
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
-// Serve static files
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
-
 // Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() })
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    api_url: process.env.API_URL || 'localhost'
+  })
 })
 
 // Handle favicon.ico requests
@@ -84,31 +87,36 @@ app.use('/api/education', educationRoutes)
 app.use('/api/certifications', certificationsRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/feature-flags', featureFlagsRoutes)
-// app.use('/api/upload', uploadRoutes)
 
 // Error handling
 app.use(notFound)
 app.use(errorHandler)
 
-// Start server first, then initialize database
-async function startServer() {
-  // Start the HTTP server first
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`)
-    console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`)
-    console.log(`🔗 API Base URL: http://localhost:${PORT}/api`)
-  })
+// Initialize services for serverless
+let servicesInitialized = false
 
-  // Initialize database in background
-  try {
-    await initializeServices()
-    console.log('✅ Database initialized successfully')
-  } catch (error) {
-    console.error('❌ Database initialization failed:', error)
-    console.log('⚠️  Server running without database connection')
+async function ensureServicesInitialized() {
+  if (!servicesInitialized) {
+    try {
+      await initializeServices()
+      servicesInitialized = true
+      console.log('✅ Services initialized for serverless function')
+    } catch (error) {
+      console.error('❌ Service initialization failed:', error)
+      throw error
+    }
   }
 }
 
-startServer()
+// Middleware to ensure services are initialized
+app.use(async (req, res, next) => {
+  try {
+    await ensureServicesInitialized()
+    next()
+  } catch (error) {
+    console.error('Service initialization error:', error)
+    res.status(500).json({ error: 'Service initialization failed' })
+  }
+})
 
 export default app
