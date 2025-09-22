@@ -12,7 +12,7 @@ router.get('/', async (req: Request, res: Response) => {
     const { supabaseService } = getServices()
     const projects = await supabaseService.select(
       'projects', 
-      'id, title, description, image_url, technologies, github_url, live_url, featured, date, created_at, updated_at'
+      'id, title, description, image, technologies, github_url, live_url, featured, date, created_at, updated_at'
     )
 
     // Sort by featured first, then by created_at desc

@@ -41,26 +41,35 @@ router.post('/track', [
     const { supabaseService } = getServices()
     
     // Check if this is an update to existing session visit
-    const existingVisit = await supabaseService.queryOne(`
-      SELECT id FROM analytics 
-      WHERE session_id = $1 AND page_path = $2 
-      ORDER BY created_at DESC 
-      LIMIT 1
-    `, [session_id, page_path])
+    const { data: existingVisit, error: visitError } = await supabaseService.getClient()
+      .from('analytics')
+      .select('id')
+      .eq('session_id', session_id)
+      .eq('page_path', page_path)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+    
+    // Handle case where no existing visit is found (not an error)
+    const hasExistingVisit = !visitError && existingVisit
 
-    if (existingVisit && visit_duration > 0) {
+    if (hasExistingVisit && visit_duration > 0) {
       // Update existing visit with duration
-      await supabaseService.query(`
-        UPDATE analytics 
-        SET visit_duration = $1, updated_at = CURRENT_TIMESTAMP 
-        WHERE id = $2
-      `, [visit_duration, existingVisit.id])
+      await supabaseService.update('analytics', existingVisit.id, {
+        visit_duration,
+        updated_at: new Date().toISOString()
+      })
     } else {
       // Insert new visit
-      await supabaseService.query(`
-        INSERT INTO analytics (page_path, page_title, user_agent, ip_address, referrer, session_id, visit_duration)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-      `, [page_path, page_title, user_agent, ip_address, referrer, session_id, visit_duration])
+      await supabaseService.insert('analytics', {
+        session_id,
+        page_path,
+        page_title,
+        user_agent,
+        ip_address,
+        referrer,
+        visit_duration
+      })
     }
 
     return res.json({

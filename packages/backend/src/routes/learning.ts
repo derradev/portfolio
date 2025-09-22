@@ -44,12 +44,14 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/skills', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const learning = await supabaseService.query(`
-      SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
-      FROM learning
-      WHERE category = 'skills'
-      ORDER BY start_date DESC
-    `)
+    
+    const { data: learning, error } = await supabaseService.getClient()
+      .from('learning')
+      .select('id, title, description, progress, category, start_date, estimated_completion, resources, status')
+      .eq('category', 'skills')
+      .order('start_date', { ascending: false })
+    
+    if (error) throw error
 
     const parsedLearning = learning.map((item: any) => ({
       ...item,
@@ -197,13 +199,16 @@ router.post('/', [
     const completionDate = estimated_completion && estimated_completion.trim() !== '' ? estimated_completion : null
     
     // Insert new learning item
-    const result = await supabaseService.query(`
-      INSERT INTO learning (title, description, progress, category, start_date, estimated_completion, resources, status)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING id
-    `, [title, description, progress, category, start_date, completionDate, JSON.stringify(resources), status])
-
-    const newItem = await supabaseService.queryOne('SELECT * FROM learning WHERE id = $1', [result[0].id])
+    const newItem = await supabaseService.insert('learning', {
+      title,
+      description,
+      progress,
+      category,
+      start_date,
+      estimated_completion: completionDate,
+      resources,
+      status
+    })
 
     return res.status(201).json({
       success: true,
