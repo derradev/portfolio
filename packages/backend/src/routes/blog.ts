@@ -75,11 +75,15 @@ router.get('/:slug', async (req: Request, res: Response) => {
   try {
     const { slug } = req.params
     const { supabaseService } = getServices()
-    const post = await supabaseService.queryOne(`
-      SELECT id, title, slug, excerpt, content, created_at as publish_date, category, tags, featured, author, read_time
-      FROM blog_posts
-      WHERE slug = $1 AND published = true
-    `, [slug])
+    
+    const { data: post, error } = await supabaseService.getClient()
+      .from('blog_posts')
+      .select('id, title, slug, excerpt, content, created_at, category, tags, featured')
+      .eq('slug', slug)
+      .eq('published', true)
+      .single()
+    
+    if (error) throw error
 
     if (!post) {
       return res.status(404).json({
@@ -120,15 +124,17 @@ router.get('/:slug', async (req: Request, res: Response) => {
   }
 })
 
-// Get all blog posts including drafts (admin only)
+// Get all blog posts for admin (admin only)
 router.get('/admin/all', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const posts = await supabaseService.query(`
-      SELECT id, title, slug, excerpt, created_at as publish_date, category, tags, featured, published, author, read_time
-      FROM blog_posts
-      ORDER BY created_at DESC
-    `)
+    
+    const { data: posts, error } = await supabaseService.getClient()
+      .from('blog_posts')
+      .select('id, title, slug, excerpt, created_at, category, tags, featured, published')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
 
     const parsedPosts = posts.map((post: any) => {
       let tags = []
