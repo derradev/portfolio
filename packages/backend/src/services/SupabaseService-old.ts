@@ -133,6 +133,60 @@ export class SupabaseService {
     }
   }
 
+  async selectOne(table: string, columns = '*', conditions?: any): Promise<any> {
+    const results = await this.select(table, columns, conditions)
+    return results[0] || null
+  }
+
+  async insert(table: string, data: any): Promise<any> {
+    try {
+      const { data: result, error } = await this.client
+        .from(table)
+        .insert(data)
+        .select()
+        .single()
+      
+      if (error) throw error
+      return result
+    } catch (error) {
+      console.error(`Supabase insert error for table ${table}:`, error)
+      throw error
+    }
+  }
+
+  async update(table: string, data: any, conditions: any): Promise<any> {
+    try {
+      let query = this.client.from(table).update(data)
+      
+      Object.entries(conditions).forEach(([key, value]) => {
+        query = query.eq(key, value)
+      })
+      
+      const { data: result, error } = await query.select().single()
+      if (error) throw error
+      return result
+    } catch (error) {
+      console.error(`Supabase update error for table ${table}:`, error)
+      throw error
+    }
+  }
+
+  async delete(table: string, conditions: any): Promise<void> {
+    try {
+      let query = this.client.from(table).delete()
+      
+      Object.entries(conditions).forEach(([key, value]) => {
+        query = query.eq(key, value)
+      })
+      
+      const { error } = await query
+      if (error) throw error
+    } catch (error) {
+      console.error(`Supabase delete error for table ${table}:`, error)
+      throw error
+    }
+  }
+
   // Auth methods
   async getUserById(userId: string): Promise<any> {
     try {

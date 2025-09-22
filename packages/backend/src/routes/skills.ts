@@ -10,11 +10,14 @@ const router = express.Router()
 router.get('/', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const skills = await supabaseService.query(`
-      SELECT id, name, category, level, description
-      FROM skills
-      ORDER BY category, name
-    `)
+    
+    const { data: skills, error } = await supabaseService.getClient()
+      .from('skills')
+      .select('id, name, category, level, description, created_at, updated_at')
+      .order('category', { ascending: true })
+      .order('name', { ascending: true })
+    
+    if (error) throw error
 
     return res.json({
       success: true,
@@ -76,13 +79,12 @@ router.post('/', [
     const { name, category, level, description } = req.body
     const { supabaseService } = getServices()
 
-    const result = await supabaseService.query(`
-      INSERT INTO skills (name, category, level, description)
-      VALUES ($1, $2, $3, $4)
-      RETURNING id
-    `, [name, category, level, description])
-
-    const newSkill = await supabaseService.queryOne('SELECT * FROM skills WHERE id = $1', [result[0].id])
+    const newSkill = await supabaseService.insert('skills', {
+      name,
+      category,
+      level,
+      description
+    })
 
     return res.status(201).json({
       success: true,
@@ -120,34 +122,17 @@ router.put('/:id', [
     const updateData = req.body
     const { supabaseService } = getServices()
 
-    const existingSkill = await supabaseService.queryOne('SELECT * FROM skills WHERE id = $1', [id])
-    if (!existingSkill) {
+    // Check if skill exists
+    try {
+      await supabaseService.selectOne('skills', id)
+    } catch (error) {
       return res.status(404).json({
         success: false,
         error: 'Skill not found'
       })
     }
 
-    const updateFields = []
-    const updateValues = []
-    let paramIndex = 1
-
-    Object.keys(updateData).forEach(key => {
-      updateFields.push(`${key} = $${paramIndex++}`)
-      updateValues.push(updateData[key])
-    })
-
-    updateFields.push(`updated_at = CURRENT_TIMESTAMP`)
-    updateValues.push(id)
-
-    const updateQuery = `
-      UPDATE skills 
-      SET ${updateFields.join(', ')}
-      WHERE id = $${paramIndex}
-      RETURNING *
-    `
-
-    const updatedSkill = await supabaseService.queryOne(updateQuery, updateValues)
+    const updatedSkill = await supabaseService.update('skills', id, updateData)
 
     return res.json({
       success: true,
@@ -168,15 +153,17 @@ router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthReques
     const { id } = req.params
     const { supabaseService } = getServices()
 
-    const existingSkill = await supabaseService.queryOne('SELECT id FROM skills WHERE id = $1', [id])
-    if (!existingSkill) {
+    // Check if skill exists
+    try {
+      await supabaseService.selectOne('skills', id)
+    } catch (error) {
       return res.status(404).json({
         success: false,
         error: 'Skill not found'
       })
     }
 
-    await supabaseService.query('DELETE FROM skills WHERE id = $1', [id])
+    await supabaseService.delete('skills', id)
 
     return res.json({
       success: true,

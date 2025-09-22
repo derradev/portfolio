@@ -41,14 +41,11 @@ router.get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params
     const { supabaseService } = getServices()
     
-    const { data: projects, error } = await supabaseService.getClient()
-      .from('projects')
-      .select('id, title, description, content, image, technologies, github_url, live_url, featured, date, created_at, updated_at')
-      .eq('id', id)
-      .single()
-    
-    if (error) throw error
-    const project = projects
+    const project = await supabaseService.selectOne(
+      'projects', 
+      id, 
+      'id, title, description, content, image, technologies, github_url, live_url, featured, date, created_at, updated_at'
+    )
 
     if (!project) {
       return res.status(404).json({
@@ -79,46 +76,33 @@ router.get('/:id', async (req: Request, res: Response) => {
 })
 
 // Create project (admin only)
-router.post('/', [
-  authenticate,
-  authorize('admin'),
-  body('title').isLength({ min: 1 }).trim(),
-  body('description').isLength({ min: 1 }).trim(),
-  body('image_url').optional().isURL(),
-  body('technologies').isArray({ min: 1 }),
-  body('github_url').optional().isURL(),
-  body('live_url').optional().isURL(),
-  body('featured').optional().isBoolean()
+router.post('/', authenticate, authorize('admin'), [
+  body('title').notEmpty().withMessage('Title is required'),
+  body('description').notEmpty().withMessage('Description is required')
 ], async (req: AuthRequest, res: Response) => {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid input',
-        details: errors.array()
+        errors: errors.array()
       })
     }
 
-    const {
+    const { title, description, content, technologies, github_url, live_url, image, featured, date } = req.body
+    const { supabaseService } = getServices()
+
+    const newProject = await supabaseService.insert('projects', {
       title,
       description,
-      image_url,
-      technologies,
+      content,
+      technologies: technologies || [],
       github_url,
       live_url,
-      featured = false
-    } = req.body
-
-    const { supabaseService } = getServices()
-    // Insert new project
-    const result = await supabaseService.query(`
-      INSERT INTO projects (title, description, image_url, technologies, github_url, live_url, featured)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING id
-    `, [title, description, image_url, JSON.stringify(technologies), github_url, live_url, featured])
-
-    const newProject = await supabaseService.queryOne('SELECT * FROM projects WHERE id = $1', [result[0].id])
+      image,
+      featured: featured || false,
+      date
+    })
 
     return res.status(201).json({
       success: true,

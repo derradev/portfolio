@@ -177,25 +177,6 @@ ALTER TABLE analytics ENABLE ROW LEVEL SECURITY;
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
 -- =====================================================
--- CREATE RPC FUNCTIONS FOR RAW SQL SUPPORT
--- =====================================================
-
--- Create a function to execute raw SQL (for compatibility)
-CREATE OR REPLACE FUNCTION exec_sql(sql text, params jsonb DEFAULT '[]'::jsonb)
-RETURNS jsonb
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-DECLARE
-    result jsonb;
-BEGIN
-    -- This is a simplified version - in production you'd want more security
-    -- For now, we'll just return an empty result
-    RETURN '[]'::jsonb;
-END;
-$$;
-
--- =====================================================
 -- CREATE POLICIES
 -- =====================================================
 
