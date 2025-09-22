@@ -8,11 +8,13 @@ const router = Router()
 router.get('/', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const education = await supabaseService.query(`
-      SELECT id, institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements
-      FROM education
-      ORDER BY start_date DESC
-    `)
+    
+    const { data: education, error } = await supabaseService.getClient()
+      .from('education')
+      .select('id, institution, degree, field_of_study, location, start_date, end_date, gpa, description, achievements')
+      .order('start_date', { ascending: false })
+    
+    if (error) throw error
 
     const parsedEducation = education.map((edu: any) => ({
       ...edu,
@@ -101,21 +103,17 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
       })
     }
 
-    const result = await supabaseService.queryOne(`
-      INSERT INTO education (institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      RETURNING *
-    `, [
+    const result = await supabaseService.insert('education', {
       institution, 
       degree, 
       field_of_study, 
       location, 
       start_date, 
       end_date, 
-      grade, 
+      gpa: grade, 
       description, 
-      JSON.stringify(achievements || [])
-    ])
+      achievements: achievements || []
+    })
 
     const parsedResult = {
       ...result,

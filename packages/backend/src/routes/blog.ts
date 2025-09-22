@@ -12,30 +12,29 @@ router.get('/', async (req: Request, res: Response) => {
     const { category, search, limit = 10, offset = 0 } = req.query
 
     const { supabaseService } = getServices()
-    let query = `
-      SELECT id, title, slug, excerpt, created_at as publish_date, category, tags, featured, author, read_time
-      FROM blog_posts
-      WHERE published = true
-    `
-    const params = []
-    let paramIndex = 1
+    
+    let query = supabaseService.getClient()
+      .from('blog_posts')
+      .select('id, title, slug, excerpt, created_at, category, tags, featured, author, read_time')
+      .eq('published', true)
 
     // Add category filter
     if (category) {
-      query += ` AND category = $${paramIndex++}`
-      params.push(category)
+      query = query.eq('category', category as string)
     }
 
     // Add search filter
     if (search) {
-      query += ` AND (title ILIKE $${paramIndex++} OR excerpt ILIKE $${paramIndex++})`
-      params.push(`%${search}%`, `%${search}%`)
+      query = query.or(`title.ilike.%${search}%,excerpt.ilike.%${search}%`)
     }
 
-    query += ` ORDER BY publish_date DESC LIMIT $${paramIndex++} OFFSET $${paramIndex++}`
-    params.push(limit, offset)
+    // Add ordering and pagination
+    query = query
+      .order('created_at', { ascending: false })
+      .range(Number(offset), Number(offset) + Number(limit) - 1)
 
-    const posts = await supabaseService.query(query, params)
+    const { data: posts, error } = await query
+    if (error) throw error
 
     const parsedPosts = posts.map((post: any) => {
       let tags = []
@@ -194,26 +193,35 @@ router.post('/', [
     // Create slug from title
     let slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
     
-    // Check if slug already exists and make it unique
+    // Check if slug already exists    // Generate unique slug
     let uniqueSlug = slug
     let counter = 1
     while (true) {
-      const existingPost = await supabaseService.queryOne('SELECT id FROM blog_posts WHERE slug = $1', [uniqueSlug])
-      if (!existingPost) {
+      try {
+        await supabaseService.selectOne('blog_posts', uniqueSlug, 'id')
+        // If we get here, slug exists, try next one
+        uniqueSlug = `${slug}-${counter}`
+        counter++
+      } catch (error) {
+        // Slug doesn't exist, we can use it
         break
       }
-      uniqueSlug = `${slug}-${counter}`
-      counter++
     }
 
     // Insert new blog post
-    const result = await supabaseService.query(`
-      INSERT INTO blog_posts (title, slug, excerpt, content, category, tags, featured, published, author, read_time, publish_date)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-      RETURNING id
-    `, [title, uniqueSlug, excerpt, content, category, JSON.stringify(tags), featured, published, author, read_time, publish_date])
-
-    const newPost = await supabaseService.queryOne('SELECT * FROM blog_posts WHERE id = $1', [result[0].id])
+    const newPost = await supabaseService.insert('blog_posts', {
+      title,
+      slug: uniqueSlug,
+      excerpt,
+      content,
+      category,
+      tags,
+      featured,
+      published,
+      author,
+      read_time,
+      created_at: publish_date
+    })
 
     return res.status(201).json({
       success: true,

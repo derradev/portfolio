@@ -10,13 +10,15 @@ const router = express.Router()
 router.get('/', async (req: Request, res: Response) => {
   try {
     const { supabaseService } = getServices()
-    const learning = await supabaseService.query(`
-      SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
-      FROM learning
-      ORDER BY start_date DESC
-    `)
+    
+    const { data: learningItems, error } = await supabaseService.getClient()
+      .from('learning')
+      .select('id, title, description, progress, category, start_date, estimated_completion, resources, status, created_at, updated_at')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
 
-    const parsedLearning = learning.map((item: any) => ({
+    const parsedLearning = learningItems.map((item: any) => ({
       ...item,
       resources: item.resources ? (
         typeof item.resources === 'string' ? 
