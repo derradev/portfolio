@@ -13,12 +13,28 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
   ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
   : 'https://api.demitaylornimmo.com/api'
 
+// Global state to track if we've already checked maintenance mode in this session
+let hasCheckedMaintenance = false
+let maintenanceState = {
+  isMaintenanceMode: false,
+  isLoading: true,
+  error: null as string | null
+}
+
 export const useMaintenanceMode = () => {
-  const [isMaintenanceMode, setIsMaintenanceMode] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [isMaintenanceMode, setIsMaintenanceMode] = useState(maintenanceState.isMaintenanceMode)
+  const [isLoading, setIsLoading] = useState(maintenanceState.isLoading)
+  const [error, setError] = useState<string | null>(maintenanceState.error)
 
   useEffect(() => {
+    // If we've already checked maintenance mode in this browser session, use cached result
+    if (hasCheckedMaintenance) {
+      setIsMaintenanceMode(maintenanceState.isMaintenanceMode)
+      setIsLoading(maintenanceState.isLoading)
+      setError(maintenanceState.error)
+      return
+    }
+
     const checkMaintenanceMode = async () => {
       try {
         setIsLoading(true)
@@ -36,23 +52,29 @@ export const useMaintenanceMode = () => {
         }
 
         const data = await response.json()
-        setIsMaintenanceMode(data.maintenance_mode || false)
+        const maintenanceMode = data.maintenance_mode || false
+        
+        // Update both local state and global cache
+        setIsMaintenanceMode(maintenanceMode)
+        maintenanceState.isMaintenanceMode = maintenanceMode
+        maintenanceState.error = null
       } catch (err) {
         console.error('Error checking maintenance mode:', err)
-        setError(err instanceof Error ? err.message : 'Unknown error')
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+        setError(errorMessage)
+        maintenanceState.error = errorMessage
         // Default to false if we can't check the flag
         setIsMaintenanceMode(false)
+        maintenanceState.isMaintenanceMode = false
       } finally {
         setIsLoading(false)
+        maintenanceState.isLoading = false
+        hasCheckedMaintenance = true
       }
     }
 
+    // Only check maintenance mode once per browser session
     checkMaintenanceMode()
-
-    // Check every 30 seconds for maintenance mode changes
-    const interval = setInterval(checkMaintenanceMode, 30000)
-
-    return () => clearInterval(interval)
   }, [])
 
   return {
