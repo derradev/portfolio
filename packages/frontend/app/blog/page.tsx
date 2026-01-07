@@ -209,10 +209,10 @@ export default function Blog() {
                       {post.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="tech-tag text-xs flex items-center"
+                          className="tech-tag text-xs"
                         >
-                          <Tag className="w-3 h-3 mr-1" />
-                          {tag}
+                          <Tag className="w-3 h-3" />
+                          <span>{tag}</span>
                         </span>
                       ))}
                     </div>
@@ -279,6 +279,26 @@ export default function Blog() {
                     <p className="text-gray-600 mb-3 text-sm line-clamp-3 font-medium">
                       {post.excerpt}
                     </p>
+                    
+                    {post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {post.tags.slice(0, 3).map((tag) => (
+                          <span
+                            key={tag}
+                            className="tech-tag text-xs"
+                          >
+                            <Tag className="w-2.5 h-2.5" />
+                            <span>{tag}</span>
+                          </span>
+                        ))}
+                        {post.tags.length > 3 && (
+                          <span className="tech-tag text-xs">
+                            <Tag className="w-2.5 h-2.5" />
+                            <span>+{post.tags.length - 3}</span>
+                          </span>
+                        )}
+                      </div>
+                    )}
                     
                     <div className="flex items-center justify-between">
                       <div className="flex items-center text-purple-600 text-xs font-medium">

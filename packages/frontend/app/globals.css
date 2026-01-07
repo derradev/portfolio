@@ -351,7 +351,9 @@ a:hover {
   border-radius: 20px;
   font-size: 0.875rem;
   font-weight: 500;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .hero-section {

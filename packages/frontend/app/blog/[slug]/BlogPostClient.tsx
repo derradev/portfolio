@@ -190,10 +190,10 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="tech-tag text-sm flex items-center"
+                    className="tech-tag text-sm"
                   >
-                    <Tag className="w-3 h-3 mr-1" />
-                    {tag}
+                    <Tag className="w-3 h-3" />
+                    <span>{tag}</span>
                   </span>
                 ))}
               </div>
