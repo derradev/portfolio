@@ -77,7 +77,7 @@ router.post('/login', [
           id: data.user.id,
           email: data.user.email,
           name: data.user.user_metadata?.name || data.user.email,
-          role: data.user.user_metadata?.role || 'admin'
+          role: data.user.user_metadata?.role || 'user'  // Changed default from 'admin' to 'user'
         },
         session: {
           access_token: data.session.access_token,
