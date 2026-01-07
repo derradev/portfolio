@@ -13,8 +13,15 @@ fi
 
 echo "🔍 Smart build check for $SERVICE..."
 
+# Check if git is available
+if ! command -v git &> /dev/null; then
+  echo "⚠️  Git not available. Building anyway (fail-safe)."
+  exit 1
+fi
+
 # Determine the base commit to compare against
 # Try to get the production/main branch, fallback to HEAD~1
+BASE_COMMIT=""
 if git rev-parse --verify origin/main >/dev/null 2>&1; then
   BASE_COMMIT="origin/main"
   echo "📊 Comparing against main branch"
@@ -25,7 +32,17 @@ elif git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
   BASE_COMMIT="HEAD~1"
   echo "📊 Comparing against previous commit"
 else
-  echo "🆕 Initial commit detected. Proceeding with build."
+  echo "🆕 No base commit found. Building anyway (fail-safe)."
+  exit 1
+fi
+
+# Verify we can actually diff
+if ! git diff --name-only --quiet $BASE_COMMIT HEAD 2>/dev/null; then
+  # This is fine - it means there are changes
+  true
+elif [ $? -eq 128 ]; then
+  # Git error (e.g., commit not found)
+  echo "⚠️  Git diff error. Building anyway (fail-safe)."
   exit 1
 fi
 

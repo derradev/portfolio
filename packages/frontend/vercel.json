@@ -6,5 +6,5 @@
       "use": "@vercel/next"
     }
   ],
-  "ignoreCommand": "bash ignore-build-step.sh"
+  "ignoreCommand": "exit 1"
 }
