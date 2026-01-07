@@ -24,5 +24,5 @@
       "dest": "/index.html"
     }
   ],
-  "ignoreCommand": "bash ignore-build-step.sh admin"
+  "ignoreCommand": "exit 1"
 }
