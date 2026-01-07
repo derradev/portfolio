@@ -35,7 +35,26 @@ const Projects = () => {
 
   const { data: projects, isLoading } = useQuery('projects', async () => {
     const response = await api.get('/projects')
-    return response.data.data as Project[]
+    const projectsData = response.data.data as Project[]
+    // Ensure technologies is always an array
+    return projectsData.map((project: Project) => ({
+      ...project,
+      technologies: Array.isArray(project.technologies) 
+        ? project.technologies 
+        : (() => {
+            try {
+              if (typeof project.technologies === 'string') {
+                if (project.technologies.startsWith('[')) {
+                  return JSON.parse(project.technologies)
+                }
+                return project.technologies.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0)
+              }
+              return []
+            } catch {
+              return []
+            }
+          })()
+    }))
   })
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ProjectForm>()
@@ -183,15 +202,21 @@ const Projects = () => {
               </div>
               <p className="text-sm text-gray-600 line-clamp-3 font-medium">{project.description}</p>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.slice(0, 3).map((tech) => (
-                  <span key={tech} className="px-3 py-1 text-xs bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 rounded-full font-medium">
-                    {tech}
-                  </span>
-                ))}
-                {project.technologies.length > 3 && (
-                  <span className="px-3 py-1 text-xs bg-gray-100 text-gray-500 rounded-full font-medium">
-                    +{project.technologies.length - 3} more
-                  </span>
+                {Array.isArray(project.technologies) && project.technologies.length > 0 ? (
+                  <>
+                    {project.technologies.slice(0, 3).map((tech) => (
+                      <span key={tech} className="px-3 py-1 text-xs bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 rounded-full font-medium">
+                        {tech}
+                      </span>
+                    ))}
+                    {project.technologies.length > 3 && (
+                      <span className="px-3 py-1 text-xs bg-gray-100 text-gray-500 rounded-full font-medium">
+                        +{project.technologies.length - 3} more
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <span className="text-gray-400 text-xs">No technologies listed</span>
                 )}
               </div>
               <div className="flex items-center justify-between pt-2">
