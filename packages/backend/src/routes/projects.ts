@@ -129,8 +129,14 @@ router.put('/:id', [
   authorize('admin'),
   body('title').optional().isLength({ min: 1 }).trim(),
   body('description').optional().isLength({ min: 1 }).trim(),
-  body('image').optional().isString(),
-  body('image_url').optional().isURL({ require_protocol: false }),
+  body('image').optional().custom((value) => {
+    if (value === null || value === '' || value === undefined) return true
+    return typeof value === 'string'
+  }),
+  body('image_url').optional().custom((value) => {
+    if (value === null || value === '' || value === undefined) return true
+    return /^https?:\/\/.+/.test(value) || /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(value)
+  }),
   body('technologies').optional().isArray({ min: 1 }),
   body('github_url').optional().custom((value) => {
     if (value === null || value === '') return true
