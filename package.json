@@ -14,11 +14,20 @@
     "build": "npm run build --workspaces",
     "start": "npm run start --workspaces",
     "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspaces",
+    "test:e2e": "cypress run",
+    "test:e2e:open": "cypress open",
+    "test:coverage": "npm run test:coverage --workspaces",
     "clean": "rimraf packages/*/node_modules packages/*/.next packages/*/dist"
   },
   "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
     "concurrently": "^8.2.2",
-    "rimraf": "^5.0.5"
+    "cypress": "^13.6.0",
+    "esbuild": "^0.19.8",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18.0.0",

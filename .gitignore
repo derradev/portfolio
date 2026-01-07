@@ -32,6 +32,13 @@ pids
 
 # Coverage directory used by tools like istanbul
 coverage/
+*.lcov
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+.cypress.env
 
 # IDE
 .vscode/
