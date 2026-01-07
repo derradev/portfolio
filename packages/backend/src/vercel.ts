@@ -45,23 +45,39 @@ const limiter = rateLimit({
 
 // Middleware
 app.use(helmet())
-app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || 'http://localhost:3000',
-    process.env.ADMIN_URL || 'http://localhost:3002',
-    // Add your custom domains
-    'https://william-malone.com',
-    'https://www.william-malone.com',
-    'https://admin.william-malone.com',
-    'https://api.william-malone.com',
-    // Add Vercel preview URLs
-    /^https:\/\/.*\.vercel\.app$/
-  ],
+// Dynamic CORS configuration
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    const allowedOrigins = [
+      process.env.FRONTEND_URL || 'http://localhost:3000',
+      process.env.ADMIN_URL || 'http://localhost:3002',
+      'https://william-malone.com',
+      'https://www.william-malone.com',
+      'https://admin.william-malone.com',
+      'https://api.william-malone.com'
+    ]
+    
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true)
+    
+    // Check Vercel preview URLs
+    if (/^https:\/\/.*\.vercel\.app$/.test(origin)) {
+      return callback(null, true)
+    }
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'), false)
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 200
-}))
+}
+
+app.use(cors(corsOptions))
 
 // Only use morgan in development
 if (process.env.NODE_ENV !== 'production') {
