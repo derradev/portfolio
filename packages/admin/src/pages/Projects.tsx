@@ -37,24 +37,28 @@ const Projects = () => {
     const response = await api.get('/projects')
     const projectsData = response.data.data as Project[]
     // Ensure technologies is always an array
-    return projectsData.map((project: Project) => ({
-      ...project,
-      technologies: Array.isArray(project.technologies) 
-        ? project.technologies 
-        : (() => {
-            try {
-              if (typeof project.technologies === 'string') {
-                if (project.technologies.startsWith('[')) {
-                  return JSON.parse(project.technologies)
-                }
-                return project.technologies.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0)
-              }
-              return []
-            } catch {
-              return []
-            }
-          })()
-    }))
+    return projectsData.map((project: Project) => {
+      let technologies: string[] = []
+      
+      if (Array.isArray(project.technologies)) {
+        technologies = project.technologies
+      } else if (typeof project.technologies === 'string') {
+        try {
+          if (project.technologies.startsWith('[')) {
+            technologies = JSON.parse(project.technologies)
+          } else {
+            technologies = project.technologies.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0)
+          }
+        } catch {
+          technologies = []
+        }
+      }
+      
+      return {
+        ...project,
+        technologies
+      }
+    })
   })
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ProjectForm>()

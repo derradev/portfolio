@@ -36,20 +36,21 @@ case $SERVICE in
   "frontend")
     SERVICE_PATHS=(
       "packages/frontend/"
-      "packages/frontend/app/"
-      "packages/frontend/components/"
-      "packages/frontend/lib/"
-      "packages/frontend/public/"
+    )
+    # Specific important files
+    SERVICE_FILES=(
       "packages/frontend/package.json"
       "packages/frontend/next.config.js"
       "packages/frontend/tsconfig.json"
       "packages/frontend/tailwind.config.js"
       "packages/frontend/postcss.config.js"
+      "packages/frontend/.env*"
     )
     SHARED_PATHS=(
       "package.json"
       "package-lock.json"
       "yarn.lock"
+      ".github/workflows/"
     )
     # Frontend might be affected by backend API changes
     DEPENDENCY_PATHS=(
@@ -60,33 +61,39 @@ case $SERVICE in
   "backend")
     SERVICE_PATHS=(
       "packages/backend/"
-      "packages/backend/src/"
+    )
+    SERVICE_FILES=(
       "packages/backend/package.json"
       "packages/backend/tsconfig.json"
       "packages/backend/vercel.json"
+      "packages/backend/.env*"
     )
     SHARED_PATHS=(
       "package.json"
       "package-lock.json"
       "yarn.lock"
+      ".github/workflows/"
     )
     DEPENDENCY_PATHS=()
     ;;
   "admin")
     SERVICE_PATHS=(
       "packages/admin/"
-      "packages/admin/src/"
-      "packages/admin/public/"
+    )
+    SERVICE_FILES=(
       "packages/admin/package.json"
       "packages/admin/vite.config.ts"
       "packages/admin/tsconfig.json"
       "packages/admin/tailwind.config.js"
       "packages/admin/postcss.config.js"
+      "packages/admin/index.html"
+      "packages/admin/.env*"
     )
     SHARED_PATHS=(
       "package.json"
       "package-lock.json"
       "yarn.lock"
+      ".github/workflows/"
     )
     # Admin might be affected by backend API changes
     DEPENDENCY_PATHS=(
@@ -100,18 +107,28 @@ case $SERVICE in
     ;;
 esac
 
-# Check for changes in service-specific paths
+# Check for changes in service-specific paths (any file in the service directory)
 SERVICE_CHANGED=false
 for path in "${SERVICE_PATHS[@]}"; do
-  if git diff --name-only --quiet $BASE_COMMIT $CURRENT_COMMIT -- "$path"; then
-    continue
-  else
+  if ! git diff --name-only --quiet $BASE_COMMIT $CURRENT_COMMIT -- "$path"; then
     SERVICE_CHANGED=true
-    echo "✅ Changes detected in: $path"
-    git diff --name-only $BASE_COMMIT $CURRENT_COMMIT -- "$path" | head -5
+    echo "✅ Changes detected in service directory: $path"
+    CHANGED_FILES=$(git diff --name-only $BASE_COMMIT $CURRENT_COMMIT -- "$path" | head -10)
+    echo "$CHANGED_FILES"
     break
   fi
 done
+
+# Also check specific important files
+if [ "$SERVICE_CHANGED" = false ]; then
+  for file in "${SERVICE_FILES[@]}"; do
+    if ! git diff --name-only --quiet $BASE_COMMIT $CURRENT_COMMIT -- "$file" 2>/dev/null; then
+      SERVICE_CHANGED=true
+      echo "✅ Important file changed: $file"
+      break
+    fi
+  done
+fi
 
 # Check for changes in shared paths
 SHARED_CHANGED=false

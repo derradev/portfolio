@@ -15,5 +15,5 @@
       "dest": "src/vercel.ts"
     }
   ],
-  "ignoreCommand": "exit 1"
+  "ignoreCommand": "bash scripts/smart-ignore-build.sh backend"
 }

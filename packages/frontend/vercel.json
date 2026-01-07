@@ -6,5 +6,5 @@
       "use": "@vercel/next"
     }
   ],
-  "ignoreCommand": "exit 1"
+  "ignoreCommand": "bash scripts/smart-ignore-build.sh frontend"
 }
