@@ -1,0 +1,45 @@
+import express, { Request, Response } from 'express'
+import { getServices } from '../services'
+
+const router = express.Router()
+
+// Keep-alive endpoint to prevent database from sleeping
+// This endpoint performs a simple query to keep the Supabase database active
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    const { supabaseService } = getServices()
+    
+    // Perform a simple query to keep the database active
+    // Query a lightweight table (blog_posts count is efficient)
+    const { data, error } = await supabaseService.getClient()
+      .from('blog_posts')
+      .select('id')
+      .limit(1)
+    
+    if (error) {
+      console.error('Keep-alive query error:', error)
+      return res.status(500).json({
+        success: false,
+        error: 'Database connection failed',
+        timestamp: new Date().toISOString()
+      })
+    }
+
+    return res.json({
+      success: true,
+      message: 'Database keep-alive successful',
+      timestamp: new Date().toISOString(),
+      database: 'active'
+    })
+  } catch (error) {
+    console.error('Keep-alive error:', error)
+    return res.status(500).json({
+      success: false,
+      error: 'Keep-alive failed',
+      timestamp: new Date().toISOString()
+    })
+  }
+})
+
+export default router
+

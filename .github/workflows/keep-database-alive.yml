@@ -1,0 +1,41 @@
+name: Keep Database Alive
+
+on:
+  schedule:
+    # Run every 3 days at 2 AM UTC
+    # This prevents the free Supabase database from going to sleep
+    - cron: '0 2 */3 * *'
+  workflow_dispatch: # Allow manual triggering from GitHub Actions UI
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Ping Database Keep-Alive Endpoint
+        env:
+          API_URL: ${{ secrets.API_URL || 'https://api.demitaylornimmo.com' }}
+        run: |
+          echo "🔄 Pinging database keep-alive endpoint..."
+          echo "📍 URL: $API_URL/api/keepalive"
+          echo "⏰ Time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          
+          # Make the request with timeout
+          response=$(curl -s -w "\n%{http_code}" --max-time 30 "$API_URL/api/keepalive" || echo -e "\n000")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n-1)
+          
+          if [ "$http_code" = "200" ]; then
+            echo "✅ Database keep-alive successful!"
+            echo "📊 Response: $body"
+            exit 0
+          else
+            echo "❌ Database keep-alive failed!"
+            echo "📊 HTTP Code: $http_code"
+            echo "📊 Response: $body"
+            # Don't fail the workflow - just log the error
+            # This prevents notification spam if the API is temporarily down
+            exit 0
+          fi
+

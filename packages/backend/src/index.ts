@@ -31,6 +31,7 @@ import educationRoutes from './routes/education'
 import certificationsRoutes from './routes/certifications'
 import analyticsRoutes from './routes/analytics'
 import featureFlagsRoutes from './routes/featureFlags'
+import keepAliveRoutes from './routes/keepalive'
 // import uploadRoutes from './routes/upload'
 
 // Load environment variables
@@ -102,6 +103,7 @@ app.get('/', (req, res) => {
     timestamp: new Date().toISOString(),
     endpoints: {
       health: '/health',
+      keepalive: '/api/keepalive',
       api: '/api/*'
     }
   })
@@ -127,6 +129,7 @@ app.use('/api/education', educationRoutes)
 app.use('/api/certifications', certificationsRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/feature-flags', featureFlagsRoutes)
+app.use('/api/keepalive', keepAliveRoutes)
 // app.use('/api/upload', uploadRoutes)
 
 // Error handling
