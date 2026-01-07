@@ -132,11 +132,10 @@ export default function Projects() {
           className="text-center mb-16"
         >
           <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-            ✨ My Projects
+              🛡️ Security Projects
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
-            A collection of cybersecurity projects, IT automation scripts, and security tools
-            showcasing my journey in penetration testing, network security, and IT operations. 🔐
+              Cybersecurity tools, Python scripts, and IT automation projects 🔐
           </p>
         </motion.div>
 
