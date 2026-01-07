@@ -6,6 +6,7 @@ const router = express.Router()
 // Keep-alive endpoint to prevent database from sleeping
 // This endpoint performs a simple query to keep the Supabase database active
 router.get('/', async (req: Request, res: Response) => {
+  console.log('Keep-alive endpoint called at:', new Date().toISOString())
   try {
     const { supabaseService } = getServices()
     

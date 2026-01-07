@@ -122,16 +122,25 @@ async function ensureSupabaseInitialized() {
 
 // Middleware to ensure Supabase services are initialized (skip for health check and root)
 app.use(async (req, res, next) => {
-  // Skip Supabase initialization for health check and root route
+  // Skip Supabase initialization for health check, root route, and favicon
   if (req.path === '/api/health' || req.path === '/' || req.path === '/favicon.ico') {
     return next()
   }
   
+  // Keep-alive endpoint needs Supabase, so ensure it's initialized
   try {
     await ensureSupabaseInitialized()
     next()
   } catch (error) {
     console.error('Supabase service initialization error:', error)
+    // For keepalive endpoint, return a more informative error
+    if (req.path === '/api/keepalive') {
+      return res.status(500).json({ 
+        success: false,
+        error: 'Supabase service initialization failed',
+        timestamp: new Date().toISOString()
+      })
+    }
     res.status(500).json({ error: 'Supabase service initialization failed' })
   }
 })
