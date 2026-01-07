@@ -15,7 +15,7 @@ router.get('/', async (req: Request, res: Response) => {
     
     let query = supabaseService.getClient()
       .from('blog_posts')
-      .select('id, title, slug, excerpt, created_at, category, tags, featured, author, read_time')
+      .select('id, title, slug, excerpt, publish_date, created_at, category, tags, featured, author, read_time')
       .eq('published', true)
 
     // Add category filter
@@ -53,7 +53,8 @@ router.get('/', async (req: Request, res: Response) => {
       return {
         ...post,
         tags,
-        featured: Boolean(post.featured)
+        featured: Boolean(post.featured),
+        publish_date: post.publish_date || post.created_at
       }
     })
 
@@ -78,7 +79,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
     
     const { data: post, error } = await supabaseService.getClient()
       .from('blog_posts')
-      .select('id, title, slug, excerpt, content, created_at, category, tags, featured')
+      .select('id, title, slug, excerpt, content, author, read_time, publish_date, created_at, category, tags, featured')
       .eq('slug', slug)
       .eq('published', true)
       .single()
@@ -108,7 +109,8 @@ router.get('/:slug', async (req: Request, res: Response) => {
     const parsedPost = {
       ...post,
       tags,
-      featured: Boolean(post.featured)
+      featured: Boolean(post.featured),
+      publish_date: post.publish_date || post.created_at
     }
 
     return res.json({
@@ -131,7 +133,7 @@ router.get('/admin/all', [authenticate, authorize('admin')], async (req: AuthReq
     
     const { data: posts, error } = await supabaseService.getClient()
       .from('blog_posts')
-      .select('id, title, slug, excerpt, created_at, category, tags, featured, published')
+      .select('id, title, slug, excerpt, content, author, read_time, publish_date, created_at, category, tags, featured, published')
       .order('created_at', { ascending: false })
     
     if (error) throw error
@@ -154,7 +156,8 @@ router.get('/admin/all', [authenticate, authorize('admin')], async (req: AuthReq
         ...post,
         tags,
         featured: Boolean(post.featured),
-        published: Boolean(post.published)
+        published: Boolean(post.published),
+        publish_date: post.publish_date || post.created_at
       }
     })
 
@@ -214,8 +217,8 @@ router.post('/', [
       }
     }
 
-    // Insert new blog post (temporarily remove author and read_time until columns are added)
-    const newPost = await supabaseService.insert('blog_posts', {
+    // Insert new blog post
+    const insertData: any = {
       title,
       slug: uniqueSlug,
       excerpt,
@@ -223,9 +226,18 @@ router.post('/', [
       category,
       tags,
       featured,
-      published,
-      created_at: publish_date
-    })
+      published
+    }
+
+    // Add optional fields if provided
+    if (author) insertData.author = author
+    if (read_time) insertData.read_time = read_time
+    if (publish_date) {
+      insertData.publish_date = publish_date
+      insertData.created_at = publish_date
+    }
+
+    const newPost = await supabaseService.insert('blog_posts', insertData)
 
     return res.status(201).json({
       success: true,
@@ -293,6 +305,24 @@ router.put('/:id', [
       })
     }
 
+    // Check slug uniqueness if slug is being updated
+    if (updateData.slug && updateData.slug !== existingPost.slug) {
+      try {
+        const slugCheck = await supabaseService.queryOne(
+          'SELECT id FROM blog_posts WHERE slug = $1 AND id != $2',
+          [updateData.slug, id]
+        )
+        if (slugCheck) {
+          return res.status(400).json({
+            success: false,
+            error: 'Slug already exists. Please choose a different slug.'
+          })
+        }
+      } catch (error) {
+        // Slug doesn't exist, which is good - continue
+      }
+    }
+
     // Build update query dynamically
     const updateFields = []
     const updateValues = []
@@ -302,6 +332,13 @@ router.put('/:id', [
       if (key === 'tags') {
         updateFields.push(`${key} = $${paramIndex++}`)
         updateValues.push(JSON.stringify(updateData[key]))
+      } else if (key === 'publish_date') {
+        // Handle publish_date - update both publish_date and created_at if publish_date is provided
+        const dateValue = updateData[key]
+        updateFields.push(`publish_date = $${paramIndex++}`)
+        updateValues.push(dateValue)
+        updateFields.push(`created_at = $${paramIndex++}`)
+        updateValues.push(dateValue)
       } else {
         updateFields.push(`${key} = $${paramIndex++}`)
         updateValues.push(updateData[key])
@@ -351,16 +388,16 @@ router.put('/:id', [
 })
 
 // Delete blog post (admin only)
-router.delete('/:slug', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
+router.delete('/:id', [authenticate, authorize('admin')], async (req: AuthRequest, res: Response) => {
   try {
-    const { slug } = req.params
+    const { id } = req.params
     const { supabaseService } = getServices()
 
     // Check if post exists and delete it
     const { data: deletedPost, error } = await supabaseService.getClient()
       .from('blog_posts')
       .delete()
-      .eq('slug', slug)
+      .eq('id', id)
       .select()
       .single()
 

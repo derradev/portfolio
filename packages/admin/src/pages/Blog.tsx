@@ -57,6 +57,10 @@ const Blog = () => {
         toast.success('Blog post created successfully')
         setIsModalOpen(false)
         reset()
+      },
+      onError: (error: any) => {
+        const message = error.response?.data?.error || 'Failed to create blog post'
+        toast.error(message)
       }
     }
   )
@@ -73,6 +77,10 @@ const Blog = () => {
         setIsModalOpen(false)
         setEditingPost(null)
         reset()
+      },
+      onError: (error: any) => {
+        const message = error.response?.data?.error || 'Failed to update blog post'
+        toast.error(message)
       }
     }
   )
@@ -83,6 +91,10 @@ const Blog = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('blog-posts')
         toast.success('Blog post deleted successfully')
+      },
+      onError: (error: any) => {
+        const message = error.response?.data?.error || 'Failed to delete blog post'
+        toast.error(message)
       }
     }
   )
@@ -215,7 +227,7 @@ const Blog = () => {
                 <div className="flex items-center text-sm text-pink-600 space-x-4 mb-3">
                   <span className="flex items-center">📂 {post.category}</span>
                   <span className="flex items-center">⏱️ {post.read_time} min read</span>
-                  <span className="flex items-center">📅 {new Date(post.publish_date).toLocaleDateString()}</span>
+                  <span className="flex items-center">📅 {post.publish_date ? new Date(post.publish_date).toLocaleDateString() : 'Date not available'}</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.slice(0, 3).map((tag) => (

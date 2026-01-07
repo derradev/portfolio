@@ -43,7 +43,7 @@ export default function Blog() {
             excerpt: post.excerpt,
             content: post.content || '',
             author: post.author || 'Admin',
-            publishDate: post.publish_date,
+            publishDate: post.publish_date || post.created_at,
             readTime: post.read_time || 5,
             category: post.category,
             tags: Array.isArray(post.tags) ? post.tags : [],
@@ -62,7 +62,9 @@ export default function Blog() {
     loadBlogPosts()
   }, [])
 
-  const categories = ['All', 'Frontend', 'Backend', 'Database', 'DevOps']
+  // Extract unique categories from blog posts dynamically
+  const uniqueCategories = Array.from(new Set(blogPosts.map(post => post.category).filter(Boolean)))
+  const categories = ['All', ...uniqueCategories.sort()]
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -218,7 +220,7 @@ export default function Blog() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center text-purple-600 text-sm font-medium">
                         <Calendar className="w-4 h-4 mr-1" />
-                        {new Date(post.publishDate).toLocaleDateString()}
+                        {post.publishDate ? new Date(post.publishDate).toLocaleDateString() : 'Date not available'}
                       </div>
                       <Link
                         href={`/blog/${post.slug}`}
@@ -281,7 +283,7 @@ export default function Blog() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center text-purple-600 text-xs font-medium">
                         <Calendar className="w-3 h-3 mr-1" />
-                        {new Date(post.publishDate).toLocaleDateString()}
+                        {post.publishDate ? new Date(post.publishDate).toLocaleDateString() : 'Date not available'}
                       </div>
                       <Link
                         href={`/blog/${post.slug}`}
