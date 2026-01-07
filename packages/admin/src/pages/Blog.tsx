@@ -203,7 +203,7 @@ const Blog = () => {
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-3 mb-2">
-                  <h3 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  <h3 className="text-xl font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                     {post.title}
                   </h3>
                   <div className="flex space-x-2">
@@ -221,22 +221,22 @@ const Blog = () => {
                     </span>
                   </div>
                 </div>
-                <p className="text-gray-600 line-clamp-2 font-medium mb-3">
+                <p className="text-gray-400 line-clamp-2 font-medium mb-3">
                   {post.excerpt}
                 </p>
-                <div className="flex items-center text-sm text-pink-600 space-x-4 mb-3">
+                <div className="flex items-center text-sm text-cyan-400 space-x-4 mb-3">
                   <span className="flex items-center">📂 {post.category}</span>
                   <span className="flex items-center">⏱️ {post.read_time} min read</span>
                   <span className="flex items-center">📅 {post.publish_date ? new Date(post.publish_date).toLocaleDateString() : 'Date not available'}</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.slice(0, 3).map((tag) => (
-                    <span key={tag} className="px-3 py-1 text-xs bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 rounded-full font-medium">
+                    <span key={tag} className="px-3 py-1 text-xs bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 rounded-full font-medium">
                       {tag}
                     </span>
                   ))}
                   {post.tags.length > 3 && (
-                    <span className="px-3 py-1 text-xs bg-gray-100 text-gray-500 rounded-full font-medium">
+                    <span className="px-3 py-1 text-xs bg-gray-800 text-gray-400 rounded-full font-medium">
                       +{post.tags.length - 3} more
                     </span>
                   )}
@@ -248,7 +248,7 @@ const Blog = () => {
                     href={`https://william-malone.com/blog/${post.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-green-100 text-green-600 hover:bg-green-200 transition-colors"
+                    className="p-2 rounded-full bg-cyan-900/30 text-cyan-400 hover:bg-cyan-900/50 transition-colors"
                     title="View Post"
                   >
                     <Eye className="w-4 h-4" />
@@ -256,7 +256,7 @@ const Blog = () => {
                 )}
                 <button
                   onClick={() => openModal(post)}
-                  className="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
+                  className="p-2 rounded-full bg-blue-900/30 text-blue-400 hover:bg-blue-900/50 transition-colors"
                 >
                   <Edit className="w-4 h-4" />
                 </button>
@@ -266,7 +266,7 @@ const Blog = () => {
                       deleteMutation.mutate(post.id)
                     }
                   }}
-                  className="p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
+                  className="p-2 rounded-full bg-red-900/30 text-red-400 hover:bg-red-900/50 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -402,19 +402,19 @@ const Blog = () => {
                         <input
                           {...register('featured')}
                           type="checkbox"
-                          className="h-5 w-5 text-pink-600 focus:ring-pink-500 border-pink-300 rounded"
+                          className="h-5 w-5 text-cyan-600 focus:ring-cyan-500 border-cyan-300 rounded"
                           id="featured"
                         />
-                        <label htmlFor="featured" className="text-sm font-medium text-gray-700">⭐ Featured post (show on homepage)</label>
+                        <label htmlFor="featured" className="text-sm font-medium text-gray-300">⭐ Featured post (show on homepage)</label>
                       </div>
                       <div className="flex items-center space-x-3">
                         <input
                           {...register('published')}
                           type="checkbox"
-                          className="h-5 w-5 text-pink-600 focus:ring-pink-500 border-pink-300 rounded"
+                          className="h-5 w-5 text-cyan-600 focus:ring-cyan-500 border-cyan-300 rounded"
                           id="published"
                         />
-                        <label htmlFor="published" className="text-sm font-medium text-gray-700">🚀 Publish immediately</label>
+                        <label htmlFor="published" className="text-sm font-medium text-gray-300">🚀 Publish immediately</label>
                       </div>
                     </div>
                   </div>

@@ -41,7 +41,7 @@ const Dashboard = () => {
       name: '📝 Security Blog',
       value: stats?.blogPosts || 0,
       icon: FileText,
-      color: 'bg-gradient-to-r from-purple-400 to-purple-600',
+      color: 'bg-gradient-to-r from-blue-500 to-blue-700',
     },
     {
       name: '👥 Work Experience',
@@ -53,7 +53,7 @@ const Dashboard = () => {
       name: '🎓 Education',
       value: stats?.education || 0,
       icon: GraduationCap,
-      color: 'bg-gradient-to-r from-pink-400 to-pink-600',
+      color: 'bg-gradient-to-r from-cyan-500 to-cyan-700',
     },
     {
       name: '🏆 Certifications',
@@ -108,19 +108,19 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <a
               href="/projects"
-              className="relative group card p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-pink-200"
+              className="relative group card p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-cyan-600"
             >
               <div>
-                <span className="rounded-xl inline-flex p-3 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700">
+                <span className="rounded-xl inline-flex p-3 bg-gradient-to-r from-blue-900/50 to-blue-800 text-blue-300">
                   <Briefcase className="w-6 h-6" />
                 </span>
               </div>
               <div className="mt-4">
-                <h3 className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <h3 className="text-lg font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   <span className="absolute inset-0" aria-hidden="true" />
                   💼 Manage Projects
                 </h3>
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-gray-400">
                   Add, edit, or remove projects from your portfolio ✨
                 </p>
               </div>
@@ -128,19 +128,19 @@ const Dashboard = () => {
 
             <a
               href="/blog"
-              className="relative group card p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-pink-200"
+              className="relative group card p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-cyan-600"
             >
               <div>
-                <span className="rounded-xl inline-flex p-3 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700">
+                <span className="rounded-xl inline-flex p-3 bg-gradient-to-r from-cyan-900/50 to-cyan-800 text-cyan-300">
                   <FileText className="w-6 h-6" />
                 </span>
               </div>
               <div className="mt-4">
-                <h3 className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <h3 className="text-lg font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   <span className="absolute inset-0" aria-hidden="true" />
                   📝 Write Blog Post
                 </h3>
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-gray-400">
                   Create and publish new blog articles 💖
                 </p>
               </div>
@@ -148,19 +148,19 @@ const Dashboard = () => {
 
             <a
               href="/learning"
-              className="relative group card p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-pink-200"
+              className="relative group card p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-cyan-600"
             >
               <div>
-                <span className="rounded-xl inline-flex p-3 bg-gradient-to-r from-green-100 to-green-200 text-green-700">
+                <span className="rounded-xl inline-flex p-3 bg-gradient-to-r from-green-900/50 to-green-800 text-green-300">
                   <BookOpen className="w-6 h-6" />
                 </span>
               </div>
               <div className="mt-4">
-                <h3 className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <h3 className="text-lg font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   <span className="absolute inset-0" aria-hidden="true" />
                   📚 Update Learning
                 </h3>
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-gray-400">
                   Track your learning progress and add new skills 🌟
                 </p>
               </div>
@@ -168,19 +168,19 @@ const Dashboard = () => {
 
             <a
               href="/education"
-              className="relative group card p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-pink-200"
+              className="relative group card p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-cyan-600"
             >
               <div>
-                <span className="rounded-xl inline-flex p-3 bg-gradient-to-r from-pink-100 to-pink-200 text-pink-700">
+                <span className="rounded-xl inline-flex p-3 bg-gradient-to-r from-cyan-900/50 to-cyan-800 text-cyan-300">
                   <GraduationCap className="w-6 h-6" />
                 </span>
               </div>
               <div className="mt-4">
-                <h3 className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <h3 className="text-lg font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   <span className="absolute inset-0" aria-hidden="true" />
                   🎓 Manage Education
                 </h3>
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-gray-400">
                   Add and update your educational background 📖
                 </p>
               </div>
@@ -194,19 +194,19 @@ const Dashboard = () => {
           📊 Portfolio Overview
         </h3>
         <div className="space-y-5">
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
-            <span className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl">
+            <span className="text-sm font-medium text-gray-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
               🚀 Published Blog Posts
             </span>
-            <span className="text-lg font-bold text-pink-600" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <span className="text-lg font-bold text-cyan-400" style={{ fontFamily: 'Playfair Display, serif' }}>
               {stats?.publishedPosts || 0} / {stats?.blogPosts || 0}
             </span>
           </div>
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
-            <span className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-900/30 to-indigo-900/30 rounded-xl">
+            <span className="text-sm font-medium text-gray-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
               ✨ Total Content Items
             </span>
-            <span className="text-lg font-bold text-blue-600" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <span className="text-lg font-bold text-blue-400" style={{ fontFamily: 'Playfair Display, serif' }}>
               {(stats?.projects || 0) + (stats?.learning || 0) + (stats?.blogPosts || 0) + (stats?.workHistory || 0) + (stats?.education || 0) + (stats?.certifications || 0)}
             </span>
           </div>

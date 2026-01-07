@@ -23,7 +23,11 @@ const Login = () => {
       await login(data.email, data.password)
       toast.success('Login successful!')
     } catch (error) {
-      // Error is handled by the API interceptor
+      const message =
+        (error as any)?.response?.data?.error ||
+        (error as any)?.message ||
+        'Login failed'
+      toast.error(message)
     } finally {
       setLoading(false)
     }

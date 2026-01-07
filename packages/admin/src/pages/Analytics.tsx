@@ -110,7 +110,7 @@ const Analytics = () => {
         <div className="card p-5 hover:scale-105 transition-all duration-300">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 bg-gradient-to-r from-purple-400 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                 <BarChart3 className="w-6 h-6 text-white" />
               </div>
             </div>
@@ -158,13 +158,13 @@ const Analytics = () => {
         </h3>
           <div className="space-y-4">
             {analytics?.pageViews?.map((page, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl hover:from-pink-100 hover:to-purple-100 transition-all duration-300">
+              <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl hover:from-cyan-900/50 hover:to-blue-900/50 transition-all duration-300">
                 <div className="flex-1">
                   <div className="flex items-center">
-                    <span className="text-sm font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <span className="text-sm font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                       {getPageDisplayName(page.page_path)}
                     </span>
-                    <span className="ml-2 text-xs text-pink-600 font-medium">
+                    <span className="ml-2 text-xs text-cyan-400 font-medium">
                       {page.page_path}
                     </span>
                   </div>
@@ -178,9 +178,9 @@ const Analytics = () => {
                   </div>
                 </div>
                 <div className="flex-shrink-0">
-                  <div className="w-32 bg-gray-200 rounded-full h-3">
+                  <div className="w-32 bg-gray-700 rounded-full h-3">
                     <div 
-                      className="bg-gradient-to-r from-pink-500 to-purple-600 h-3 rounded-full" 
+                      className="bg-gradient-to-r from-cyan-500 to-blue-600 h-3 rounded-full" 
                       style={{ 
                         width: `${Math.min(100, (page.views / Math.max(...(analytics?.pageViews?.map(p => p.views) || [1]))) * 100)}%` 
                       }}

@@ -115,14 +115,14 @@ const Settings = () => {
       </div>
 
       {/* Tabs */}
-      <div className="border-b-2 border-gradient-to-r from-pink-200 to-purple-200">
+      <div className="border-b-2 border-gradient-to-r from-cyan-600 to-blue-600">
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab('profile')}
             className={`py-3 px-4 border-b-2 font-bold text-sm rounded-t-lg transition-all duration-300 ${
               activeTab === 'profile'
-                ? 'border-pink-500 text-pink-600 bg-gradient-to-r from-pink-50 to-purple-50'
-                : 'border-transparent text-gray-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-50'
+                ? 'border-cyan-500 text-cyan-400 bg-gradient-to-r from-cyan-900/20 to-blue-900/20'
+                : 'border-transparent text-gray-500 hover:text-cyan-400 hover:border-cyan-600 hover:bg-cyan-900/10'
             }`}
             style={{ fontFamily: 'Poppins, sans-serif' }}
           >
@@ -133,8 +133,8 @@ const Settings = () => {
             onClick={() => setActiveTab('password')}
             className={`py-3 px-4 border-b-2 font-bold text-sm rounded-t-lg transition-all duration-300 ${
               activeTab === 'password'
-                ? 'border-pink-500 text-pink-600 bg-gradient-to-r from-pink-50 to-purple-50'
-                : 'border-transparent text-gray-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-50'
+                ? 'border-cyan-500 text-cyan-400 bg-gradient-to-r from-cyan-900/20 to-blue-900/20'
+                : 'border-transparent text-gray-500 hover:text-cyan-400 hover:border-cyan-600 hover:bg-cyan-900/10'
             }`}
             style={{ fontFamily: 'Poppins, sans-serif' }}
           >
@@ -187,7 +187,7 @@ const Settings = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-r from-pink-50 to-purple-50 px-6 py-4 rounded-b-xl text-right">
+            <div className="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 px-6 py-4 rounded-b-xl text-right">
               <button
                 type="submit"
                 disabled={updateProfileMutation.isLoading}
@@ -266,7 +266,7 @@ const Settings = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-r from-pink-50 to-purple-50 px-6 py-4 rounded-b-xl text-right">
+            <div className="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 px-6 py-4 rounded-b-xl text-right">
               <button
                 type="submit"
                 disabled={changePasswordMutation.isLoading}
@@ -298,18 +298,18 @@ const Settings = () => {
                 </span>
               </dd>
             </div>
-            <div className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+            <div className="p-4 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl">
               <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>🌐 Frontend URL</dt>
               <dd className="mt-2">
-                <a href="https://william-malone.com" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-500 font-medium hover:underline">
+                <a href="https://william-malone.com" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 font-medium hover:underline">
                   https://william-malone.com
                 </a>
               </dd>
             </div>
-            <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
+            <div className="p-4 bg-gradient-to-r from-blue-900/30 to-cyan-900/30 rounded-xl">
               <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>🔌 API URL</dt>
               <dd className="mt-2">
-                <a href={`${(import.meta as any).env.VITE_API_URL || 'https://api.william-malone.com'}/api`} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-500 font-medium hover:underline">
+                <a href={`${(import.meta as any).env.VITE_API_URL || 'https://api.william-malone.com'}/api`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-medium hover:underline">
                   {`${(import.meta as any).env.VITE_API_URL || 'https://api.william-malone.com'}/api`}
                 </a>
               </dd>

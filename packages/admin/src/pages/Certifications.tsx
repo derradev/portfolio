@@ -296,7 +296,7 @@ export default function Certifications() {
                     <button
                       type="button"
                       onClick={addSkill}
-                      className="text-pink-600 hover:text-pink-800 text-sm font-medium"
+                      className="text-cyan-400 hover:text-cyan-300 text-sm font-medium"
                     >
                       ✨ Add Skill
                     </button>
@@ -335,8 +335,8 @@ export default function Certifications() {
                   <Award className="w-7 h-7 text-yellow-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>{cert.name}</h3>
-                  <p className="text-pink-600 font-semibold text-lg">{cert.issuer}</p>
+                  <h3 className="text-xl font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>{cert.name}</h3>
+                  <p className="text-cyan-400 font-semibold text-lg">{cert.issuer}</p>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -355,13 +355,13 @@ export default function Certifications() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-4 text-sm text-pink-600 mb-4">
+            <div className="flex flex-wrap gap-4 text-sm text-cyan-400 mb-4">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 <span className="font-medium">Issued: {new Date(cert.issue_date).toLocaleDateString()}</span>
               </div>
               {cert.expiry_date && (
-                <div className={`flex items-center gap-2 ${isExpired(cert.expiry_date) ? 'text-red-600' : 'text-pink-600'}`}>
+                <div className={`flex items-center gap-2 ${isExpired(cert.expiry_date) ? 'text-red-400' : 'text-cyan-400'}`}>
                   <Calendar className="w-4 h-4" />
                   <span className="font-medium">Expires: {new Date(cert.expiry_date).toLocaleDateString()}</span>
                   {isExpired(cert.expiry_date) && (
@@ -391,7 +391,7 @@ export default function Certifications() {
                   {cert.skills.map((skill, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 rounded-full text-sm font-medium"
+                      className="px-3 py-1 bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 rounded-full text-sm font-medium"
                     >
                       {skill}
                     </span>
@@ -405,7 +405,7 @@ export default function Certifications() {
                 href={cert.credential_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 text-sm font-semibold shadow-lg hover:shadow-xl"
+                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-full hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 text-sm font-semibold shadow-lg hover:shadow-xl"
               >
                 🔗 View Credential
                 <ExternalLink className="w-4 h-4 ml-2" />

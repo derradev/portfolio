@@ -244,14 +244,14 @@ const Learning = () => {
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-pink-200">
+      <div className="border-b border-gray-700">
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab('learning')}
             className={`py-3 px-4 border-b-2 font-medium text-sm rounded-t-lg transition-all duration-300 ${
               activeTab === 'learning'
-                ? 'border-pink-500 text-pink-600 bg-pink-50'
-                : 'border-transparent text-gray-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-25'
+                ? 'border-cyan-500 text-cyan-400 bg-cyan-900/20'
+                : 'border-transparent text-gray-500 hover:text-cyan-400 hover:border-cyan-600 hover:bg-cyan-900/10'
             }`}
           >
             <BookOpen className="w-4 h-4 inline mr-2" />
@@ -261,8 +261,8 @@ const Learning = () => {
             onClick={() => setActiveTab('skills')}
             className={`py-3 px-4 border-b-2 font-medium text-sm rounded-t-lg transition-all duration-300 ${
               activeTab === 'skills'
-                ? 'border-pink-500 text-pink-600 bg-pink-50'
-                : 'border-transparent text-gray-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-25'
+                ? 'border-cyan-500 text-cyan-400 bg-cyan-900/20'
+                : 'border-transparent text-gray-500 hover:text-cyan-400 hover:border-cyan-600 hover:bg-cyan-900/10'
             }`}
           >
             <Award className="w-4 h-4 inline mr-2" />
@@ -286,15 +286,15 @@ const Learning = () => {
               <div key={item.id} className="card p-6 hover:scale-105 transition-all duration-300">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>{item.title}</h3>
-                    <p className="text-sm text-gray-600 mt-1 font-medium">{item.description}</p>
+                    <h3 className="text-lg font-semibold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>{item.title}</h3>
+                    <p className="text-sm text-gray-400 mt-1 font-medium">{item.description}</p>
                     <div className="flex items-center mt-3 space-x-3">
-                      <span className="px-3 py-1 text-xs bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 rounded-full font-medium">
+                      <span className="px-3 py-1 text-xs bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 rounded-full font-medium">
                         {item.category}
                       </span>
                       <span className={`px-3 py-1 text-xs rounded-full font-medium ${
                         item.status === 'completed' ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700' :
-                        item.status === 'paused' ? 'bg-gradient-to-r from-red-100 to-pink-100 text-red-700' :
+                        item.status === 'paused' ? 'bg-gradient-to-r from-red-900/50 to-orange-900/50 text-red-400' :
                         'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700'
                       }`}>
                         {item.status === 'completed' ? '✅ Completed' :
@@ -324,22 +324,22 @@ const Learning = () => {
                 </div>
                 <div className="mb-4">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-semibold text-gray-700">Progress ✨</span>
-                    <span className="text-sm font-bold text-pink-600">{item.progress}%</span>
+                    <span className="text-sm font-semibold text-gray-300">Progress ✨</span>
+                    <span className="text-sm font-bold text-cyan-400">{item.progress}%</span>
                   </div>
-                  <div className="w-full bg-pink-100 rounded-full h-3">
+                  <div className="w-full bg-gray-700 rounded-full h-3">
                     <div
-                      className="h-3 rounded-full bg-gradient-to-r from-pink-400 to-purple-500"
+                      className="h-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
                       style={{ width: `${item.progress}%` }}
                     ></div>
                   </div>
                 </div>
                 {item.resources.length > 0 && (
                   <div>
-                    <p className="text-sm font-semibold text-gray-700 mb-2">Resources 📖</p>
+                    <p className="text-sm font-semibold text-gray-300 mb-2">Resources 📖</p>
                     <div className="flex flex-wrap gap-2">
                       {item.resources.map((resource, index) => (
-                        <span key={index} className="px-3 py-1 text-xs bg-purple-100 text-purple-700 rounded-full font-medium">
+                        <span key={index} className="px-3 py-1 text-xs bg-blue-900/50 text-blue-300 rounded-full font-medium">
                           {resource}
                         </span>
                       ))}
@@ -377,13 +377,13 @@ const Learning = () => {
                      '🌱 Beginner'}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-4 font-medium">{skill.description}</p>
+                <p className="text-sm text-gray-400 mb-4 font-medium">{skill.description}</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <span className="px-3 py-1 text-xs bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 rounded-full font-medium">
+                    <span className="px-3 py-1 text-xs bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 rounded-full font-medium">
                       {skill.category}
                     </span>
-                    <span className="text-xs text-pink-600 font-medium">
+                    <span className="text-xs text-cyan-400 font-medium">
                       Level: {skill.level}
                     </span>
                   </div>

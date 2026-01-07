@@ -206,15 +206,15 @@ const Education = () => {
           <div key={edu.id} className="card p-6 hover:scale-105 transition-all duration-300">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-gradient-to-r from-pink-100 to-purple-100 rounded-xl flex items-center justify-center">
-                  <GraduationCap className="w-7 h-7 text-pink-600" />
+                <div className="w-14 h-14 bg-gradient-to-r from-cyan-900/50 to-blue-900/50 rounded-xl flex items-center justify-center">
+                  <GraduationCap className="w-7 h-7 text-cyan-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  <h3 className="text-xl font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                     {edu.degree}
                     {edu.field_of_study && ` in ${edu.field_of_study}`}
                   </h3>
-                  <p className="text-pink-600 font-semibold text-lg">{edu.institution}</p>
+                  <p className="text-cyan-400 font-semibold text-lg">{edu.institution}</p>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -237,7 +237,7 @@ const Education = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-4 text-sm text-pink-600 mb-4">
+            <div className="flex flex-wrap gap-4 text-sm text-cyan-400 mb-4">
               {edu.location && (
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
@@ -269,8 +269,8 @@ const Education = () => {
                 <ul className="space-y-2">
                   {edu.achievements.map((achievement, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-pink-500 mt-1">•</span>
-                      <span className="text-gray-600 font-medium">{achievement}</span>
+                      <span className="text-cyan-400 mt-1">•</span>
+                      <span className="text-gray-400 font-medium">{achievement}</span>
                     </li>
                   ))}
                 </ul>
@@ -282,8 +282,8 @@ const Education = () => {
 
       {education?.length === 0 && (
         <div className="text-center py-16">
-          <div className="w-20 h-20 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <GraduationCap className="w-10 h-10 text-pink-400" />
+          <div className="w-20 h-20 bg-gradient-to-r from-cyan-900/50 to-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <GraduationCap className="w-10 h-10 text-cyan-400" />
           </div>
           <p className="text-gray-500 text-xl font-semibold mb-2">No education entries found</p>
           <p className="text-gray-400 font-medium">Click "Add Education" to create your first entry 🎓</p>
@@ -418,7 +418,7 @@ const Education = () => {
                       <button
                         type="button"
                         onClick={addAchievement}
-                        className="text-pink-600 hover:text-pink-800 text-sm font-medium"
+                        className="text-cyan-400 hover:text-cyan-300 text-sm font-medium"
                       >
                         ✨ Add Achievement
                       </button>

@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import { createClient } from '@supabase/supabase-js'
-import { getServices } from '../services'
+import { authenticate, authorize, AuthRequest } from '../middleware/auth'
 
 const router = express.Router()
 
@@ -33,6 +33,68 @@ router.get('/', (req: Request, res: Response) => {
     }
   })
 })
+
+// Admin: create a user so other people can log in (bypasses email confirmation)
+router.post(
+  '/admin/create-user',
+  authenticate,
+  authorize('admin'),
+  [
+    body('email').isEmail().normalizeEmail(),
+    body('password').isLength({ min: 6 }),
+    body('name').optional().isLength({ min: 2 }).trim()
+  ],
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          errors: errors.array()
+        })
+      }
+
+      const { email, password, name } = req.body as { email: string; password: string; name?: string }
+
+      const { data, error } = await supabase.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: {
+          ...(name ? { name } : {}),
+          role: 'admin'
+        }
+      })
+
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          error: error.message
+        })
+      }
+
+      return res.json({
+        success: true,
+        data: {
+          user: data.user
+            ? {
+                id: data.user.id,
+                email: data.user.email,
+                name: data.user.user_metadata?.name || data.user.email,
+                role: data.user.user_metadata?.role || 'admin'
+              }
+            : null
+        }
+      })
+    } catch (error) {
+      console.error('Admin create user error:', error)
+      return res.status(500).json({
+        success: false,
+        error: 'Internal server error'
+      })
+    }
+  }
+)
 
 // Login with Supabase Auth
 router.post('/login', [
@@ -77,7 +139,7 @@ router.post('/login', [
           id: data.user.id,
           email: data.user.email,
           name: data.user.user_metadata?.name || data.user.email,
-          role: data.user.user_metadata?.role || 'user'  // Changed default from 'admin' to 'user'
+          role: data.user.user_metadata?.role || 'admin'
         },
         session: {
           access_token: data.session.access_token,

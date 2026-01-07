@@ -164,10 +164,10 @@ const WorkHistory = () => {
               <div key={item.id} className="card p-6 hover:scale-105 transition-all duration-300">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>{item.position}</h3>
-                    <p className="text-pink-600 font-semibold text-lg">{item.company}</p>
-                    <p className="text-gray-600 font-medium">📍 {item.location}</p>
-                    <p className="text-pink-500 font-medium text-sm">
+                    <h3 className="text-xl font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>{item.position}</h3>
+                    <p className="text-cyan-400 font-semibold text-lg">{item.company}</p>
+                    <p className="text-gray-400 font-medium">📍 {item.location}</p>
+                    <p className="text-cyan-400 font-medium text-sm">
                       📅 {new Date(item.start_date).toLocaleDateString()} - {item.end_date ? new Date(item.end_date).toLocaleDateString() : '✨ Present'}
                     </p>
                   </div>
@@ -196,8 +196,8 @@ const WorkHistory = () => {
                     <h4 className="font-semibold text-gray-800 mb-3 flex items-center">🏆 Key Achievements:</h4>
                     <ul className="space-y-2">
                       {item.achievements.map((achievement, index) => (
-                        <li key={index} className="text-sm text-gray-600 flex items-start">
-                          <span className="text-pink-500 mr-2 mt-1">✨</span>
+                        <li key={index} className="text-sm text-gray-400 flex items-start">
+                          <span className="text-cyan-400 mr-2 mt-1">✨</span>
                           <span className="font-medium">{achievement}</span>
                         </li>
                       ))}
@@ -209,7 +209,7 @@ const WorkHistory = () => {
                     <h4 className="font-semibold text-gray-800 mb-3 flex items-center">🛠️ Technologies:</h4>
                     <div className="flex flex-wrap gap-2">
                       {item.technologies.map((tech) => (
-                        <span key={tech} className="px-3 py-1 text-xs bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 rounded-full font-medium">
+                        <span key={tech} className="px-3 py-1 text-xs bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 rounded-full font-medium">
                           {tech}
                         </span>
                       ))}

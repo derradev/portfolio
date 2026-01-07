@@ -216,7 +216,7 @@ const Projects = () => {
                 {Array.isArray(project.technologies) && project.technologies.length > 0 ? (
                   <>
                     {project.technologies.slice(0, 3).map((tech) => (
-                      <span key={tech} className="px-3 py-1 text-xs bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 rounded-full font-medium">
+                      <span key={tech} className="px-3 py-1 text-xs bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 rounded-full font-medium">
                         {tech}
                       </span>
                     ))}
@@ -237,7 +237,7 @@ const Projects = () => {
                       href={project.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-pink-100 hover:text-pink-600 transition-colors"
+                      className="p-2 rounded-full bg-gray-800/50 text-gray-400 hover:bg-cyan-900/50 hover:text-cyan-400 transition-colors"
                     >
                       <Github className="w-4 h-4" />
                     </a>
@@ -247,7 +247,7 @@ const Projects = () => {
                       href={project.live_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-pink-100 hover:text-pink-600 transition-colors"
+                      className="p-2 rounded-full bg-gray-800/50 text-gray-400 hover:bg-cyan-900/50 hover:text-cyan-400 transition-colors"
                     >
                       <ExternalLink className="w-4 h-4" />
                     </a>
@@ -354,10 +354,10 @@ const Projects = () => {
                       <input
                         {...register('featured')}
                         type="checkbox"
-                        className="h-5 w-5 text-pink-600 focus:ring-pink-500 border-pink-300 rounded"
+                        className="h-5 w-5 text-cyan-600 focus:ring-cyan-500 border-cyan-300 rounded"
                         id="featured"
                       />
-                      <label htmlFor="featured" className="text-sm font-medium text-gray-700">⭐ Featured project (show on homepage)</label>
+                      <label htmlFor="featured" className="text-sm font-medium text-gray-300">⭐ Featured project (show on homepage)</label>
                     </div>
                   </div>
                 </div>
