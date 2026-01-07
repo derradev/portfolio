@@ -54,7 +54,7 @@ router.get('/', async (req: Request, res: Response) => {
         ...post,
         tags,
         featured: Boolean(post.featured),
-        publish_date: post.publish_date || post.created_at
+        publish_date: post.created_at
       }
     })
 
@@ -110,7 +110,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
       ...post,
       tags,
       featured: Boolean(post.featured),
-      publish_date: post.publish_date || post.created_at
+      publish_date: post.created_at
     }
 
     return res.json({
@@ -157,7 +157,7 @@ router.get('/admin/all', [authenticate, authorize('admin')], async (req: AuthReq
         tags,
         featured: Boolean(post.featured),
         published: Boolean(post.published),
-        publish_date: post.publish_date || post.created_at
+        publish_date: post.created_at
       }
     })
 
