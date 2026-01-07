@@ -1,6 +1,7 @@
 import { expect, afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import * as matchers from '@testing-library/jest-dom/matchers'
+import React from 'react'
 
 // Extend Vitest's expect with jest-dom matchers
 expect.extend(matchers)
@@ -14,10 +15,12 @@ afterEach(() => {
 vi.mock('react-router-dom', () => ({
   useNavigate: () => vi.fn(),
   useLocation: () => ({ pathname: '/' }),
-  Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
-    <a href={to}>{children}</a>
-  ),
-  BrowserRouter: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Link: ({ children, to }: { children: any; to: string }) => {
+    return React.createElement('a', { href: to }, children)
+  },
+  BrowserRouter: ({ children }: { children: any }) => {
+    return React.createElement(React.Fragment, null, children)
+  },
 }))
 
 // Mock axios
