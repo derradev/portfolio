@@ -80,12 +80,14 @@ router.get('/category/:category', async (req: Request, res: Response) => {
   try {
     const { category } = req.params
     const { supabaseService } = getServices()
-    const learning = await supabaseService.query(`
-      SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
-      FROM learning
-      WHERE category = $1
-      ORDER BY start_date DESC
-    `, [category])
+    
+    const { data: learning, error } = await supabaseService.getClient()
+      .from('learning')
+      .select('id, title, description, progress, category, start_date, estimated_completion, resources, status')
+      .eq('category', category)
+      .order('start_date', { ascending: false })
+    
+    if (error) throw error
 
     const parsedLearning = learning.map((item: any) => ({
       ...item,
@@ -123,13 +125,13 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
     
     const { supabaseService } = getServices()
-    const learningItem = await supabaseService.queryOne(`
-      SELECT id, title, description, progress, category, start_date, estimated_completion, resources, status
-      FROM learning
-      WHERE id = $1
-    `, [id])
+    const { data: learningItem, error: fetchError } = await supabaseService.getClient()
+      .from('learning')
+      .select('id, title, description, progress, category, start_date, estimated_completion, resources, status')
+      .eq('id', id)
+      .single()
 
-    if (!learningItem) {
+    if (fetchError || !learningItem) {
       return res.status(404).json({
         success: false,
         error: 'Learning item not found'
@@ -260,46 +262,41 @@ router.put('/:id', [
     const { supabaseService } = getServices()
 
     // Check if learning item exists
-    const existingItem = await supabaseService.queryOne('SELECT * FROM learning WHERE id = $1', [id])
+    const { data: existingItem, error: checkError } = await supabaseService.getClient()
+      .from('learning')
+      .select('id')
+      .eq('id', id)
+      .single()
 
-    if (!existingItem) {
+    if (checkError || !existingItem) {
       return res.status(404).json({
         success: false,
         error: 'Learning item not found'
       })
     }
 
-    // Build update query dynamically
-    const updateFields = []
-    const updateValues = []
-    let paramIndex = 1
-
+    // Prepare update payload
+    const updatePayload: any = {}
+    
     Object.keys(updateData).forEach(key => {
       if (key === 'resources') {
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(JSON.stringify(updateData[key]))
+        // Ensure resources array is stored as JSON string
+        updatePayload[key] = JSON.stringify(updateData[key])
       } else if (key === 'estimated_completion') {
         // Handle empty estimated_completion date
         const completionDate = updateData[key] && updateData[key].trim() !== '' ? updateData[key] : null
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(completionDate)
-      } else {
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(updateData[key])
+        updatePayload[key] = completionDate
+      } else if (key !== 'id') {
+        // Include all other fields except id
+        updatePayload[key] = updateData[key]
       }
     })
 
-    updateFields.push(`updated_at = CURRENT_TIMESTAMP`)
-    updateValues.push(id)
+    // Always update updated_at
+    updatePayload.updated_at = new Date().toISOString()
 
-    const updateQuery = `
-      UPDATE learning 
-      SET ${updateFields.join(', ')}
-      WHERE id = $${paramIndex}
-      RETURNING *
-    `
-
-    const updatedItem = await supabaseService.queryOne(updateQuery, updateValues)
+    // Use Supabase client update method
+    const updatedItem = await supabaseService.update('learning', id, updatePayload)
 
     return res.json({
       success: true,

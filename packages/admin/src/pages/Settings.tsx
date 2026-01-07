@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { api } from '@/lib/api'
 import { User, Lock, Save } from 'lucide-react'
@@ -18,15 +19,43 @@ interface PasswordForm {
 }
 
 const Settings = () => {
-  const { user, refreshUser } = useAuth()
+  const { user, refreshUser, loading } = useAuth()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<'profile' | 'password'>('profile')
 
-  const { register: registerProfile, handleSubmit: handleProfileSubmit, formState: { errors: profileErrors } } = useForm<ProfileForm>({
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/login')
+    }
+  }, [user, loading, navigate])
+
+  const { register: registerProfile, handleSubmit: handleProfileSubmit, reset: resetProfile, formState: { errors: profileErrors } } = useForm<ProfileForm>({
     defaultValues: {
-      name: user?.name || '',
-      email: user?.email || ''
+      name: '',
+      email: ''
     }
   })
+
+  // Reset form when user changes (e.g., after logout/login)
+  useEffect(() => {
+    if (user) {
+      resetProfile({
+        name: user.name || '',
+        email: user.email || ''
+      })
+    } else {
+      resetProfile({
+        name: '',
+        email: ''
+      })
+    }
+  }, [user, resetProfile])
+
+  // Don't render if not authenticated
+  if (loading || !user) {
+    return null
+  }
 
   const { register: registerPassword, handleSubmit: handlePasswordSubmit, reset: resetPassword, watch, formState: { errors: passwordErrors } } = useForm<PasswordForm>()
 

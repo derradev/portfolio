@@ -274,46 +274,41 @@ router.put('/:id', [
     const { supabaseService } = getServices()
 
     // Check if work history entry exists
-    const existingJob = await supabaseService.queryOne('SELECT * FROM work_history WHERE id = $1', [id])
+    const { data: existingJob, error: checkError } = await supabaseService.getClient()
+      .from('work_history')
+      .select('id')
+      .eq('id', id)
+      .single()
 
-    if (!existingJob) {
+    if (checkError || !existingJob) {
       return res.status(404).json({
         success: false,
         error: 'Work history item not found'
       })
     }
 
-    // Build update query dynamically
-    const updateFields = []
-    const updateValues = []
-    let paramIndex = 1
-
+    // Prepare update payload
+    const updatePayload: any = {}
+    
     Object.keys(updateData).forEach(key => {
       if (key === 'achievements' || key === 'technologies') {
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(JSON.stringify(updateData[key]))
+        // Ensure arrays are stored as JSON strings
+        updatePayload[key] = JSON.stringify(updateData[key])
       } else if (key === 'end_date') {
         // Handle empty end_date
         const endDate = updateData[key] && updateData[key].trim() !== '' ? updateData[key] : null
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(endDate)
-      } else {
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(updateData[key])
+        updatePayload[key] = endDate
+      } else if (key !== 'id') {
+        // Include all other fields except id
+        updatePayload[key] = updateData[key]
       }
     })
 
-    updateFields.push(`updated_at = CURRENT_TIMESTAMP`)
-    updateValues.push(id)
+    // Always update updated_at
+    updatePayload.updated_at = new Date().toISOString()
 
-    const updateQuery = `
-      UPDATE work_history 
-      SET ${updateFields.join(', ')}
-      WHERE id = $${paramIndex}
-      RETURNING *
-    `
-
-    const updatedItem = await supabaseService.queryOne(updateQuery, updateValues)
+    // Use Supabase client update method
+    const updatedItem = await supabaseService.update('work_history', id, updatePayload)
 
     return res.json({
       success: true,

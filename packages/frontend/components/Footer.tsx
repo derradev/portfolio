@@ -48,7 +48,7 @@ const Footer = () => {
             </h3>
             <div className="flex space-x-4">
               <a
-                href="https://github.com/demitaylornimmo"
+                href="https://github.com/DemiInfinity"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-500 text-white hover:scale-110 transition-transform"
@@ -56,7 +56,7 @@ const Footer = () => {
                 <Github className="w-5 h-5" />
               </a>
               <a
-                href="https://linkedin.com/in/demitaylornimmo"
+                href="https://www.linkedin.com/in/demi-taylor-nimmo-bb320b40"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-500 text-white hover:scale-110 transition-transform"

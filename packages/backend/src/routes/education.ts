@@ -18,6 +18,7 @@ router.get('/', async (req: Request, res: Response) => {
 
     const parsedEducation = education.map((edu: any) => ({
       ...edu,
+      grade: edu.gpa, // Include grade for frontend compatibility
       achievements: edu.achievements ? (
         typeof edu.achievements === 'string' ? 
           (edu.achievements.startsWith('[') ? JSON.parse(edu.achievements) : [edu.achievements]) :
@@ -59,6 +60,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
     const parsedEducation = {
       ...education,
+      grade: education.gpa, // Include grade for frontend compatibility
       achievements: education.achievements ? (
         typeof education.achievements === 'string' ? 
           (education.achievements.startsWith('[') ? JSON.parse(education.achievements) : [education.achievements]) :
@@ -117,7 +119,12 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
 
     const parsedResult = {
       ...result,
-      achievements: result.achievements ? JSON.parse(result.achievements) : []
+      grade: result.gpa, // Include grade for frontend compatibility
+      achievements: result.achievements ? (
+        typeof result.achievements === 'string' 
+          ? (result.achievements.startsWith('[') ? JSON.parse(result.achievements) : [result.achievements])
+          : result.achievements
+      ) : []
     }
 
     return res.status(201).json({
@@ -180,7 +187,12 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
 
     const parsedResult = {
       ...result,
-      achievements: result.achievements ? JSON.parse(result.achievements) : []
+      grade: result.gpa, // Include grade for frontend compatibility
+      achievements: result.achievements ? (
+        typeof result.achievements === 'string' 
+          ? (result.achievements.startsWith('[') ? JSON.parse(result.achievements) : [result.achievements])
+          : result.achievements
+      ) : []
     }
 
     return res.json({

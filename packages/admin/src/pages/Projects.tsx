@@ -100,6 +100,10 @@ const Projects = () => {
   const openModal = (project?: Project) => {
     if (project) {
       setEditingProject(project)
+      // Format date for HTML date input (YYYY-MM-DD)
+      const formattedDate = project.date 
+        ? new Date(project.date).toISOString().split('T')[0]
+        : new Date().toISOString().split('T')[0]
       reset({
         title: project.title,
         description: project.description,
@@ -107,7 +111,7 @@ const Projects = () => {
         technologies: project.technologies.join(', '),
         github_url: project.github_url,
         live_url: project.live_url,
-        date: project.date,
+        date: formattedDate,
         featured: project.featured
       })
     } else {

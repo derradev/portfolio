@@ -74,13 +74,13 @@ router.get('/:id', [
     const { id } = req.params
     const { supabaseService } = getServices()
     
-    const featureFlag = await supabaseService.queryOne(`
-      SELECT id, name, description, enabled, created_at, updated_at
-      FROM feature_flags
-      WHERE id = $1
-    `, [id])
+    const { data: featureFlag, error } = await supabaseService.getClient()
+      .from('feature_flags')
+      .select('id, name, description, enabled, created_at, updated_at')
+      .eq('id', id)
+      .single()
 
-    if (!featureFlag) {
+    if (error || !featureFlag) {
       return res.status(404).json({
         success: false,
         error: 'Feature flag not found'

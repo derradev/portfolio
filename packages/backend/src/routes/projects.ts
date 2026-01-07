@@ -129,6 +129,7 @@ router.put('/:id', [
   authorize('admin'),
   body('title').optional().isLength({ min: 1 }).trim(),
   body('description').optional().isLength({ min: 1 }).trim(),
+  body('image').optional().isString(),
   body('image_url').optional().isURL({ require_protocol: false }),
   body('technologies').optional().isArray({ min: 1 }),
   body('github_url').optional().custom((value) => {
@@ -139,7 +140,8 @@ router.put('/:id', [
     if (value === null || value === '') return true
     return /^https?:\/\/.+/.test(value) || /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(value)
   }),
-  body('featured').optional().isBoolean()
+  body('featured').optional().isBoolean(),
+  body('date').optional().isString()
 ], async (req: AuthRequest, res: Response) => {
   try {
     const errors = validationResult(req)
@@ -157,41 +159,40 @@ router.put('/:id', [
     const { supabaseService } = getServices()
 
     // Check if project exists
-    const existingProject = await supabaseService.queryOne('SELECT * FROM projects WHERE id = $1', [id])
+    const existingProject = await supabaseService.getClient()
+      .from('projects')
+      .select('id')
+      .eq('id', id)
+      .single()
 
-    if (!existingProject) {
+    if (!existingProject || existingProject.error) {
       return res.status(404).json({
         success: false,
         error: 'Project not found'
       })
     }
 
-    // Build update query dynamically
-    const updateFields = []
-    const updateValues = []
-    let paramIndex = 1
-
+    // Prepare update payload
+    const updatePayload: any = {}
+    
     Object.keys(updateData).forEach(key => {
       if (key === 'technologies') {
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(JSON.stringify(updateData[key]))
-      } else {
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(updateData[key])
+        // Ensure technologies is stored as JSON string
+        updatePayload[key] = JSON.stringify(updateData[key])
+      } else if (key === 'image_url') {
+        // Map image_url to image if provided
+        updatePayload.image = updateData[key]
+      } else if (key !== 'id') {
+        // Include all other fields except id
+        updatePayload[key] = updateData[key]
       }
     })
 
-    updateFields.push(`updated_at = CURRENT_TIMESTAMP`)
-    updateValues.push(id)
+    // Always update updated_at
+    updatePayload.updated_at = new Date().toISOString()
 
-    const updateQuery = `
-      UPDATE projects 
-      SET ${updateFields.join(', ')}
-      WHERE id = $${paramIndex}
-      RETURNING *
-    `
-
-    const updatedProject = await supabaseService.queryOne(updateQuery, updateValues)
+    // Use Supabase client update method
+    const updatedProject = await supabaseService.update('projects', id, updatePayload)
 
     return res.json({
       success: true,
@@ -199,8 +200,18 @@ router.put('/:id', [
         ...updatedProject,
         technologies: (() => {
           try {
-            return JSON.parse(updatedProject.technologies || '[]')
+            if (updatedProject.technologies) {
+              if (typeof updatedProject.technologies === 'string') {
+                return JSON.parse(updatedProject.technologies)
+              }
+              return updatedProject.technologies
+            }
+            return []
           } catch {
+            // If parsing fails, try to split by comma
+            if (typeof updatedProject.technologies === 'string') {
+              return updatedProject.technologies.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0)
+            }
             return []
           }
         })(),
