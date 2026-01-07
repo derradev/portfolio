@@ -23,6 +23,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "ignoreCommand": "bash ignore-build-step.sh"
+  ]
 }
