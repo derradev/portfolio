@@ -299,12 +299,9 @@ export default function Learning() {
                     {skill.description}
                   </p>
                   
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center">
                     <span className="tech-tag">
                       {skill.category}
-                    </span>
-                    <span className="text-sm text-pink-600 font-medium">
-                      Completed: {skill.completedDate ? new Date(skill.completedDate).toLocaleDateString() : 'N/A'}
                     </span>
                   </div>
                 </motion.div>
