@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 Given('I visit the admin login page', () => {
@@ -6,8 +7,8 @@ Given('I visit the admin login page', () => {
 })
 
 When('I enter valid admin credentials', () => {
-  const email = Cypress.env('ADMIN_EMAIL') || 'admin@example.com'
-  const password = Cypress.env('ADMIN_PASSWORD') || 'password'
+  const email = Cypress.env('ADMIN_EMAIL') || 'missdemitg@outlook.com'
+  const password = Cypress.env('ADMIN_PASSWORD') || 'testpassword123'
   cy.get('input[type="email"]').type(email)
   cy.get('input[type="password"]').type(password)
 })
@@ -39,9 +40,11 @@ Then('I should remain on the login page', () => {
 })
 
 Given('I am logged in as admin', () => {
-  const email = Cypress.env('ADMIN_EMAIL') || 'admin@example.com'
-  const password = Cypress.env('ADMIN_PASSWORD') || 'password'
-  cy.login(email, password)
+  const email = Cypress.env('ADMIN_EMAIL') || 'missdemitg@outlook.com'
+  const password = Cypress.env('ADMIN_PASSWORD') || 'testpassword123'
+  cy.session([email, password], () => {
+    cy.visit('/admin')
+  })
 })
 
 When('I click the logout button', () => {
