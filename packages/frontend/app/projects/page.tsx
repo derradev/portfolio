@@ -89,19 +89,19 @@ export default function Projects() {
   // Show empty state if no projects
   if (projects.length === 0) {
     return (
-      <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #fdf2f8 0%, #f8f4ff 50%, #fff8f0 100%)' }}>
+      <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center"
+            className="text-center mb-16"
           >
-            <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              Projects
+            <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+              🛡️ Security Projects
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium mb-12">
-              Building portfolio of security projects and Python scripts
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
+              Cybersecurity tools, Python scripts, and IT automation projects 🔐
             </p>
           </motion.div>
         </div>
@@ -114,12 +114,13 @@ export default function Projects() {
 
   return (
     <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
-      {/* Tech-focused decorative elements */}
+      {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 text-4xl opacity-15 text-cyan-500 terminal-cursor">&gt;</div>
-        <div className="absolute top-40 right-20 text-3xl opacity-20 text-blue-500 terminal-cursor">#</div>
-        <div className="absolute bottom-40 left-20 text-5xl opacity-10 text-green-500 terminal-cursor">$</div>
-        <div className="absolute bottom-20 right-10 text-3xl opacity-15 text-cyan-400 terminal-cursor">/</div>
+        <div className="absolute top-20 left-10 text-4xl opacity-15 float-animation">🛡️</div>
+        <div className="absolute top-40 right-20 text-3xl opacity-20 animate-gradient">🔐</div>
+        <div className="absolute bottom-40 left-20 text-5xl opacity-10 float-animation">💻</div>
+        <div className="absolute bottom-20 right-10 text-3xl opacity-15 animate-gradient">⚡</div>
+        <div className="absolute top-1/2 left-1/4 text-3xl opacity-10">🔒</div>
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -148,7 +149,7 @@ export default function Projects() {
             viewport={{ once: true }}
             className="text-4xl font-bold gradient-text mb-8" style={{ fontFamily: 'Poppins, sans-serif' }}
           >
-            💎 Featured Projects
+            🔐 Featured Projects
           </motion.h2>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -159,9 +160,9 @@ export default function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="card hover:scale-105 transition-transform"
+                className="card-tech hover:scale-105 transition-transform"
               >
-                <div className="h-64 bg-gradient-to-br from-gray-800 to-gray-700"></div>
+                <div className="h-64 bg-gradient-to-br from-cyan-900 to-blue-900"></div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-2xl font-semibold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
@@ -236,7 +237,7 @@ export default function Projects() {
             viewport={{ once: true }}
             className="text-4xl font-bold gradient-text mb-8" style={{ fontFamily: 'Poppins, sans-serif' }}
           >
-            🌟 Other Projects
+            ⚡ Other Projects
           </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -247,9 +248,9 @@ export default function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="card hover:scale-105 transition-transform"
+                className="card-tech hover:scale-105 transition-transform"
               >
-                <div className="h-48 bg-gradient-to-br from-gray-800 to-gray-700"></div>
+                <div className="h-48 bg-gradient-to-br from-blue-900 to-cyan-900"></div>
                 <div className="p-6">
                   <div className="flex items-center gap-2">
                     <div className="flex items-center">

@@ -98,14 +98,14 @@ export default function Blog() {
   }
 
   return (
-    <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #fdf2f8 0%, #f8f4ff 50%, #fff8f0 100%)' }}>
+    <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 text-4xl opacity-15 float-animation">📝</div>
-        <div className="absolute top-40 right-20 text-3xl opacity-20 sparkle-animation">✨</div>
+        <div className="absolute top-40 right-20 text-3xl opacity-20 animate-gradient">🔐</div>
         <div className="absolute bottom-40 left-20 text-5xl opacity-10 float-animation">💭</div>
-        <div className="absolute bottom-20 right-10 text-3xl opacity-15 sparkle-animation">💫</div>
-        <div className="absolute top-1/2 left-1/4 text-3xl opacity-10">🌟</div>
+        <div className="absolute bottom-20 right-10 text-3xl opacity-15 animate-gradient">⚡</div>
+        <div className="absolute top-1/2 left-1/4 text-3xl opacity-10">🛡️</div>
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -117,9 +117,9 @@ export default function Blog() {
           className="text-center mb-16"
         >
           <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-            📝 Blog
+            📝 Security Blog
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
             Thoughts, tutorials, and insights about IT support, cybersecurity learning,
             Python scripting, and the journey from IT to security professional! 🛡️
           </p>
@@ -185,25 +185,25 @@ export default function Blog() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="card shadow-lg hover:shadow-xl hover:scale-105 transition-all overflow-hidden"
+                  className="card-tech shadow-lg hover:shadow-xl hover:scale-105 transition-all overflow-hidden"
                 >
-                  <div className="h-48 bg-gradient-to-br from-pink-200 to-purple-300"></div>
+                  <div className="h-48 bg-gradient-to-br from-cyan-900 to-blue-900"></div>
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getCategoryColor(post.category)}`}>
                         {post.category}
                       </span>
-                      <div className="flex items-center text-pink-600 text-sm font-medium">
+                      <div className="flex items-center text-cyan-400 text-sm font-medium">
                         <Clock className="w-4 h-4 mr-1" />
                         {post.readTime} min read
                       </div>
                     </div>
                     
-                    <h3 className="text-xl font-semibold text-gray-800 mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <h3 className="text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
                       {post.title}
                     </h3>
                     
-                    <p className="text-gray-600 mb-4 font-medium">
+                    <p className="text-gray-400 mb-4 font-medium">
                       {post.excerpt}
                     </p>
                     
@@ -220,13 +220,13 @@ export default function Blog() {
                     </div>
                     
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center text-purple-600 text-sm font-medium">
+                      <div className="flex items-center text-blue-400 text-sm font-medium">
                         <Calendar className="w-4 h-4 mr-1" />
                         {post.publishDate ? new Date(post.publishDate).toLocaleDateString() : 'Date not available'}
                       </div>
                       <Link
                         href={`/blog/${post.slug}`}
-                        className="inline-flex items-center text-pink-600 hover:text-purple-600 font-semibold transition-colors"
+                        className="inline-flex items-center text-cyan-400 hover:text-blue-400 font-semibold transition-colors"
                       >
                         Read More ✨
                         <ArrowRight className="w-4 h-4 ml-1" />
@@ -260,25 +260,25 @@ export default function Blog() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="card shadow-md hover:shadow-lg hover:scale-105 transition-all overflow-hidden"
+                  className="card-tech shadow-md hover:shadow-lg hover:scale-105 transition-all overflow-hidden"
                 >
-                  <div className="h-40 bg-gradient-to-br from-pink-100 to-purple-200"></div>
+                  <div className="h-40 bg-gradient-to-br from-blue-900 to-cyan-900"></div>
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-3">
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getCategoryColor(post.category)}`}>
                         {post.category}
                       </span>
-                      <div className="flex items-center text-pink-600 text-xs font-medium">
+                      <div className="flex items-center text-cyan-400 text-xs font-medium">
                         <Clock className="w-3 h-3 mr-1" />
                         {post.readTime} min
                       </div>
                     </div>
                     
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
                       {post.title}
                     </h3>
                     
-                    <p className="text-gray-600 mb-3 text-sm line-clamp-3 font-medium">
+                    <p className="text-gray-400 mb-3 text-sm line-clamp-3 font-medium">
                       {post.excerpt}
                     </p>
                     
@@ -303,13 +303,13 @@ export default function Blog() {
                     )}
                     
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center text-purple-600 text-xs font-medium">
+                      <div className="flex items-center text-blue-400 text-xs font-medium">
                         <Calendar className="w-3 h-3 mr-1" />
                         {post.publishDate ? new Date(post.publishDate).toLocaleDateString() : 'Date not available'}
                       </div>
                       <Link
                         href={`/blog/${post.slug}`}
-                        className="inline-flex items-center text-pink-600 hover:text-purple-600 text-sm font-semibold transition-colors"
+                        className="inline-flex items-center text-cyan-400 hover:text-blue-400 text-sm font-semibold transition-colors"
                       >
                         Read ✨
                         <ArrowRight className="w-3 h-3 ml-1" />
@@ -330,13 +330,13 @@ export default function Blog() {
             transition={{ duration: 0.5 }}
             className="text-center py-12"
           >
-            <div className="w-24 h-24 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-12 h-12 text-pink-400" />
+            <div className="w-24 h-24 bg-gradient-to-r from-cyan-900 to-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-12 h-12 text-cyan-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            <h3 className="text-xl font-semibold text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
               No posts found 😔
             </h3>
-            <p className="text-gray-600 font-medium">
+            <p className="text-gray-400 font-medium">
               Try adjusting your search terms or category filter! ✨
             </p>
           </motion.div>

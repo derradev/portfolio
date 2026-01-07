@@ -31,17 +31,17 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" 
-         style={{ background: 'linear-gradient(135deg, #f8f4ff 0%, #fff8f0 50%, #ffb3ba 100%)' }}>
+         style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-10 text-6xl opacity-20">💖</div>
-        <div className="absolute top-32 right-20 text-4xl opacity-15">✨</div>
-        <div className="absolute bottom-20 left-20 text-5xl opacity-10">🌸</div>
-        <div className="absolute bottom-32 right-10 text-3xl opacity-20">💫</div>
+        <div className="absolute top-10 left-10 text-6xl opacity-20">�️</div>
+        <div className="absolute top-32 right-20 text-4xl opacity-15">🔐</div>
+        <div className="absolute bottom-20 left-20 text-5xl opacity-10">💻</div>
+        <div className="absolute bottom-32 right-10 text-3xl opacity-20">⚡</div>
       </div>
       
       <div className="max-w-md w-full space-y-8 relative z-10">
-        <div className="card text-center p-8">
+        <div className="card-tech text-center p-8">
           <div className="mx-auto h-24 w-24 mb-4">
             <img 
               src={Logo} 
@@ -50,18 +50,18 @@ const Login = () => {
             />
           </div>
           <h2 className="mt-6 text-center text-4xl font-bold gradient-text" style={{ fontFamily: 'Dancing Script, cursive' }}>
-            ✨ Portfolio Admin
+            🛡️ Security Admin
           </h2>
-          <p className="mt-3 text-center text-sm text-gray-600">
-            Sign in to manage your beautiful portfolio content 💖
+          <p className="mt-3 text-center text-sm text-gray-400">
+            Sign in to manage your cybersecurity portfolio content �
           </p>
         </div>
         
-        <form className="mt-8 space-y-6 form-girly" onSubmit={handleSubmit(onSubmit)}>
-          <div className="card p-6 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="card-tech p-6 space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                ✉️ Email address
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                📧 Email address
               </label>
               <input
                 {...register('email', { 
@@ -73,16 +73,16 @@ const Login = () => {
                 })}
                 type="email"
                 autoComplete="email"
-                className="input-girly"
+                className="input-tech"
                 placeholder="Enter your email"
               />
               {errors.email && (
-                <p className="mt-2 text-sm text-pink-600 font-medium">{errors.email.message}</p>
+                <p className="mt-2 text-sm text-cyan-400 font-medium">{errors.email.message}</p>
               )}
             </div>
             
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                 🔐 Password
               </label>
               <div className="relative">
@@ -96,12 +96,12 @@ const Login = () => {
                   })}
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
-                  className="input-girly pr-12"
+                  className="input-tech pr-12"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center hover:text-pink-600 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center hover:text-cyan-400 transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -112,22 +112,22 @@ const Login = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-2 text-sm text-pink-600 font-medium">{errors.password.message}</p>
+                <p className="mt-2 text-sm text-cyan-400 font-medium">{errors.password.message}</p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-tech w-full py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-400 mr-2"></div>
                   Signing in...
                 </span>
               ) : (
-                'Sign in ✨'
+                'Sign in 🔐'
               )}
             </button>
           </div>
