@@ -2,7 +2,7 @@
 
 ## 🚀 Quick Setup
 
-Your portfolio is now configured for Vercel and Supabase deployment with your custom domain `api.demitaylornimmo.com`.
+Your portfolio is now configured for Vercel and Supabase deployment with your custom domain `api.william-malone.com`.
 
 ## 1. Supabase Database Setup
 
@@ -48,9 +48,9 @@ VAULT_ENABLED=false
 VERCEL=1
 
 # URLs (update these after deployment)
-FRONTEND_URL=https://demitaylornimmo.com
-ADMIN_URL=https://admin.demitaylornimmo.com
-API_URL=https://api.demitaylornimmo.com
+FRONTEND_URL=https://william-malone.com
+ADMIN_URL=https://admin.william-malone.com
+API_URL=https://api.william-malone.com
 ```
 
 ### Deploy to Vercel
@@ -68,27 +68,27 @@ API_URL=https://api.demitaylornimmo.com
 Your portfolio uses a multi-domain setup:
 
 ### 🌐 **Domain Structure:**
-- **Frontend**: `https://demitaylornimmo.com` (main portfolio site)
-- **Admin Panel**: `https://admin.demitaylornimmo.com` (admin interface)
-- **Backend API**: `https://api.demitaylornimmo.com` (API endpoints)
+- **Frontend**: `https://william-malone.com` (main portfolio site)
+- **Admin Panel**: `https://admin.william-malone.com` (admin interface)
+- **Backend API**: `https://api.william-malone.com` (API endpoints)
 
 ### **Frontend & Admin → API Communication:**
-- Frontend calls: `https://api.demitaylornimmo.com/api/projects`
-- Admin calls: `https://api.demitaylornimmo.com/api/auth/login`
+- Frontend calls: `https://api.william-malone.com/api/projects`
+- Admin calls: `https://api.william-malone.com/api/auth/login`
 - All client apps point to the same backend API domain
 
 ### **Vercel Deployment Options:**
 
 #### Option 1: Single Vercel Project (Recommended)
 Deploy everything as one project with domain routing:
-1. **Main domain**: `demitaylornimmo.com` → Frontend
-2. **API subdomain**: `api.demitaylornimmo.com` → Backend API
-3. **Admin subdomain**: `admin.demitaylornimmo.com` → Admin (separate deployment)
+1. **Main domain**: `william-malone.com` → Frontend
+2. **API subdomain**: `api.william-malone.com` → Backend API
+3. **Admin subdomain**: `admin.william-malone.com` → Admin (separate deployment)
 
 #### Option 2: Separate Vercel Projects
-- **Project 1**: Frontend (`demitaylornimmo.com`)
-- **Project 2**: Backend API (`api.demitaylornimmo.com`) 
-- **Project 3**: Admin Panel (`admin.demitaylornimmo.com`)
+- **Project 1**: Frontend (`william-malone.com`)
+- **Project 2**: Backend API (`api.william-malone.com`) 
+- **Project 3**: Admin Panel (`admin.william-malone.com`)
 
 ## 4. Local Development
 
@@ -142,10 +142,10 @@ Your local setup now connects to:
 ## 7. API Endpoints
 
 Once deployed, your API will be available at:
-- `https://api.demitaylornimmo.com/api/health` - Health check
-- `https://api.demitaylornimmo.com/api/projects` - Projects
-- `https://api.demitaylornimmo.com/api/blog` - Blog posts
-- `https://api.demitaylornimmo.com/api/auth` - Authentication
+- `https://api.william-malone.com/api/health` - Health check
+- `https://api.william-malone.com/api/projects` - Projects
+- `https://api.william-malone.com/api/blog` - Blog posts
+- `https://api.william-malone.com/api/auth` - Authentication
 - And all other endpoints...
 
 ## 🎉 You're Ready to Deploy!

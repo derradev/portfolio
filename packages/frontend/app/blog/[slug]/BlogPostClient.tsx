@@ -35,7 +35,7 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
       try {
         const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
           ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-          : 'https://api.demitaylornimmo.com/api'
+          : 'https://api.william-malone.com/api'
         
         const response = await fetch(`${API_BASE_URL}/blog/${slug}`)
         const data = await response.json()

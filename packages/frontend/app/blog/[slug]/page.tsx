@@ -12,7 +12,7 @@ async function getBlogPost(slug: string) {
   try {
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
       ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-      : 'https://api.demitaylornimmo.com/api'
+      : 'https://api.william-malone.com/api'
     
     const response = await fetch(`${API_BASE_URL}/blog/${slug}`, {
       next: { revalidate: 60 } // Revalidate every 60 seconds
@@ -40,11 +40,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://demitaylornimmo.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://william-malone.com'
   const url = `${siteUrl}/blog/${params.slug}`
-  const title = `${post.title} | Demi Taylor Nimmo`
-  const description = post.excerpt || 'Read this blog post by Demi Taylor Nimmo'
-  const author = post.author || 'Demi Taylor Nimmo'
+  const title = `${post.title} | William Malone`
+  const description = post.excerpt || 'Read this blog post by William Malone'
+  const author = post.author || 'William Malone'
 
   return {
     title,
@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       url,
-      siteName: 'Demi Taylor Nimmo',
+      siteName: 'William Malone',
       type: 'article',
       publishedTime: post.publish_date || post.created_at,
       authors: [author],
@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: 'summary_large_image',
       title,
       description,
-      creator: '@demitaylornimmo',
+      creator: process.env.NEXT_PUBLIC_TWITTER_HANDLE || '',
     },
     alternates: {
       canonical: url,

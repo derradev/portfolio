@@ -301,16 +301,16 @@ const Settings = () => {
             <div className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
               <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>🌐 Frontend URL</dt>
               <dd className="mt-2">
-                <a href="https://demitaylornimmo.com" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-500 font-medium hover:underline">
-                  https://demitaylornimmo.com
+                <a href="https://william-malone.com" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-500 font-medium hover:underline">
+                  https://william-malone.com
                 </a>
               </dd>
             </div>
             <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
               <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>🔌 API URL</dt>
               <dd className="mt-2">
-                <a href={`${(import.meta as any).env.VITE_API_URL || 'https://api.demitaylornimmo.com'}/api`} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-500 font-medium hover:underline">
-                  {`${(import.meta as any).env.VITE_API_URL || 'https://api.demitaylornimmo.com'}/api`}
+                <a href={`${(import.meta as any).env.VITE_API_URL || 'https://api.william-malone.com'}/api`} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-500 font-medium hover:underline">
+                  {`${(import.meta as any).env.VITE_API_URL || 'https://api.william-malone.com'}/api`}
                 </a>
               </dd>
             </div>

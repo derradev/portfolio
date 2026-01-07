@@ -11,7 +11,7 @@ interface FeatureFlag {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
   ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-  : 'https://api.demitaylornimmo.com/api'
+  : 'https://api.william-malone.com/api'
 
 // Global state to track if we've already checked maintenance mode in this session
 let hasCheckedMaintenance = false

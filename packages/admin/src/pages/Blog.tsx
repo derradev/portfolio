@@ -245,7 +245,7 @@ const Blog = () => {
               <div className="flex items-center space-x-2">
                 {post.published && (
                   <a
-                    href={`https://demitaylornimmo.com/blog/${post.slug}`}
+                    href={`https://william-malone.com/blog/${post.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-2 rounded-full bg-green-100 text-green-600 hover:bg-green-200 transition-colors"

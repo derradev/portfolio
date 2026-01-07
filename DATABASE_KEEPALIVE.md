@@ -33,7 +33,7 @@ You can test the keep-alive endpoint manually:
 curl http://localhost:3001/api/keepalive
 
 # Test production
-curl https://api.demitaylornimmo.com/api/keepalive
+curl https://api.william-malone.com/api/keepalive
 ```
 
 Expected response:
@@ -50,7 +50,7 @@ Expected response:
 
 ### GitHub Actions
 The workflow uses the `API_URL` secret if configured, otherwise defaults to:
-- `https://api.demitaylornimmo.com`
+- `https://api.william-malone.com`
 
 To set a custom API URL:
 1. Go to your GitHub repository

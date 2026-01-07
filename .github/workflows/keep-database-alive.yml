@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Ping Database Keep-Alive Endpoint
         env:
-          API_URL: ${{ secrets.API_URL || 'https://api.demitaylornimmo.com' }}
+          API_URL: ${{ secrets.API_URL || 'https://api.william-malone.com' }}
         run: |
           echo "🔄 Pinging database keep-alive endpoint..."
           echo "📍 URL: $API_URL/api/keepalive"

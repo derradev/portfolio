@@ -29,7 +29,7 @@ class Analytics {
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
         ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-        : 'https://api.demitaylornimmo.com/api'
+        : 'https://api.william-malone.com/api'
       
       await fetch(`${API_BASE_URL}/analytics/track`, {
         method: 'POST',
@@ -88,7 +88,7 @@ class Analytics {
         if (navigator.sendBeacon) {
           const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
             ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-            : 'https://api.demitaylornimmo.com/api'
+            : 'https://api.william-malone.com/api'
           navigator.sendBeacon(`${API_BASE_URL}/analytics/track`, data)
         }
       }

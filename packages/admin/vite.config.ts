@@ -14,7 +14,7 @@ export default defineConfig({
     port: 3002,
     proxy: {
       '/api': {
-        target: process.env.VITE_API_URL || 'https://api.demitaylornimmo.com',
+        target: process.env.VITE_API_URL || 'https://api.william-malone.com',
         changeOrigin: true,
       },
     },

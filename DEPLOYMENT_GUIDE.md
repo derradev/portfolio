@@ -4,7 +4,7 @@ This portfolio consists of 3 separate applications that should be deployed as in
 
 ## 1. Frontend (Main Website)
 **Deploy from**: `/packages/frontend`
-**Domain**: `demitaylornimmo.com`
+**Domain**: `william-malone.com`
 **Vercel Config**: `/packages/frontend/vercel.json`
 
 ### Steps:
@@ -15,12 +15,12 @@ This portfolio consists of 3 separate applications that should be deployed as in
 
 ### Environment Variables:
 ```
-NEXT_PUBLIC_API_URL=https://api.demitaylornimmo.com
+NEXT_PUBLIC_API_URL=https://api.william-malone.com
 ```
 
 ## 2. Backend API
 **Deploy from**: `/packages/backend`
-**Domain**: `api.demitaylornimmo.com`
+**Domain**: `api.william-malone.com`
 **Vercel Config**: `/packages/backend/vercel.json`
 
 ### Steps:
@@ -38,13 +38,13 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 JWT_SECRET=8c653503e73f6cd2afc47a6c66ec768ecd56d59f792eea58cf22178dc35de431f49087f1d79fe13218ac9ed131925493944f38c5ab522400759ffdba0769cbee
 NODE_ENV=production
 VAULT_ENABLED=false
-FRONTEND_URL=https://demitaylornimmo.com
-ADMIN_URL=https://admin.demitaylornimmo.com
+FRONTEND_URL=https://william-malone.com
+ADMIN_URL=https://admin.william-malone.com
 ```
 
 ## 3. Admin Panel
 **Deploy from**: `/packages/admin`
-**Domain**: `admin.demitaylornimmo.com`
+**Domain**: `admin.william-malone.com`
 **Vercel Config**: `/packages/admin/vercel.json`
 
 ### Steps:
@@ -55,16 +55,16 @@ ADMIN_URL=https://admin.demitaylornimmo.com
 
 ### Environment Variables:
 ```
-VITE_API_URL=https://api.demitaylornimmo.com
+VITE_API_URL=https://api.william-malone.com
 ```
 
 ## Domain Configuration
 
 After deploying all three projects:
 
-1. **Frontend**: Set custom domain to `demitaylornimmo.com`
-2. **Backend**: Set custom domain to `api.demitaylornimmo.com`
-3. **Admin**: Set custom domain to `admin.demitaylornimmo.com`
+1. **Frontend**: Set custom domain to `william-malone.com`
+2. **Backend**: Set custom domain to `api.william-malone.com`
+3. **Admin**: Set custom domain to `admin.william-malone.com`
 
 ## Conditional Deployments
 
