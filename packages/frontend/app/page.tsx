@@ -287,7 +287,7 @@ export default function Home() {
               Let's discuss how we can bring your beautiful ideas to life! ✨
             </p>
             <a
-              href="mailto:demi@example.com"
+              href="mailto:demi.21@outlook.com"
               className="btn-secondary bg-white text-pink-600 hover:bg-pink-50 font-semibold"
             >
               Get In Touch 💌

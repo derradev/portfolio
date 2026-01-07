@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMaintenanceMode } from '../lib/useMaintenanceMode'
 import MaintenancePage from './MaintenancePage'
 
@@ -10,28 +10,21 @@ interface MaintenanceWrapperProps {
 
 const MaintenanceWrapper: React.FC<MaintenanceWrapperProps> = ({ children }) => {
   const { isMaintenanceMode, isLoading, error } = useMaintenanceMode()
+  const [showMaintenance, setShowMaintenance] = useState(false)
 
-  // Show loading state briefly while checking maintenance mode
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white">Loading...</p>
-        </div>
-      </div>
-    )
-  }
+  // Check maintenance mode in the background without blocking initial render
+  useEffect(() => {
+    // Only show maintenance page if maintenance mode is confirmed enabled
+    // Don't show during loading or on error (fail-safe approach)
+    if (!isLoading && !error && isMaintenanceMode) {
+      setShowMaintenance(true)
+    } else {
+      setShowMaintenance(false)
+    }
+  }, [isMaintenanceMode, isLoading, error])
 
-  // If there's an error checking maintenance mode, show the normal site
-  // (fail-safe approach - don't block users if we can't check the flag)
-  if (error) {
-    console.warn('Failed to check maintenance mode, showing normal site:', error)
-    return <>{children}</>
-  }
-
-  // Show maintenance page if maintenance mode is enabled
-  if (isMaintenanceMode) {
+  // Show maintenance page only if maintenance mode is confirmed enabled
+  if (showMaintenance) {
     return (
       <MaintenancePage 
         estimatedTime="a few hours"
@@ -40,7 +33,7 @@ const MaintenanceWrapper: React.FC<MaintenanceWrapperProps> = ({ children }) => 
     )
   }
 
-  // Show normal site
+  // Always show normal site during loading or on error (fail-safe)
   return <>{children}</>
 }
 

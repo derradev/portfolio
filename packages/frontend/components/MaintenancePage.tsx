@@ -61,7 +61,7 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({
               Need immediate assistance?
             </p>
             <a 
-              href="mailto:contact@demitaylornimmo.com" 
+              href="mailto:demi.21@outlook.com" 
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium"
             >
               <Mail className="w-4 h-4" />
