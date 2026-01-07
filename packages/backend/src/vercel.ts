@@ -50,10 +50,10 @@ app.use(cors({
     process.env.FRONTEND_URL || 'http://localhost:3000',
     process.env.ADMIN_URL || 'http://localhost:3002',
     // Add your custom domains
-    'https://demitaylornimmo.com',
-    'https://www.demitaylornimmo.com',
-    'https://admin.demitaylornimmo.com',
-    'https://api.demitaylornimmo.com',
+    'https://william-malone.com',
+    'https://www.william-malone.com',
+    'https://admin.william-malone.com',
+    'https://api.william-malone.com',
     // Add Vercel preview URLs
     /^https:\/\/.*\.vercel\.app$/
   ],
