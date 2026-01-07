@@ -39,15 +39,16 @@ const Projects = () => {
     // Ensure technologies is always an array
     return projectsData.map((project: Project) => {
       let technologies: string[] = []
+      const techValue = project.technologies
       
-      if (Array.isArray(project.technologies)) {
-        technologies = project.technologies
-      } else if (typeof project.technologies === 'string') {
+      if (Array.isArray(techValue)) {
+        technologies = techValue
+      } else if (typeof techValue === 'string') {
         try {
-          if (project.technologies.startsWith('[')) {
-            technologies = JSON.parse(project.technologies)
+          if (techValue.startsWith('[')) {
+            technologies = JSON.parse(techValue)
           } else {
-            technologies = project.technologies.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0)
+            technologies = techValue.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0)
           }
         } catch {
           technologies = []

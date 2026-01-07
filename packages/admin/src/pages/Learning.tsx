@@ -19,11 +19,10 @@ interface LearningItem {
 
 interface Skill {
   id: number
-  title: string
-  description: string
-  completed_date: string
+  name: string
+  description?: string
   category: string
-  level: 'beginner' | 'intermediate' | 'advanced'
+  level: 'beginner' | 'intermediate' | 'advanced' | 'expert'
 }
 
 interface LearningForm {
@@ -38,11 +37,10 @@ interface LearningForm {
 }
 
 interface SkillForm {
-  title: string
-  description: string
-  completed_date: string
+  name: string
+  description?: string
   category: string
-  level: 'beginner' | 'intermediate' | 'advanced'
+  level: 'beginner' | 'intermediate' | 'advanced' | 'expert'
 }
 
 const Learning = () => {
@@ -57,7 +55,7 @@ const Learning = () => {
   })
 
   const { data: skills, isLoading: skillsLoading } = useQuery('skills', async () => {
-    const response = await api.get('/learning/skills')
+    const response = await api.get('/skills')
     return response.data.data as Skill[]
   })
 
@@ -80,13 +78,16 @@ const Learning = () => {
   )
 
   const createSkillMutation = useMutation(
-    (data: SkillForm) => api.post('/learning/skills', data),
+    (data: SkillForm) => api.post('/skills', data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('skills')
         toast.success('Skill added successfully')
         setIsModalOpen(false)
         resetSkill()
+      },
+      onError: (error: any) => {
+        toast.error(error.response?.data?.error || 'Failed to create skill')
       }
     }
   )
@@ -117,12 +118,31 @@ const Learning = () => {
     }
   )
 
+  const updateSkillMutation = useMutation(
+    ({ id, data }: { id: number, data: SkillForm }) => api.put(`/skills/${id}`, data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('skills')
+        toast.success('Skill updated successfully')
+        setIsModalOpen(false)
+        setEditingItem(null)
+        resetSkill()
+      },
+      onError: (error: any) => {
+        toast.error(error.response?.data?.error || 'Failed to update skill')
+      }
+    }
+  )
+
   const deleteSkillMutation = useMutation(
-    (id: number) => api.delete(`/learning/skills/${id}`),
+    (id: number) => api.delete(`/skills/${id}`),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('skills')
         toast.success('Skill deleted successfully')
+      },
+      onError: (error: any) => {
+        toast.error(error.response?.data?.error || 'Failed to delete skill')
       }
     }
   )
@@ -145,9 +165,8 @@ const Learning = () => {
       const skill = item as Skill
       setEditingItem(skill)
       resetSkill({
-        title: skill.title,
-        description: skill.description,
-        completed_date: skill.completed_date,
+        name: skill.name,
+        description: skill.description || '',
         category: skill.category,
         level: skill.level
       })
@@ -166,9 +185,8 @@ const Learning = () => {
         })
       } else {
         resetSkill({
-          title: '',
+          name: '',
           description: '',
-          completed_date: new Date().toISOString().split('T')[0],
           category: '',
           level: 'beginner'
         })
@@ -338,7 +356,7 @@ const Learning = () => {
             skills?.map((skill) => (
               <div key={skill.id} className="card p-6 hover:scale-105 transition-all duration-300">
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>{skill.title}</h3>
+                  <h3 className="text-lg font-semibold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>{skill.name}</h3>
                   <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
                     skill.level === 'advanced' ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white' :
                     skill.level === 'intermediate' ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white' :
@@ -356,7 +374,7 @@ const Learning = () => {
                       {skill.category}
                     </span>
                     <span className="text-xs text-pink-600 font-medium">
-                      Completed: {new Date(skill.completed_date).toLocaleDateString()}
+                      Level: {skill.level}
                     </span>
                   </div>
                   <button
@@ -496,56 +514,54 @@ const Learning = () => {
               ) : (
                 <form onSubmit={handleSkillSubmit(onSkillSubmit)}>
                   <div className="modal-header">
-                    <h3 className="text-xl font-bold">🏆 Add New Skill</h3>
+                    <h3 className="text-xl font-bold">
+                      {editingItem && 'name' in editingItem ? '✨ Edit Skill' : '🏆 Add New Skill'}
+                    </h3>
                   </div>
                   <div className="modal-body">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Title</label>
+                        <label className="block text-sm font-medium text-gray-700">Name *</label>
                         <input
-                          {...registerSkill('title', { required: 'Title is required' })}
+                          {...registerSkill('name', { required: 'Name is required' })}
                           type="text"
                           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                          placeholder="e.g., React, TypeScript, Node.js"
                         />
-                        {skillErrors.title && <p className="text-red-600 text-sm">{skillErrors.title.message}</p>}
+                        {skillErrors.name && <p className="text-red-600 text-sm">{skillErrors.name.message}</p>}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Description</label>
                         <textarea
-                          {...registerSkill('description', { required: 'Description is required' })}
+                          {...registerSkill('description')}
                           rows={3}
                           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                          placeholder="Optional description of the skill"
                         />
                         {skillErrors.description && <p className="text-red-600 text-sm">{skillErrors.description.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Category</label>
+                        <label className="block text-sm font-medium text-gray-700">Category *</label>
                         <input
                           {...registerSkill('category', { required: 'Category is required' })}
                           type="text"
                           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                          placeholder="e.g., Frontend, Backend, Database"
                         />
                         {skillErrors.category && <p className="text-red-600 text-sm">{skillErrors.category.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Completed Date</label>
-                        <input
-                          {...registerSkill('completed_date', { required: 'Completed date is required' })}
-                          type="date"
-                          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                        />
-                        {skillErrors.completed_date && <p className="text-red-600 text-sm">{skillErrors.completed_date.message}</p>}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">Level</label>
+                        <label className="block text-sm font-medium text-gray-700">Level *</label>
                         <select
-                          {...registerSkill('level')}
+                          {...registerSkill('level', { required: 'Level is required' })}
                           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                         >
                           <option value="beginner">Beginner</option>
                           <option value="intermediate">Intermediate</option>
                           <option value="advanced">Advanced</option>
+                          <option value="expert">Expert</option>
                         </select>
+                        {skillErrors.level && <p className="text-red-600 text-sm">{skillErrors.level.message}</p>}
                       </div>
                     </div>
                   </div>
@@ -559,16 +575,16 @@ const Learning = () => {
                     </button>
                     <button
                       type="submit"
-                      disabled={createSkillMutation.isLoading}
+                      disabled={createSkillMutation.isLoading || updateSkillMutation.isLoading}
                       className="btn-success"
                     >
-                      {createSkillMutation.isLoading ? (
+                      {createSkillMutation.isLoading || updateSkillMutation.isLoading ? (
                         <div className="flex items-center">
                           <div className="spinner w-4 h-4 mr-2"></div>
-                          Adding...
+                          Saving...
                         </div>
                       ) : (
-                        '🏆 Add Skill'
+                        editingItem && 'name' in editingItem ? '✨ Update Skill' : '🏆 Add Skill'
                       )}
                     </button>
                   </div>
