@@ -78,8 +78,8 @@ export default function WorkHistory() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #fdf2f8 0%, #f8f4ff 50%, #fff8f0 100%)' }}>
-        <div className="text-lg font-medium text-gray-700">Loading work history... ✨</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
+        <div className="text-lg font-medium text-gray-300">Loading work history...</div>
       </div>
     )
   }
@@ -111,14 +111,14 @@ export default function WorkHistory() {
   }
 
   return (
-    <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #fdf2f8 0%, #f8f4ff 50%, #fff8f0 100%)' }}>
-      {/* Decorative elements */}
+    <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
+      {/* Tech-focused decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 text-4xl opacity-15 float-animation">💼</div>
-        <div className="absolute top-40 right-20 text-3xl opacity-20 sparkle-animation">✨</div>
-        <div className="absolute bottom-40 left-20 text-5xl opacity-10 float-animation">🏆</div>
-        <div className="absolute bottom-20 right-10 text-3xl opacity-15 sparkle-animation">💫</div>
-        <div className="absolute top-1/2 left-1/4 text-3xl opacity-10">🌟</div>
+        <div className="absolute top-20 left-10 text-4xl opacity-15 text-cyan-500 terminal-cursor">&gt;</div>
+        <div className="absolute top-40 right-20 text-3xl opacity-20 text-blue-500 terminal-cursor">#</div>
+        <div className="absolute bottom-40 left-20 text-5xl opacity-10 text-green-500 terminal-cursor">$</div>
+        <div className="absolute bottom-20 right-10 text-3xl opacity-15 text-cyan-400 terminal-cursor">/</div>
+        <div className="absolute top-1/2 left-1/4 text-3xl opacity-10 text-blue-400">[ ]</div>
       </div>
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -129,12 +129,11 @@ export default function WorkHistory() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-            💼 Experience
+          <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Professional Experience
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
-            My professional journey as a software engineer, showcasing growth,
-            achievements, and the technologies I've mastered along the way! ✨
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
+            IT infrastructure experience building foundation for cybersecurity career transition
           </p>
         </motion.div>
 
@@ -145,10 +144,10 @@ export default function WorkHistory() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-4xl font-bold gradient-text mb-8 flex items-center" style={{ fontFamily: 'Playfair Display, serif' }}
+            className="text-4xl font-bold gradient-text mb-8 flex items-center" style={{ fontFamily: 'Poppins, sans-serif' }}
           >
-            <Briefcase className="w-8 h-8 mr-3 text-pink-600" />
-            💼 Professional Experience
+            <Briefcase className="w-8 h-8 mr-3 text-cyan-400" />
+            Professional Experience
           </motion.h2>
 
           <div className="space-y-8">
@@ -159,21 +158,21 @@ export default function WorkHistory() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="card p-6 border-l-4 border-pink-400 hover:scale-105 transition-transform"
+                className="card p-6 border-l-4 border-cyan-500 hover:scale-105 transition-transform"
               >
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center mb-2">
-                      <h3 className="text-xl font-semibold text-gray-800 mr-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                      <h3 className="text-xl font-semibold text-white mr-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
                         {job.position}
                       </h3>
                       {!job.end_date && (
-                        <span className="px-3 py-1 bg-gradient-to-r from-pink-400 to-purple-500 text-white rounded-full text-xs font-semibold">
-                          Current ✨
+                        <span className="px-3 py-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full text-xs font-semibold">
+                          Current
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center text-pink-600 mb-2">
+                    <div className="flex items-center text-cyan-400 mb-2">
                       <a
                         href={job.company_url}
                         target="_blank"
@@ -184,34 +183,34 @@ export default function WorkHistory() {
                         <ExternalLink className="w-4 h-4 ml-1" />
                       </a>
                     </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center text-gray-600 text-sm space-y-1 sm:space-y-0 sm:space-x-4 font-medium">
+                    <div className="flex flex-col sm:flex-row sm:items-center text-gray-400 text-sm space-y-1 sm:space-y-0 sm:space-x-4 font-medium">
                       <div className="flex items-center">
-                        <MapPin className="w-4 h-4 mr-1 text-pink-500" />
+                        <MapPin className="w-4 h-4 mr-1 text-cyan-400" />
                         {job.location}
                       </div>
                       <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-1 text-pink-500" />
+                        <Calendar className="w-4 h-4 mr-1 text-cyan-400" />
                         {new Date(job.start_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - {job.end_date ? new Date(job.end_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Present'}
                       </div>
-                      <div className="text-purple-600">
+                      <div className="text-blue-400">
                         ({calculateDuration(job.start_date, job.end_date)})
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <p className="text-gray-600 mb-4 font-medium">
+                <p className="text-gray-400 mb-4 font-medium">
                   {job.description}
                 </p>
 
                 {job.achievements && job.achievements.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>🏆 Key Achievements:</h4>
+                    <h4 className="font-semibold text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>🔧 Key Responsibilities:</h4>
                     <ul className="space-y-2">
                       {job.achievements.map((achievement, i) => (
-                        <li key={i} className="flex items-start">
-                          <span className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                          <span className="text-gray-600 text-sm font-medium">{achievement}</span>
+                        <li className="flex items-start">
+                          <span className="w-2 h-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                          <span className="text-gray-400 text-sm font-medium">{achievement}</span>
                         </li>
                       ))}
                     </ul>
@@ -220,7 +219,7 @@ export default function WorkHistory() {
 
                 {job.technologies && job.technologies.length > 0 && (
                   <div>
-                    <h4 className="font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>💻 Technologies:</h4>
+                    <h4 className="font-semibold text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>💻 Technologies:</h4>
                     <div className="flex flex-wrap gap-2">
                       {job.technologies.map((tech) => (
                         <span
@@ -246,11 +245,11 @@ export default function WorkHistory() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="text-4xl font-bold gradient-text mb-8 flex items-center" style={{ fontFamily: 'Playfair Display, serif' }}
-            >
-              <Award className="w-8 h-8 mr-3 text-pink-600" />
-              🎓 Education
-            </motion.h2>
+              className="text-4xl font-bold gradient-text mb-8 flex items-center" style={{ fontFamily: 'Poppins, sans-serif' }}
+          >
+            <Award className="w-8 h-8 mr-3 text-cyan-400" />
+            🎓 Education
+          </motion.h2>
 
             <div className="space-y-6">
               {education.map((edu, index) => (
@@ -264,34 +263,34 @@ export default function WorkHistory() {
               >
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <h3 className="text-xl font-semibold text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
                       {edu.degree}
                       {edu.field_of_study && ` in ${edu.field_of_study}`}
                     </h3>
-                    <p className="text-pink-600 font-semibold mb-2">
+                    <p className="text-cyan-400 font-semibold mb-2">
                       {edu.institution}
                     </p>
-                    <div className="flex flex-col sm:flex-row sm:items-center text-gray-600 text-sm space-y-1 sm:space-y-0 sm:space-x-4 font-medium">
+                    <div className="flex flex-col sm:flex-row sm:items-center text-gray-400 text-sm space-y-1 sm:space-y-0 sm:space-x-4 font-medium">
                       <div className="flex items-center">
-                        <MapPin className="w-4 h-4 mr-1 text-pink-500" />
+                        <MapPin className="w-4 h-4 mr-1 text-cyan-400" />
                         {edu.location}
                       </div>
                       <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-1 text-pink-500" />
+                        <Calendar className="w-4 h-4 mr-1 text-cyan-400" />
                         {new Date(edu.start_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - {edu.end_date ? new Date(edu.end_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Present'}
                       </div>
                     </div>
                   </div>
                   {edu.grade && (
                     <div className="mt-4 lg:mt-0">
-                      <span className="px-4 py-2 bg-gradient-to-r from-pink-400 to-purple-500 text-white rounded-full text-sm font-semibold">
-                        ✨ {edu.grade}
+                      <span className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full text-sm font-semibold">
+                        🎓 {edu.grade}
                       </span>
                     </div>
                   )}
                 </div>
                 {edu.description && (
-                  <p className="text-gray-600 font-medium mb-4">
+                  <p className="text-gray-400 font-medium mb-4">
                     {edu.description}
                   </p>
                 )}
@@ -309,12 +308,12 @@ export default function WorkHistory() {
                         <>
                           {courses.length > 0 && (
                             <div className="mb-4">
-                              <h4 className="font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>📚 Course Work:</h4>
+                              <h4 className="font-semibold text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>📚 Course Work:</h4>
                               <ul className="space-y-2">
                                 {courses.map((achievement, i) => (
                                   <li key={i} className="flex items-start">
-                                    <span className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                                    <span className="text-gray-600 text-sm font-medium">
+                                    <span className="w-2 h-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                    <span className="text-gray-400 text-sm font-medium">
                                       {achievement.replace(/^course:\s*/i, '')}
                                     </span>
                                   </li>
@@ -324,12 +323,12 @@ export default function WorkHistory() {
                           )}
                           {activities.length > 0 && (
                             <div className="mb-4">
-                              <h4 className="font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>🎯 Extra Activities I've Done:</h4>
+                              <h4 className="font-semibold text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>🎯 Extra Activities:</h4>
                               <ul className="space-y-2">
                                 {activities.map((achievement, i) => (
                                   <li key={i} className="flex items-start">
-                                    <span className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                                    <span className="text-gray-600 text-sm font-medium">
+                                    <span className="w-2 h-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                    <span className="text-gray-400 text-sm font-medium">
                                       {achievement.replace(/^activities:\s*/i, '')}
                                     </span>
                                   </li>
@@ -339,12 +338,12 @@ export default function WorkHistory() {
                           )}
                           {other.length > 0 && (
                             <div className="mb-4">
-                              <h4 className="font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>🏆 Achievements:</h4>
+                              <h4 className="font-semibold text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>🏆 Achievements:</h4>
                               <ul className="space-y-2">
                                 {other.map((achievement, i) => (
                                   <li key={i} className="flex items-start">
-                                    <span className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                                    <span className="text-gray-600 text-sm font-medium">{achievement}</span>
+                                    <span className="w-2 h-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                    <span className="text-gray-400 text-sm font-medium">{achievement}</span>
                                   </li>
                                 ))}
                               </ul>
@@ -385,23 +384,23 @@ export default function WorkHistory() {
                   viewport={{ once: true }}
                   className="card p-6 text-center hover:scale-105 transition-transform"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Award className="w-8 h-8 text-pink-600" />
+                  <div className="w-16 h-16 bg-gradient-to-r from-cyan-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Award className="w-8 h-8 text-cyan-600" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  <h3 className="text-lg font-semibold text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
                     {cert.name}
                   </h3>
-                  <p className="text-pink-600 font-semibold mb-2">
+                  <p className="text-cyan-400 font-semibold mb-2">
                     {cert.issuer}
                   </p>
-                  <p className="text-sm text-gray-600 mb-4 font-medium">
+                  <p className="text-sm text-gray-400 mb-4 font-medium">
                     Issued: {new Date(cert.issue_date).toLocaleDateString()}
                   </p>
                   <a
                     href={cert.credential_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-pink-600 hover:text-purple-600 hover:underline text-sm font-semibold transition-colors"
+                    className="inline-flex items-center text-cyan-400 hover:text-blue-400 hover:underline text-sm font-semibold transition-colors"
                   >
                     View Credential ✨
                     <ExternalLink className="w-3 h-3 ml-1" />

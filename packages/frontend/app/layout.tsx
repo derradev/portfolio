@@ -12,18 +12,18 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'Demi Taylor Nimmo - Full Stack Software Engineer ✨',
-  description: 'Beautiful portfolio of Demi Taylor Nimmo, showcasing creative projects, skills, and professional experience in software engineering.',
-  keywords: 'software engineer, full stack developer, web development, portfolio, creative developer',
-  authors: [{ name: 'Demi Taylor Nimmo' }],
+  title: 'William Malone - IT Support Engineer | Aspiring Cybersecurity Professional',
+  description: 'Professional portfolio of William Malone, IT Support Engineer with expertise in Active Directory, system administration, and pursuing a career in cybersecurity.',
+  keywords: 'IT support, cybersecurity, system administrator, Active Directory, network security, Python, IT infrastructure',
+  authors: [{ name: 'William Malone' }],
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.ico',
     apple: '/favicon.svg',
   },
   openGraph: {
-    title: 'Demi Taylor Nimmo - Full Stack Software Engineer ✨',
-    description: 'Beautiful portfolio showcasing creative projects, skills, and professional experience.',
+    title: 'William Malone - IT Support Engineer | Aspiring Cybersecurity Professional',
+    description: 'Professional portfolio showcasing IT infrastructure expertise and cybersecurity journey.',
     type: 'website',
   },
 }

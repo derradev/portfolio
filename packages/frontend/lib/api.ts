@@ -1,6 +1,6 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
   ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-  : 'https://api.demitaylornimmo.com/api'
+  : 'https://api.william-malone.com/api'
 
 export async function fetchProjects() {
   try {

@@ -54,7 +54,7 @@ const Layout = ({ children }: LayoutProps) => {
             <div className="flex flex-col items-center justify-center flex-1">
               <img src={Logo} alt="Portfolio Admin" className="h-24 w-24 mb-2" />
               <span className="text-sm font-bold gradient-text" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                Admin Panel
+                William Malone Admin
               </span>
             </div>
             <button 

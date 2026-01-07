@@ -16,6 +16,9 @@ interface Project {
   date: string
   featured: boolean
   status?: 'active' | 'on_hold' | 'completed'
+  company?: string
+  start_date?: string
+  end_date?: string
 }
 
 // Format project date from YYYY-MM-DD to Month Day, Year
@@ -27,6 +30,33 @@ const formatProjectDate = (dateString: string) => {
     month: 'short',
     day: 'numeric'
   })
+}
+
+const calculateDuration = (start_date?: string, end_date?: string | null) => {
+  if (!start_date) return 'N/A'
+  const start = new Date(start_date)
+  const end = end_date ? new Date(end_date) : new Date()
+  
+  // Calculate difference in months properly
+  let diffMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
+  
+  // If end day is before the start day, subtract one month
+  if (end.getDate() < start.getDate()) {
+    diffMonths--
+  }
+  
+  // Ensure minimum of 1 month if there's any time difference
+  if (diffMonths <= 0 && end > start) {
+    diffMonths = 1
+  }
+  
+  if (diffMonths < 12) {
+    return `${diffMonths} month${diffMonths !== 1 ? 's' : ''}`
+  } else {
+    const years = Math.floor(diffMonths / 12)
+    const months = diffMonths % 12
+    return `${years} year${years !== 1 ? 's' : ''}${months > 0 ? ` ${months} month${months !== 1 ? 's' : ''}` : ''}`
+  }
 }
 
 export default function Projects() {
@@ -50,8 +80,8 @@ export default function Projects() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading projects...</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
+        <div className="text-lg font-medium text-gray-300">Loading projects...</div>
       </div>
     )
   }
@@ -67,11 +97,11 @@ export default function Projects() {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-              💼 Projects
+            <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              Projects
             </h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium mb-12">
-              No projects available at the moment. Check back soon! ✨
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium mb-12">
+              Building portfolio of security projects and Python scripts
             </p>
           </motion.div>
         </div>
@@ -83,13 +113,13 @@ export default function Projects() {
   const otherProjects = projects.filter(project => !project.featured)
 
   return (
-    <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #f8f4ff 0%, #fff8f0 50%, #ffb3ba 100%)' }}>
-      {/* Decorative elements */}
+    <div className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
+      {/* Tech-focused decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 text-4xl opacity-15 float-animation">💻</div>
-        <div className="absolute top-40 right-20 text-3xl opacity-20 sparkle-animation">✨</div>
-        <div className="absolute bottom-40 left-20 text-5xl opacity-10 float-animation">🚀</div>
-        <div className="absolute bottom-20 right-10 text-3xl opacity-15 sparkle-animation">💫</div>
+        <div className="absolute top-20 left-10 text-4xl opacity-15 text-cyan-500 terminal-cursor">&gt;</div>
+        <div className="absolute top-40 right-20 text-3xl opacity-20 text-blue-500 terminal-cursor">#</div>
+        <div className="absolute bottom-40 left-20 text-5xl opacity-10 text-green-500 terminal-cursor">$</div>
+        <div className="absolute bottom-20 right-10 text-3xl opacity-15 text-cyan-400 terminal-cursor">/</div>
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -116,7 +146,7 @@ export default function Projects() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-4xl font-bold gradient-text mb-8" style={{ fontFamily: 'Playfair Display, serif' }}
+            className="text-4xl font-bold gradient-text mb-8" style={{ fontFamily: 'Poppins, sans-serif' }}
           >
             💎 Featured Projects
           </motion.h2>
@@ -131,32 +161,40 @@ export default function Projects() {
                 viewport={{ once: true }}
                 className="card hover:scale-105 transition-transform"
               >
-                <div className="h-64 bg-gradient-to-br from-pink-200 to-purple-300"></div>
+                <div className="h-64 bg-gradient-to-br from-gray-800 to-gray-700"></div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-2xl font-semibold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <h3 className="text-2xl font-semibold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
                       {project.title}
                     </h3>
                     {project.status === 'on_hold' && (
-                      <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                        On Hold
+                      <span className="px-3 py-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full text-xs font-semibold">
+                        Current
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-600 mb-4 font-medium">
-                    {project.description}
+                  <p className="text-gray-400 mb-4 font-medium">
+                    {project.description || 'No description available'}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.technologies.map((tech) => (
-                      <span key={tech} className="tech-tag">
+                      <span
+                        key={tech}
+                        className="tech-tag"
+                      >
                         {tech}
                       </span>
                     ))}
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center text-purple-600 text-sm font-medium">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatProjectDate(project.date)}
+                    <div className="flex flex-col sm:flex-row sm:items-center text-gray-400 text-sm space-y-1 sm:space-y-0 sm:space-x-4 font-medium">
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1 text-cyan-400" />
+                        {formatProjectDate(project.date)}
+                      </div>
+                      <div className="text-blue-400">
+                        {calculateDuration(project.start_date, project.end_date || null)}
+                      </div>
                     </div>
                     <div className="flex space-x-3">
                       {project.github_url && (
@@ -164,9 +202,10 @@ export default function Projects() {
                           href={project.github_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-gray-100 hover:bg-pink-100 rounded-full transition-colors"
+                          className="p-2 bg-gray-100 hover:bg-cyan-100 rounded-full transition-colors"
                         >
-                          <Github className="w-5 h-5 text-gray-600 hover:text-pink-600" />
+                          <Github className="w-5 h-5 text-gray-600 hover:text-cyan-400" />
+                          Code 💻
                         </a>
                       )}
                       {project.live_url && (
@@ -174,9 +213,10 @@ export default function Projects() {
                           href={project.live_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-gray-100 hover:bg-pink-100 rounded-full transition-colors"
+                          className="p-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full text-xs px-3 py-1 font-semibold transition-colors"
                         >
-                          <ExternalLink className="w-5 h-5 text-gray-600 hover:text-pink-600" />
+                          <ExternalLink className="w-3 h-3 mr-1" />
+                          Demo
                         </a>
                       )}
                     </div>
@@ -194,7 +234,7 @@ export default function Projects() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-4xl font-bold gradient-text mb-8" style={{ fontFamily: 'Playfair Display, serif' }}
+            className="text-4xl font-bold gradient-text mb-8" style={{ fontFamily: 'Poppins, sans-serif' }}
           >
             🌟 Other Projects
           </motion.h2>
@@ -209,11 +249,11 @@ export default function Projects() {
                 viewport={{ once: true }}
                 className="card hover:scale-105 transition-transform"
               >
-                <div className="h-48 bg-gradient-to-br from-pink-100 to-purple-100"></div>
+                <div className="h-48 bg-gradient-to-br from-gray-800 to-gray-700"></div>
                 <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-lg font-semibold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center">
+                      <h3 className="text-lg font-semibold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
                         {project.title}
                       </h3>
                       {project.status === 'on_hold' && (
@@ -222,27 +262,24 @@ export default function Projects() {
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center text-pink-600 text-sm font-medium">
-                      <Calendar className="w-4 h-4 mr-1" />
+                    <div className="flex items-center text-gray-400 text-sm">
+                      <Calendar className="w-4 h-4 mr-1 text-cyan-400" />
                       {formatProjectDate(project.date)}
                     </div>
                   </div>
                   
                   <p className="text-gray-600 mb-4 text-sm font-medium">
-                    {project.description}
+                    {project.description || 'No description available'}
                   </p>
                   
                   <div className="flex flex-wrap gap-1 mb-4">
                     {project.technologies.slice(0, 3).map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs font-medium"
-                      >
+                      <span key={tech} className="px-2 py-1 bg-gray-700 text-gray-300 rounded text-xs font-medium">
                         {tech}
                       </span>
                     ))}
                     {project.technologies.length > 3 && (
-                      <span className="px-2 py-1 bg-purple-100 text-purple-600 rounded text-xs font-medium">
+                      <span className="px-3 py-1 bg-blue-700 text-blue-300 rounded text-xs font-medium">
                         +{project.technologies.length - 3} more
                       </span>
                     )}

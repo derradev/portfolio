@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Home, Briefcase, BookOpen, Clock, FileText } from 'lucide-react'
+import { Menu, X, Home, Briefcase, BookOpen, Clock, FileText, GraduationCap, Code } from 'lucide-react'
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -11,21 +11,24 @@ const Navigation = () => {
 
   const navigation = [
     { name: 'Home', href: '/', icon: Home },
-    { name: 'Projects', href: '/projects', icon: Briefcase },
+    { name: 'Projects', href: '/projects', icon: Code },
+    { name: 'Experience', href: '/experience', icon: Briefcase },
+    { name: 'Education', href: '/education', icon: GraduationCap },
     { name: 'Learning', href: '/learning', icon: BookOpen },
-    { name: 'Experience', href: '/experience', icon: Clock },
     { name: 'Blog', href: '/blog', icon: FileText },
   ]
 
   return (
-    <nav className="nav-girly sticky top-0 z-50">
+    <nav className="nav-tech sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center gap-3">
-              <img src="/logo.svg" alt="Portfolio" className="h-12 w-12" />
-              <span className="text-2xl font-bold gradient-text" style={{ fontFamily: 'Dancing Script, cursive' }}>
-                DTN
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">WM</span>
+              </div>
+              <span className="text-2xl font-bold gradient-text" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                William Malone
               </span>
             </Link>
           </div>

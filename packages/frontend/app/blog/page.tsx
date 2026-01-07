@@ -30,7 +30,7 @@ export default function Blog() {
       try {
         const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
           ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-          : 'https://api.demitaylornimmo.com/api'
+          : 'https://api.william-malone.com/api'
         
         const response = await fetch(`${API_BASE_URL}/blog`)
         const data = await response.json()
@@ -87,12 +87,14 @@ export default function Blog() {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      Frontend: 'bg-gradient-to-r from-pink-100 to-purple-100 text-pink-800',
-      Backend: 'bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800',
-      Database: 'bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800',
-      DevOps: 'bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800',
+      'Cybersecurity': 'bg-gradient-to-r from-red-100 to-orange-100 text-red-800',
+      'IT Support': 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800',
+      'Python': 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800',
+      'Learning': 'bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800',
+      'Career': 'bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800',
+      'Security Tools': 'bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800',
     }
-    return colors[category as keyof typeof colors] || 'bg-gradient-to-r from-pink-100 to-purple-100 text-pink-800'
+    return colors[category as keyof typeof colors] || 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800'
   }
 
   return (
@@ -118,8 +120,8 @@ export default function Blog() {
             📝 Blog
           </h1>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
-            Thoughts, tutorials, and insights about software development,
-            technology trends, and lessons learned from building applications! ✨
+            Thoughts, tutorials, and insights about IT support, cybersecurity learning,
+            Python scripting, and the journey from IT to security professional! 🛡️
           </p>
         </motion.div>
 
