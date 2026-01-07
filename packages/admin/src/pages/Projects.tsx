@@ -10,7 +10,7 @@ interface Project {
   title: string
   description: string
   image?: string
-  technologies: string[]
+  technologies: string[] | string
   github_url?: string
   live_url?: string
   date: string
@@ -35,9 +35,9 @@ const Projects = () => {
 
   const { data: projects, isLoading } = useQuery('projects', async () => {
     const response = await api.get('/projects')
-    const projectsData = response.data.data as Project[]
+    const projectsData = response.data.data as any[]
     // Ensure technologies is always an array
-    return projectsData.map((project: Project) => {
+    return projectsData.map((project: any) => {
       let technologies: string[] = []
       const techValue = project.technologies
       
@@ -58,7 +58,7 @@ const Projects = () => {
       return {
         ...project,
         technologies
-      }
+      } as Project
     })
   })
 
