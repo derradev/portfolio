@@ -15,7 +15,7 @@ router.get('/', async (req: Request, res: Response) => {
     
     let query = supabaseService.getClient()
       .from('blog_posts')
-      .select('id, title, slug, excerpt, publish_date, created_at, category, tags, featured, author, read_time')
+      .select('id, title, slug, excerpt, created_at, category, tags, featured, author, read_time')
       .eq('published', true)
 
     // Add category filter
@@ -79,7 +79,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
     
     const { data: post, error } = await supabaseService.getClient()
       .from('blog_posts')
-      .select('id, title, slug, excerpt, content, author, read_time, publish_date, created_at, category, tags, featured')
+      .select('id, title, slug, excerpt, content, author, read_time, created_at, category, tags, featured')
       .eq('slug', slug)
       .eq('published', true)
       .single()
@@ -133,7 +133,7 @@ router.get('/admin/all', [authenticate, authorize('admin')], async (req: AuthReq
     
     const { data: posts, error } = await supabaseService.getClient()
       .from('blog_posts')
-      .select('id, title, slug, excerpt, content, author, read_time, publish_date, created_at, category, tags, featured, published')
+      .select('id, title, slug, excerpt, content, author, read_time, created_at, category, tags, featured, published')
       .order('created_at', { ascending: false })
     
     if (error) throw error
@@ -243,7 +243,7 @@ router.post('/', [
     if (author) insertData.author = author
     if (read_time) insertData.read_time = read_time
     if (publish_date) {
-      insertData.publish_date = publish_date
+      // Use created_at as the publish date (publish_date column may not exist)
       insertData.created_at = publish_date
     }
 
@@ -352,8 +352,8 @@ router.put('/:id', [
         // Stringify tags array
         updatePayload[key] = JSON.stringify(updateData[key])
       } else if (key === 'publish_date') {
-        // Handle publish_date - update both publish_date and created_at if publish_date is provided
-        updatePayload.publish_date = updateData[key]
+        // Handle publish_date - only update created_at since publish_date column may not exist
+        // Use created_at as the publish date
         updatePayload.created_at = updateData[key]
       } else {
         updatePayload[key] = updateData[key]
