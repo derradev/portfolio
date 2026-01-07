@@ -229,9 +229,9 @@ const Learning = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>📚 Learning & Skills</h1>
+          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>🛡️ Cybersecurity Learning</h1>
           <p className="mt-2 text-gray-600 font-medium">
-            Manage your beautiful learning journey and amazing skills ✨
+            Manage your security certifications and technical skills 🔐
           </p>
         </div>
         <button

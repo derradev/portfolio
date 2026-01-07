@@ -182,9 +182,9 @@ const Blog = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>📝 Blog Posts</h1>
+          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>📝 Security Blog</h1>
           <p className="mt-2 text-gray-600 font-medium">
-            Manage your beautiful articles and publications ✨
+            Manage your cybersecurity and IT support articles 🛡️
           </p>
         </div>
         <button
@@ -348,7 +348,7 @@ const Blog = () => {
                           {...register('author', { required: 'Author is required' })}
                           type="text"
                           className="form-input"
-                          placeholder="Demi Taylor Nimmo"
+                          placeholder="William Malone"
                         />
                         {errors.author && <p className="text-red-500 text-sm mt-1">{errors.author.message}</p>}
                       </div>
@@ -358,7 +358,7 @@ const Blog = () => {
                           {...register('category', { required: 'Category is required' })}
                           type="text"
                           className="form-input"
-                          placeholder="Technology, Tutorial, etc."
+                          placeholder="Cybersecurity, IT Support, Python, Learning, Career, Security Tools"
                         />
                         {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>}
                       </div>
@@ -383,7 +383,7 @@ const Blog = () => {
                         <input
                           {...register('tags')}
                           type="text"
-                          placeholder="React, TypeScript, Tutorial, Web Development"
+                          placeholder="Penetration Testing, Active Directory, Python Scripting, Security+, Home Lab, CTF Write-up"
                           className="form-input"
                         />
                       </div>

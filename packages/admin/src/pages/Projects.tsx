@@ -181,9 +181,9 @@ const Projects = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>✨ Projects</h1>
+          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>🛡️ Security Projects</h1>
           <p className="mt-2 text-gray-600 font-medium">
-            Manage your beautiful portfolio projects 💖
+            Manage your cybersecurity and IT projects 🔐
           </p>
         </div>
         <button
@@ -199,8 +199,8 @@ const Projects = () => {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects?.map((project) => (
           <div key={project.id} className="card p-6 hover:scale-105 transition-all duration-300">
-            <div className="h-48 bg-gradient-to-br from-pink-100 to-purple-100 rounded-xl mb-4 flex items-center justify-center">
-              <span className="text-4xl opacity-50">🎨</span>
+            <div className="h-48 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl mb-4 flex items-center justify-center">
+              <span className="text-4xl opacity-50">🔒</span>
             </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between">

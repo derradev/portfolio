@@ -26,19 +26,19 @@ const Dashboard = () => {
 
   const statCards = [
     {
-      name: '💼 Total Projects',
+      name: '🛡️ Security Projects',
       value: stats?.projects || 0,
       icon: Briefcase,
       color: 'bg-gradient-to-r from-blue-400 to-blue-600',
     },
     {
-      name: '📚 Learning Items',
+      name: '🔐 Learning Items',
       value: stats?.learning || 0,
       icon: BookOpen,
       color: 'bg-gradient-to-r from-green-400 to-emerald-600',
     },
     {
-      name: '📝 Blog Posts',
+      name: '📝 Security Blog',
       value: stats?.blogPosts || 0,
       icon: FileText,
       color: 'bg-gradient-to-r from-purple-400 to-purple-600',
@@ -66,9 +66,9 @@ const Dashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>✨ Dashboard</h1>
+        <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>🛡️ Security Dashboard</h1>
         <p className="mt-2 text-gray-600 font-medium">
-          Overview of your beautiful portfolio content and statistics 💖
+          Overview of your cybersecurity portfolio and IT career progression 🔐
         </p>
       </div>
 
