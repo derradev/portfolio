@@ -42,13 +42,11 @@ const Education = () => {
     return response.data.data as Education[]
   })
 
-  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<EducationForm>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<EducationForm>({
     defaultValues: {
       achievements: []
     }
   })
-
-  const watchedAchievements = watch('achievements') || []
 
   const createMutation = useMutation(
     (data: EducationForm) => api.post('/education', data),
