@@ -76,9 +76,19 @@ app.use(cors({
   optionsSuccessStatus: 200
 }))
 app.use(morgan('combined'))
+// Handle favicon.ico requests very early (before body parsing)
+app.use('/favicon.ico', (req, res) => {
+  res.status(204).end()
+})
+
 app.use(limiter)
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
+
+// Also handle as a GET route
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end()
+})
 
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
@@ -104,10 +114,6 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
   })
-})
-
-app.get('/favicon.ico', (req, res) => {
-  res.status(204).end()
 })
 
 // API Routes

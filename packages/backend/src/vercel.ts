@@ -61,9 +61,19 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('combined'))
 }
 
+// Handle favicon.ico requests very early (before body parsing)
+app.use('/favicon.ico', (req, res) => {
+  res.status(204).end()
+})
+
 app.use(limiter)
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
+
+// Also handle as a GET route
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end()
+})
 
 // Root route
 app.get('/', (req, res) => {
@@ -87,11 +97,6 @@ app.get('/api/health', (req, res) => {
     environment: process.env.NODE_ENV || 'development',
     api_url: process.env.API_URL || 'localhost'
   })
-})
-
-// Handle favicon.ico requests
-app.get('/favicon.ico', (req, res) => {
-  res.status(204).end()
 })
 
 // Initialize Supabase services for serverless

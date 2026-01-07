@@ -202,17 +202,27 @@ router.post('/', [
     // Create slug from title
     let slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
     
-    // Check if slug already exists    // Generate unique slug
+    // Check if slug already exists and generate unique slug
     let uniqueSlug = slug
     let counter = 1
     while (true) {
       try {
-        await supabaseService.selectOne('blog_posts', uniqueSlug, 'id')
+        const { data } = await supabaseService.getClient()
+          .from('blog_posts')
+          .select('id')
+          .eq('slug', uniqueSlug)
+          .single()
+        
         // If we get here, slug exists, try next one
-        uniqueSlug = `${slug}-${counter}`
-        counter++
+        if (data) {
+          uniqueSlug = `${slug}-${counter}`
+          counter++
+        } else {
+          // Slug doesn't exist, we can use it
+          break
+        }
       } catch (error) {
-        // Slug doesn't exist, we can use it
+        // Slug doesn't exist (error means no match found), we can use it
         break
       }
     }
@@ -296,7 +306,15 @@ router.put('/:id', [
     const { supabaseService } = getServices()
 
     // Check if post exists
-    const existingPost = await supabaseService.queryOne('SELECT * FROM blog_posts WHERE id = $1', [id])
+    let existingPost
+    try {
+      existingPost = await supabaseService.selectOne('blog_posts', id)
+    } catch (error) {
+      return res.status(404).json({
+        success: false,
+        error: 'Blog post not found'
+      })
+    }
 
     if (!existingPost) {
       return res.status(404).json({
@@ -308,10 +326,13 @@ router.put('/:id', [
     // Check slug uniqueness if slug is being updated
     if (updateData.slug && updateData.slug !== existingPost.slug) {
       try {
-        const slugCheck = await supabaseService.queryOne(
-          'SELECT id FROM blog_posts WHERE slug = $1 AND id != $2',
-          [updateData.slug, id]
-        )
+        const { data: slugCheck } = await supabaseService.getClient()
+          .from('blog_posts')
+          .select('id')
+          .eq('slug', updateData.slug)
+          .neq('id', id)
+          .single()
+        
         if (slugCheck) {
           return res.status(400).json({
             success: false,
@@ -323,39 +344,27 @@ router.put('/:id', [
       }
     }
 
-    // Build update query dynamically
-    const updateFields = []
-    const updateValues = []
-    let paramIndex = 1
-
+    // Prepare update data
+    const updatePayload: any = {}
+    
     Object.keys(updateData).forEach(key => {
       if (key === 'tags') {
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(JSON.stringify(updateData[key]))
+        // Stringify tags array
+        updatePayload[key] = JSON.stringify(updateData[key])
       } else if (key === 'publish_date') {
         // Handle publish_date - update both publish_date and created_at if publish_date is provided
-        const dateValue = updateData[key]
-        updateFields.push(`publish_date = $${paramIndex++}`)
-        updateValues.push(dateValue)
-        updateFields.push(`created_at = $${paramIndex++}`)
-        updateValues.push(dateValue)
+        updatePayload.publish_date = updateData[key]
+        updatePayload.created_at = updateData[key]
       } else {
-        updateFields.push(`${key} = $${paramIndex++}`)
-        updateValues.push(updateData[key])
+        updatePayload[key] = updateData[key]
       }
     })
 
-    updateFields.push(`updated_at = CURRENT_TIMESTAMP`)
-    updateValues.push(id)
+    // Add updated_at timestamp
+    updatePayload.updated_at = new Date().toISOString()
 
-    const updateQuery = `
-      UPDATE blog_posts 
-      SET ${updateFields.join(', ')}
-      WHERE id = $${paramIndex}
-      RETURNING *
-    `
-
-    const updatedPost = await supabaseService.queryOne(updateQuery, updateValues)
+    // Update the post using Supabase client method
+    const updatedPost = await supabaseService.update('blog_posts', id, updatePayload)
 
     return res.json({
       success: true,
