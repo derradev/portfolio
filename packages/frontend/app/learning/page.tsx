@@ -32,7 +32,7 @@ export default function Learning() {
           : 'https://api.demitaylornimmo.com/api'
         
         const learningResponse = await fetch(`${API_BASE_URL}/learning`)
-        const skillsResponse = await fetch(`${API_BASE_URL}/learning/skills`)
+        const skillsResponse = await fetch(`${API_BASE_URL}/skills`)
         
         if (learningResponse.ok) {
           const learningData = await learningResponse.json()
@@ -56,13 +56,14 @@ export default function Learning() {
           const skillsData = await skillsResponse.json()
           if (skillsData.success) {
             // Map backend data to frontend interface
+            // Backend returns 'name' but frontend expects 'title'
             const mappedSkills = skillsData.data.map((skill: any) => ({
               id: skill.id,
-              title: skill.title,
-              description: skill.description,
+              title: skill.name, // Map 'name' to 'title'
+              description: skill.description || '',
               category: skill.category,
               level: skill.level,
-              completedDate: skill.completed_date
+              completedDate: skill.completed_date || null
             }))
             setCompletedSkills(mappedSkills)
           }
