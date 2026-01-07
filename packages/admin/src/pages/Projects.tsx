@@ -128,11 +128,17 @@ const Projects = () => {
       const formattedDate = project.date 
         ? new Date(project.date).toISOString().split('T')[0]
         : new Date().toISOString().split('T')[0]
+      
+      // Ensure technologies is an array before joining
+      const technologiesString = Array.isArray(project.technologies) 
+        ? project.technologies.join(', ')
+        : (typeof project.technologies === 'string' ? project.technologies : '')
+      
       reset({
         title: project.title,
         description: project.description,
         image: project.image,
-        technologies: project.technologies.join(', '),
+        technologies: technologiesString,
         github_url: project.github_url,
         live_url: project.live_url,
         date: formattedDate,
