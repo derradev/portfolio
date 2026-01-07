@@ -33,7 +33,7 @@ const Settings = () => {
   const updateProfileMutation = useMutation(
     (data: ProfileForm) => api.put('/auth/profile', data),
     {
-      onSuccess: async (response) => {
+      onSuccess: async () => {
         toast.success('Profile updated successfully')
         // Refresh user data
         await refreshUser()
