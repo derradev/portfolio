@@ -5,7 +5,7 @@
 -- WILLIAM'S EDUCATION
 -- ============================================
 
-INSERT INTO education (institution, degree, field_of_study, location, start_date, end_date, grade, description, achievements) VALUES
+INSERT INTO education (institution, degree, field_of_study, location, start_date, end_date, grade, gpa, description, achievements) VALUES
 (
   'Middlesbrough College',
   'BTEC in IT System Support and Networking',
@@ -14,6 +14,7 @@ INSERT INTO education (institution, degree, field_of_study, location, start_date
   '2010-09-01',
   '2012-07-01',
   'DDM (Distinction, Distinction, Merit)',
+  3.67, -- High distinction level GPA
   'Comprehensive study of system support and networking with deep theoretical foundation. Coursework included diagnosing and repairing IT hardware and software, web development, and network and system architecture.',
   ARRAY['Strong performance with DDM grade', 'Built foundation for practical IT career']
 ),
@@ -25,6 +26,7 @@ INSERT INTO education (institution, degree, field_of_study, location, start_date
   '2023-12-18',
   NULL,
   NULL,
+  3.8, -- Current high performance
   'Hands-on apprenticeship combining practical IT support experience with formal training, working in a live school IT environment managing systems, users, and infrastructure.',
   ARRAY['Practical IT support experience', 'Live school IT environment management']
 ) ON CONFLICT DO NOTHING;

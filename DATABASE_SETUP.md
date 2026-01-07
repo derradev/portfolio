@@ -1,5 +1,41 @@
 # Database Setup for William Malone Portfolio
 
+## 🚨 **Important: GPA Column Migration**
+
+If you encounter the error:
+```
+column education.gpa does not exist
+```
+
+You need to run the GPA migration script:
+
+### **Option 1: Quick Migration**
+Run the `migrate_gpa.sql` script in your Supabase SQL editor:
+```sql
+-- Copy and paste the entire contents of migrate_gpa.sql
+```
+
+### **Option 2: Manual Column Addition**
+If the migration script fails, run this manually:
+```sql
+ALTER TABLE education 
+ADD COLUMN gpa DECIMAL(3,2);
+
+-- Update existing records
+UPDATE education 
+SET gpa = CASE 
+    WHEN grade LIKE '%Distinction%' THEN 3.67
+    WHEN grade LIKE '%DDM%' THEN 3.67
+    WHEN grade LIKE '%Merit%' THEN 3.33
+    WHEN grade LIKE '%Pass%' THEN 2.67
+    ELSE 3.0
+END
+WHERE gpa IS NULL;
+```
+
+### **Option 3: Fresh Setup**
+If starting fresh, the updated `database_setup.sql` already includes the GPA column.
+
 ## 🛡️ Overview
 
 This document explains how to set up the Supabase database for William Malone's cybersecurity portfolio website.

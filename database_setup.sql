@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS education (
   start_date DATE NOT NULL,
   end_date DATE,
   grade VARCHAR(50),
+  gpa DECIMAL(3,2), -- Added GPA column for grade point average
   description TEXT,
   achievements TEXT[] DEFAULT '{}',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

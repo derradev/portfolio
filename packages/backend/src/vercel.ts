@@ -30,6 +30,9 @@ dotenv.config()
 
 const app = express()
 
+// Serve static files from public directory
+app.use(express.static('public'))
+
 // Trust proxy for Vercel deployment (required for rate limiting)
 app.set('trust proxy', 1)
 
