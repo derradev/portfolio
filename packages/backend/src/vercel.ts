@@ -65,6 +65,20 @@ app.use(limiter)
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Portfolio API Server',
+    version: '1.0.0',
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/api/health',
+      api: '/api/*'
+    }
+  })
+})
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -79,22 +93,6 @@ app.get('/api/health', (req, res) => {
 app.get('/favicon.ico', (req, res) => {
   res.status(204).end()
 })
-
-// API Routes
-app.use('/api/auth', authRouter)
-app.use('/api/projects', projectsRouter)
-app.use('/api/learning', learningRouter)
-app.use('/api/work-history', workHistoryRouter)
-app.use('/api/blog', blogRouter)
-app.use('/api/skills', skillsRouter)
-app.use('/api/education', educationRoutes)
-app.use('/api/certifications', certificationsRoutes)
-app.use('/api/analytics', analyticsRoutes)
-app.use('/api/feature-flags', featureFlagsRoutes)
-
-// Error handling
-app.use(notFound)
-app.use(errorHandler)
 
 // Initialize Supabase services for serverless
 let supabaseInitialized = false
@@ -112,8 +110,13 @@ async function ensureSupabaseInitialized() {
   }
 }
 
-// Middleware to ensure Supabase services are initialized
+// Middleware to ensure Supabase services are initialized (skip for health check and root)
 app.use(async (req, res, next) => {
+  // Skip Supabase initialization for health check and root route
+  if (req.path === '/api/health' || req.path === '/' || req.path === '/favicon.ico') {
+    return next()
+  }
+  
   try {
     await ensureSupabaseInitialized()
     next()
@@ -122,5 +125,21 @@ app.use(async (req, res, next) => {
     res.status(500).json({ error: 'Supabase service initialization failed' })
   }
 })
+
+// API Routes
+app.use('/api/auth', authRouter)
+app.use('/api/projects', projectsRouter)
+app.use('/api/learning', learningRouter)
+app.use('/api/work-history', workHistoryRouter)
+app.use('/api/blog', blogRouter)
+app.use('/api/skills', skillsRouter)
+app.use('/api/education', educationRoutes)
+app.use('/api/certifications', certificationsRoutes)
+app.use('/api/analytics', analyticsRoutes)
+app.use('/api/feature-flags', featureFlagsRoutes)
+
+// Error handling
+app.use(notFound)
+app.use(errorHandler)
 
 export default app
