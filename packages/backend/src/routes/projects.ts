@@ -22,9 +22,29 @@ router.get('/', async (req: Request, res: Response) => {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
 
+    // Parse technologies from JSON string to array
+    const parsedProjects = projects.map((project: any) => ({
+      ...project,
+      technologies: (() => {
+        try {
+          if (typeof project.technologies === 'string') {
+            if (project.technologies.startsWith('[')) {
+              return JSON.parse(project.technologies)
+            }
+            // Handle comma-separated string
+            return project.technologies.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0)
+          }
+          return Array.isArray(project.technologies) ? project.technologies : []
+        } catch {
+          return []
+        }
+      })(),
+      featured: Boolean(project.featured)
+    }))
+
     res.json({
       success: true,
-      data: projects
+      data: parsedProjects
     })
   } catch (error) {
     console.error('Error fetching projects:', error)

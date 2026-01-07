@@ -205,15 +205,21 @@ export default function Home() {
                       {project.description}
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {project.technologies.slice(0, 2).map((tech) => (
-                        <span key={tech} className="tech-tag">
-                          {tech}
-                        </span>
-                      ))}
-                      {project.technologies.length > 2 && (
-                        <span className="px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-sm font-medium">
-                          +{project.technologies.length - 2} more
-                        </span>
+                      {Array.isArray(project.technologies) && project.technologies.length > 0 ? (
+                        <>
+                          {project.technologies.slice(0, 2).map((tech) => (
+                            <span key={tech} className="tech-tag">
+                              {tech}
+                            </span>
+                          ))}
+                          {project.technologies.length > 2 && (
+                            <span className="px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-sm font-medium">
+                              +{project.technologies.length - 2} more
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-gray-400 text-sm">No technologies listed</span>
                       )}
                     </div>
                   </div>
