@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
+      // Use Supabase authentication endpoint
       const response = await api.post('/auth/login', { email, password })
       const data = response.data?.data
       
