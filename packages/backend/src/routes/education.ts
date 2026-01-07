@@ -105,6 +105,9 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
       })
     }
 
+    // Truncate grade/gpa to 10 characters (database limit)
+    const gpaValue = grade && grade.trim() ? grade.trim().substring(0, 10) : null
+
     const result = await supabaseService.insert('education', {
       institution, 
       degree, 
@@ -112,7 +115,7 @@ router.post('/', authenticate, authorize('admin'), async (req: Request, res: Res
       location, 
       start_date, 
       end_date, 
-      gpa: grade, 
+      gpa: gpaValue, 
       description, 
       achievements: achievements || []
     })
@@ -165,6 +168,9 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
       })
     }
 
+    // Truncate grade/gpa to 10 characters (database limit)
+    const gpaValue = grade && grade.trim() ? grade.trim().substring(0, 10) : null
+
     const result = await supabaseService.update('education', id, {
       institution, 
       degree, 
@@ -172,7 +178,7 @@ router.put('/:id', authenticate, authorize('admin'), async (req: Request, res: R
       location, 
       start_date, 
       end_date, 
-      gpa: grade, 
+      gpa: gpaValue, 
       description, 
       achievements: achievements || [],
       updated_at: new Date().toISOString()

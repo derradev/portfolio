@@ -211,7 +211,17 @@ const Learning = () => {
   }
 
   const onSkillSubmit = (data: SkillForm) => {
-    createSkillMutation.mutate(data)
+    // Clean up the data - remove empty description
+    const cleanData = {
+      ...data,
+      description: data.description && data.description.trim() !== '' ? data.description.trim() : undefined
+    }
+    
+    if (editingItem && 'name' in editingItem && !('progress' in editingItem)) {
+      updateSkillMutation.mutate({ id: editingItem.id, data: cleanData })
+    } else {
+      createSkillMutation.mutate(cleanData)
+    }
   }
 
 

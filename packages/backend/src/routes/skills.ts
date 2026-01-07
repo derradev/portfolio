@@ -66,7 +66,7 @@ router.post('/', [
   body('name').isLength({ min: 1 }).trim(),
   body('category').isLength({ min: 1 }).trim(),
   body('level').isIn(['beginner', 'intermediate', 'advanced', 'expert']),
-  body('description').optional().isLength({ min: 1 }).trim()
+  body('description').optional({ nullable: true, checkFalsy: true }).trim()
 ], async (req: AuthRequest, res: Response) => {
   try {
     const errors = validationResult(req)
@@ -81,11 +81,14 @@ router.post('/', [
     const { name, category, level, description } = req.body
     const { supabaseService } = getServices()
 
+    // Handle empty description - set to null if empty string
+    const skillDescription = description && description.trim() !== '' ? description.trim() : null
+
     const newSkill = await supabaseService.insert('skills', {
-      name,
-      category,
+      name: name.trim(),
+      category: category.trim(),
       level,
-      description
+      description: skillDescription
     })
 
     return res.status(201).json({

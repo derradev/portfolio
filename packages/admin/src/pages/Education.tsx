@@ -367,13 +367,21 @@ const Education = () => {
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">🏆 Grade/GPA</label>
+                        <label className="form-label">🏆 Grade/GPA (max 10 characters)</label>
                         <input
-                          {...register('grade')}
+                          {...register('grade', { 
+                            maxLength: {
+                              value: 10,
+                              message: 'Grade/GPA must be 10 characters or less'
+                            }
+                          })}
                           type="text"
                           className="form-input"
-                          placeholder="3.8 GPA, First Class Honours"
+                          placeholder="3.8 GPA"
+                          maxLength={10}
                         />
+                        {errors.grade && <p className="text-red-500 text-sm mt-1">{errors.grade.message}</p>}
+                        <p className="text-xs text-gray-500 mt-1">Keep it short, e.g., "3.8 GPA" or "First Class"</p>
                       </div>
                     </div>
 

@@ -290,9 +290,71 @@ export default function WorkHistory() {
                     </div>
                   )}
                 </div>
-                <p className="text-gray-600 font-medium">
-                  {edu.description}
-                </p>
+                {edu.description && (
+                  <p className="text-gray-600 font-medium mb-4">
+                    {edu.description}
+                  </p>
+                )}
+                {edu.achievements && edu.achievements.length > 0 && (
+                  <div className="mt-4">
+                    {/* Separate courses and activities */}
+                    {(() => {
+                      const courses = edu.achievements.filter(a => a.toLowerCase().startsWith('course:'))
+                      const activities = edu.achievements.filter(a => a.toLowerCase().startsWith('activities:'))
+                      const other = edu.achievements.filter(a => 
+                        !a.toLowerCase().startsWith('course:') && !a.toLowerCase().startsWith('activities:')
+                      )
+                      
+                      return (
+                        <>
+                          {courses.length > 0 && (
+                            <div className="mb-4">
+                              <h4 className="font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>📚 Course Work:</h4>
+                              <ul className="space-y-2">
+                                {courses.map((achievement, i) => (
+                                  <li key={i} className="flex items-start">
+                                    <span className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                    <span className="text-gray-600 text-sm font-medium">
+                                      {achievement.replace(/^course:\s*/i, '')}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          {activities.length > 0 && (
+                            <div className="mb-4">
+                              <h4 className="font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>🎯 Extra Activities I've Done:</h4>
+                              <ul className="space-y-2">
+                                {activities.map((achievement, i) => (
+                                  <li key={i} className="flex items-start">
+                                    <span className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                    <span className="text-gray-600 text-sm font-medium">
+                                      {achievement.replace(/^activities:\s*/i, '')}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          {other.length > 0 && (
+                            <div className="mb-4">
+                              <h4 className="font-semibold text-gray-800 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>🏆 Achievements:</h4>
+                              <ul className="space-y-2">
+                                {other.map((achievement, i) => (
+                                  <li key={i} className="flex items-start">
+                                    <span className="w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                    <span className="text-gray-600 text-sm font-medium">{achievement}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </>
+                      )
+                    })()}
+                  </div>
+                )}
               </motion.div>
             ))}
             </div>
