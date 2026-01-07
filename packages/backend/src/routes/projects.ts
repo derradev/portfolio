@@ -182,14 +182,22 @@ router.put('/:id', [
     const updatePayload: any = {}
     
     Object.keys(updateData).forEach(key => {
+      // Skip id and undefined values
+      if (key === 'id' || updateData[key] === undefined) {
+        return
+      }
+      
       if (key === 'technologies') {
         // Ensure technologies is stored as JSON string
         updatePayload[key] = JSON.stringify(updateData[key])
       } else if (key === 'image_url') {
-        // Map image_url to image if provided
-        updatePayload.image = updateData[key]
-      } else if (key !== 'id') {
-        // Include all other fields except id
+        // Map image_url to image if provided (allow null/empty)
+        updatePayload.image = updateData[key] || null
+      } else if (key === 'image') {
+        // Handle image field - allow null/empty values
+        updatePayload.image = updateData[key] || null
+      } else {
+        // Include all other fields (allow null values for optional fields)
         updatePayload[key] = updateData[key]
       }
     })
