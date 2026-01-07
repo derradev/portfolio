@@ -232,6 +232,158 @@ router.post('/refresh', [
   }
 })
 
+// Update user profile
+router.put('/profile', [
+  body('name').optional().isLength({ min: 2 }).trim(),
+  body('email').optional().isEmail().normalizeEmail()
+], async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const authHeader = req.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: 'No token provided'
+      })
+    }
+
+    const token = authHeader.substring(7)
+    const { name, email } = req.body
+
+    // Get current user
+    const { data: userData, error: getUserError } = await supabase.auth.getUser(token)
+    if (getUserError || !userData.user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid token'
+      })
+    }
+
+    // Prepare update data
+    const updateData: any = {}
+    if (name) {
+      updateData.data = {
+        ...userData.user.user_metadata,
+        name
+      }
+    }
+    if (email && email !== userData.user.email) {
+      updateData.email = email
+    }
+
+    // Update user
+    const { data: updatedUser, error: updateError } = await supabase.auth.admin.updateUserById(
+      userData.user.id,
+      updateData
+    )
+
+    if (updateError) {
+      return res.status(400).json({
+        success: false,
+        error: updateError.message
+      })
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        user: {
+          id: updatedUser.user.id,
+          email: updatedUser.user.email,
+          name: updatedUser.user.user_metadata?.name || updatedUser.user.email,
+          role: updatedUser.user.user_metadata?.role || 'admin'
+        }
+      }
+    })
+  } catch (error) {
+    console.error('Update profile error:', error)
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    })
+  }
+})
+
+// Change password
+router.put('/change-password', [
+  body('currentPassword').notEmpty(),
+  body('newPassword').isLength({ min: 6 })
+], async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const authHeader = req.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: 'No token provided'
+      })
+    }
+
+    const token = authHeader.substring(7)
+    const { currentPassword, newPassword } = req.body
+
+    // Get current user
+    const { data: userData, error: getUserError } = await supabase.auth.getUser(token)
+    if (getUserError || !userData.user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid token'
+      })
+    }
+
+    // Verify current password by attempting to sign in
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: userData.user.email!,
+      password: currentPassword
+    })
+
+    if (signInError) {
+      return res.status(401).json({
+        success: false,
+        error: 'Current password is incorrect'
+      })
+    }
+
+    // Update password
+    const { error: updateError } = await supabase.auth.admin.updateUserById(
+      userData.user.id,
+      { password: newPassword }
+    )
+
+    if (updateError) {
+      return res.status(400).json({
+        success: false,
+        error: updateError.message
+      })
+    }
+
+    return res.json({
+      success: true,
+      message: 'Password changed successfully'
+    })
+  } catch (error) {
+    console.error('Change password error:', error)
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    })
+  }
+})
+
 // Get current user
 router.get('/me', async (req: Request, res: Response) => {
   try {

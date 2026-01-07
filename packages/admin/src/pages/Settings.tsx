@@ -18,7 +18,7 @@ interface PasswordForm {
 }
 
 const Settings = () => {
-  const { user } = useAuth()
+  const { user, refreshUser } = useAuth()
   const [activeTab, setActiveTab] = useState<'profile' | 'password'>('profile')
 
   const { register: registerProfile, handleSubmit: handleProfileSubmit, formState: { errors: profileErrors } } = useForm<ProfileForm>({
@@ -33,8 +33,14 @@ const Settings = () => {
   const updateProfileMutation = useMutation(
     (data: ProfileForm) => api.put('/auth/profile', data),
     {
-      onSuccess: () => {
+      onSuccess: async (response) => {
         toast.success('Profile updated successfully')
+        // Refresh user data
+        await refreshUser()
+      },
+      onError: (error: any) => {
+        const message = error.response?.data?.error || 'Failed to update profile'
+        toast.error(message)
       }
     }
   )
@@ -45,6 +51,10 @@ const Settings = () => {
       onSuccess: () => {
         toast.success('Password changed successfully')
         resetPassword()
+      },
+      onError: (error: any) => {
+        const message = error.response?.data?.error || 'Failed to change password'
+        toast.error(message)
       }
     }
   )
