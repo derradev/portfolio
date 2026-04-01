@@ -34,8 +34,6 @@ jobs:
             echo "❌ Database keep-alive failed!"
             echo "📊 HTTP Code: $http_code"
             echo "📊 Response: $body"
-            # Don't fail the workflow - just log the error
-            # This prevents notification spam if the API is temporarily down
-            exit 0
+            exit 1
           fi
 

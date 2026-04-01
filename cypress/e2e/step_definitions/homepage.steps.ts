@@ -6,7 +6,7 @@ Given('I visit the homepage', () => {
 
 Then('I should see the main heading', () => {
   cy.get('h1').should('be.visible')
-  cy.get('h1').should('contain.text', 'Demi')
+  cy.get('h1').should('contain.text', 'Securing Systems')
 })
 
 Then('I should see navigation links', () => {

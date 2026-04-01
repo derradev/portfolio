@@ -61,7 +61,7 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({
               Need immediate assistance?
             </p>
             <a 
-              href="mailto:demi.21@outlook.com" 
+              href="mailto:william.malone80@gmail.com" 
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium"
             >
               <Mail className="w-4 h-4" />
@@ -73,7 +73,7 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({
         {/* Footer */}
         <div className="mt-8 text-blue-300 text-sm">
           <p>Thank you for your patience!</p>
-          <p className="mt-2">- Demi Taylor Nimmo</p>
+          <p className="mt-2">- William Malone</p>
         </div>
       </div>
     </div>

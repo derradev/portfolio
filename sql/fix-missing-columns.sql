@@ -3,7 +3,7 @@
 
 -- Add missing columns to blog_posts table
 ALTER TABLE blog_posts 
-ADD COLUMN IF NOT EXISTS author VARCHAR(255) DEFAULT 'Demi Taylor Nimmo',
+ADD COLUMN IF NOT EXISTS author VARCHAR(255) DEFAULT 'William Malone',
 ADD COLUMN IF NOT EXISTS read_time INTEGER DEFAULT 5;
 
 -- Add missing columns to analytics table  
@@ -57,7 +57,7 @@ ON CONFLICT (name) DO NOTHING;
 
 -- Update existing blog posts to have author and read_time
 UPDATE blog_posts 
-SET author = 'Demi Taylor Nimmo', read_time = 5 
+SET author = 'William Malone', read_time = 5 
 WHERE author IS NULL OR read_time IS NULL;
 
 -- Verify columns were added

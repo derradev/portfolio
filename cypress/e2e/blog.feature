@@ -1,7 +1,7 @@
 Feature: Blog
   As a visitor
   I want to view blog posts
-  So that I can read about Demi's thoughts and experiences
+  So that I can read about William's thoughts and experiences
 
   Background:
     Given I visit the blog page

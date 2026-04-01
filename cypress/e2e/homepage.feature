@@ -1,7 +1,7 @@
 Feature: Homepage
   As a visitor
   I want to view the portfolio homepage
-  So that I can learn about Demi's work and skills
+  So that I can learn about William's work and skills
 
   Background:
     Given I visit the homepage
