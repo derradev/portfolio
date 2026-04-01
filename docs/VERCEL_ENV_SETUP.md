@@ -38,7 +38,7 @@ VITE_API_URL_PROD=https://api.william-malone.com
 2. **Select your project**: William Malone Portfolio
 3. **Go to Settings → API**
 4. **Copy the following values**:
-   - **Project URL**: `https://vtkekrttdxohsqqadzwu.supabase.co`
+   - **Project URL**: `https://bughmfyuoikmfvxeeemq.supabase.co`
    - **anon public**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
    - **service_role**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
 

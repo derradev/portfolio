@@ -10,7 +10,7 @@ BEGIN
         -- Call the admin API to update user metadata
         -- This uses the service role key which has admin privileges
         PERFORM dblink(
-            'https://vtkekrttdxohsqqadzwu.supabase.co',
+            'https://bughmfyuoikmfvxeeemq.supabase.co',
             'POST',
             '/rest/v1/admin/users',
             'application/json',

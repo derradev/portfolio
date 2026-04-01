@@ -6,10 +6,9 @@ import morgan from 'morgan'
 import rateLimit from 'express-rate-limit'
 import path from 'path'
 
-// Load environment variables - try multiple locations
-dotenv.config({ path: path.join(__dirname, '../.env') })
-dotenv.config({ path: path.join(__dirname, '../.env.development') })
-dotenv.config() // Also try default locations
+// Load env: optional `.env`, then mode-specific file wins (override) so one project isn’t stuck from an old `.env`
+const backendEnvDir = path.join(__dirname, '..')
+dotenv.config({ path: path.join(backendEnvDir, '.env') })
 
 console.log('🔍 Environment Check:')
 console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'Set' : 'Missing')
@@ -34,11 +33,10 @@ import featureFlagsRoutes from './routes/featureFlags'
 import keepAliveRoutes from './routes/keepalive'
 // import uploadRoutes from './routes/upload'
 
-// Load environment variables
-const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
-dotenv.config({ path: envFile })
-// Fallback to default .env if specific env file doesn't exist
-dotenv.config()
+const envFileName =
+  process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
+dotenv.config({ path: path.join(backendEnvDir, envFileName), override: true })
+dotenv.config({ override: true })
 
 const app = express()
 const PORT = process.env.PORT || 3001
