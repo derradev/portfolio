@@ -143,14 +143,14 @@ Update your environment files with the Supabase credentials:
 
 ### **Frontend** (`packages/frontend/.env.local`)
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://bughmfyuoikmfvxeeemq.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://vtkekrttdxohsqqadzwu.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 NEXT_PUBLIC_API_URL=https://api.william-malone.com
 ```
 
 ### **Backend** (`packages/backend/.env`)
 ```env
-SUPABASE_URL=https://bughmfyuoikmfvxeeemq.supabase.co
+SUPABASE_URL=https://vtkekrttdxohsqqadzwu.supabase.co
 SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 DATABASE_CONNECTION_STRING=your_connection_string

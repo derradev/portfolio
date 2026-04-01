@@ -3,7 +3,6 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
-import path from 'path'
 import rateLimit from 'express-rate-limit'
 
 import { initializeServices } from './services'
@@ -23,13 +22,11 @@ import analyticsRoutes from './routes/analytics'
 import featureFlagsRoutes from './routes/featureFlags'
 import keepAliveRoutes from './routes/keepalive'
 
-// Vercel injects env at runtime; locally still respect `.env` + mode file
-const backendEnvDir = path.join(__dirname, '..')
-dotenv.config({ path: path.join(backendEnvDir, '.env') })
-const envFileName =
-  process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
-dotenv.config({ path: path.join(backendEnvDir, envFileName), override: true })
-dotenv.config({ override: true })
+// Load environment variables
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
+dotenv.config({ path: envFile })
+// Fallback to default .env if specific env file doesn't exist
+dotenv.config()
 
 const app = express()
 

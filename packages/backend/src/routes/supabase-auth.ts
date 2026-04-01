@@ -40,7 +40,7 @@ router.post(
   authenticate,
   authorize('admin'),
   [
-    body('email').isEmail().normalizeEmail(),
+    body('email').isEmail(),
     body('password').isLength({ min: 6 }),
     body('name').optional().isLength({ min: 2 }).trim()
   ],
@@ -98,7 +98,7 @@ router.post(
 
 // Login with Supabase Auth
 router.post('/login', [
-  body('email').isEmail().normalizeEmail(),
+  body('email').isEmail(),
   body('password').isLength({ min: 6 })
 ], async (req: Request, res: Response) => {
   try {
@@ -159,7 +159,7 @@ router.post('/login', [
 
 // Register with Supabase Auth
 router.post('/register', [
-  body('email').isEmail().normalizeEmail(),
+  body('email').isEmail(),
   body('password').isLength({ min: 6 }),
   body('name').isLength({ min: 2 })
 ], async (req: Request, res: Response) => {
@@ -306,7 +306,7 @@ router.post('/refresh', [
 // Update user profile
 router.put('/profile', [
   body('name').optional().isLength({ min: 2 }).trim(),
-  body('email').optional().isEmail().normalizeEmail()
+  body('email').optional().isEmail()
 ], async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req)
