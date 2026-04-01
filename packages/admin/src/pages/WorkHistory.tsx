@@ -135,14 +135,14 @@ const WorkHistory = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>💼 Work History</h1>
-          <p className="mt-2 text-gray-600 font-medium">
+          <h1 className="text-3xl font-bold gradient-text">💼 Work History</h1>
+          <p className="mt-2 text-gray-400 font-medium">
             Manage your amazing professional journey ✨
           </p>
         </div>
         <button
           onClick={() => openModal()}
-          className="btn-primary floating-hearts"
+          className="btn-primary"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Experience
@@ -156,7 +156,7 @@ const WorkHistory = () => {
             <div className="flex justify-center items-center h-64">
               <div className="text-center">
                 <div className="spinner mx-auto mb-4"></div>
-                <p className="text-gray-600 font-medium">Loading your career journey... 💼</p>
+                <p className="text-gray-400 font-medium">Loading your career journey... 💼</p>
               </div>
             </div>
           ) : (
@@ -190,10 +190,10 @@ const WorkHistory = () => {
                     </button>
                   </div>
                 </div>
-                <p className="text-gray-700 mb-4 font-medium leading-relaxed">{item.description}</p>
+                <p className="text-gray-300 mb-4 font-medium leading-relaxed">{item.description}</p>
                 {item.achievements.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="font-semibold text-gray-800 mb-3 flex items-center">🏆 Key Achievements:</h4>
+                    <h4 className="font-semibold text-gray-100 mb-3 flex items-center">🏆 Key Achievements:</h4>
                     <ul className="space-y-2">
                       {item.achievements.map((achievement, index) => (
                         <li key={index} className="text-sm text-gray-400 flex items-start">
@@ -206,7 +206,7 @@ const WorkHistory = () => {
                 )}
                 {item.technologies.length > 0 && (
                   <div>
-                    <h4 className="font-semibold text-gray-800 mb-3 flex items-center">🛠️ Technologies:</h4>
+                    <h4 className="font-semibold text-gray-100 mb-3 flex items-center">🛠️ Technologies:</h4>
                     <div className="flex flex-wrap gap-2">
                       {item.technologies.map((tech) => (
                         <span key={tech} className="px-3 py-1 text-xs bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 rounded-full font-medium">

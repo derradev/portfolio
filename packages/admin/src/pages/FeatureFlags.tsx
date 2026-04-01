@@ -187,7 +187,7 @@ const FeatureFlags: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-4xl font-bold gradient-text flex items-center gap-3 mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+          <h1 className="text-4xl font-bold gradient-text flex items-center gap-3 mb-2">
             <Flag className="w-10 h-10 text-cyan-400" />
             ✨ Feature Flags
           </h1>
@@ -238,7 +238,7 @@ const FeatureFlags: React.FC = () => {
                     className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 transform hover:scale-105 shadow-md ${
                       flag.enabled
                         ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white hover:from-green-500 hover:to-emerald-600'
-                        : 'bg-gradient-to-r from-gray-300 to-gray-400 text-gray-700 hover:from-gray-400 hover:to-gray-500'
+                        : 'bg-gray-700/80 text-gray-300 border border-gray-600 hover:bg-gray-600/80'
                     }`}
                   >
                     {flag.enabled ? (
@@ -284,7 +284,7 @@ const FeatureFlags: React.FC = () => {
               <Flag className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
               <div className="text-6xl mb-4">🎀</div>
             </div>
-            <h3 className="text-2xl font-bold gradient-text mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>No feature flags yet</h3>
+            <h3 className="text-2xl font-bold gradient-text mb-3">No feature flags yet</h3>
             <p className="text-gray-400 mb-6 text-lg font-medium">Create your first feature flag to get started! ✨</p>
             <button
               onClick={() => openModal()}
@@ -301,7 +301,7 @@ const FeatureFlags: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full z-50">
           <div className="relative top-20 mx-auto p-8 w-[500px] bg-gray-800 rounded-3xl shadow-2xl border border-gray-700">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold gradient-text mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <h3 className="text-2xl font-bold gradient-text mb-2">
                 {editingFlag ? '✨ Edit Feature Flag' : '🎀 Add New Feature Flag'}
               </h3>
               <p className="text-gray-400 font-medium">Configure your feature toggle with style! 💖</p>

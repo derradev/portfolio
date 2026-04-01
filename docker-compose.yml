@@ -12,7 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./packages/backend/data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Schema targets Supabase (auth.users, etc.); use sql/database_setup.sql in Supabase, not vanilla Postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 30s

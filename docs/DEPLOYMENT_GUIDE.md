@@ -31,11 +31,11 @@ NEXT_PUBLIC_API_URL=https://api.william-malone.com
 
 ### Environment Variables:
 ```
-DATABASE_CONNECTION_STRING=postgres://postgres.vtkekrttdxohsqqadzwu:PdiqfcDNQ1dHugRH@aws-1-eu-west-2.pooler.supabase.com:5432/postgres?sslmode=require
-SUPABASE_URL=https://vtkekrttdxohsqqadzwu.supabase.co
-SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0a2VrcnR0ZHhvaHNxcWFkend1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NjIzMDgsImV4cCI6MjA3NDEzODMwOH0.a4KS4UstRF-AO1I2IvpIpgsVkQivDevK5DyoDvaT0pE
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0a2VrcnR0ZHhvaHNxcWFkend1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU2MjMwOCwiZXhwIjoyMDc0MTM4MzA4fQ.kceHemv1QyTM5xu1p-NzOfQn3fqUfNfgofIKUhODx5E
-JWT_SECRET=8c653503e73f6cd2afc47a6c66ec768ecd56d59f792eea58cf22178dc35de431f49087f1d79fe13218ac9ed131925493944f38c5ab522400759ffdba0769cbee
+DATABASE_CONNECTION_STRING=postgresql://postgres.[ref]:[password]@[pooler-host]/postgres
+SUPABASE_URL=https://[your-project-ref].supabase.co
+SUPABASE_ANON_KEY=[anon-key]
+SUPABASE_SERVICE_ROLE_KEY=[service-role-key]
+JWT_SECRET=[long-random-secret]
 NODE_ENV=production
 VAULT_ENABLED=false
 FRONTEND_URL=https://william-malone.com

@@ -153,7 +153,7 @@ export default function Certifications() {
       <div className="flex justify-center items-center h-64">
         <div className="text-center">
           <div className="spinner mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading your certifications... 🏆</p>
+          <p className="text-gray-400 font-medium">Loading your certifications... 🏆</p>
         </div>
       </div>
     )
@@ -163,14 +163,14 @@ export default function Certifications() {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>🏆 Certifications Management</h1>
-          <p className="mt-2 text-gray-600 font-medium">
+          <h1 className="text-3xl font-bold gradient-text">🏆 Certifications Management</h1>
+          <p className="mt-2 text-gray-400 font-medium">
             Manage your professional certifications and credentials ✨
           </p>
         </div>
         <button
           onClick={() => setShowAddForm(true)}
-          className="btn-primary floating-hearts"
+          className="btn-primary"
         >
           <Plus className="w-4 h-4" />
           Add Certification
@@ -186,7 +186,7 @@ export default function Certifications() {
                 <h2 className="text-xl font-bold">
                   {editingId ? '✨ Edit Certification' : '🏆 Add New Certification'}
                 </h2>
-                <button onClick={resetForm} className="text-gray-500 hover:text-gray-700">
+                <button onClick={resetForm} className="text-gray-500 hover:text-gray-300">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -379,12 +379,12 @@ export default function Certifications() {
             </div>
 
             {cert.description && (
-              <p className="text-gray-600 mb-4 font-medium">{cert.description}</p>
+              <p className="text-gray-400 mb-4 font-medium">{cert.description}</p>
             )}
 
             {cert.skills && cert.skills.length > 0 && (
               <div className="mb-4">
-                <h4 className="font-bold text-gray-800 mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <h4 className="font-bold text-gray-100 mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   💪 Skills:
                 </h4>
                 <div className="flex flex-wrap gap-2">

@@ -172,7 +172,7 @@ const Blog = () => {
       <div className="flex justify-center items-center h-64">
         <div className="text-center">
           <div className="spinner mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading your amazing blog posts... 📝</p>
+          <p className="text-gray-400 font-medium">Loading your amazing blog posts... 📝</p>
         </div>
       </div>
     )
@@ -182,14 +182,14 @@ const Blog = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>📝 Security Blog</h1>
-          <p className="mt-2 text-gray-600 font-medium">
+          <h1 className="text-3xl font-bold gradient-text">📝 Security Blog</h1>
+          <p className="mt-2 text-gray-400 font-medium">
             Manage your cybersecurity and IT support articles 🛡️
           </p>
         </div>
         <button
           onClick={() => openModal()}
-          className="btn-primary floating-hearts"
+          className="btn-primary"
         >
           <Plus className="w-4 h-4 mr-2" />
           New Post

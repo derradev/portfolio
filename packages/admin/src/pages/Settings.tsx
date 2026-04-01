@@ -108,8 +108,8 @@ const Settings = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>⚙️ Settings</h1>
-        <p className="mt-2 text-gray-600 font-medium">
+        <h1 className="text-3xl font-bold gradient-text">⚙️ Settings</h1>
+        <p className="mt-2 text-gray-400 font-medium">
           Manage your account settings and preferences ✨
         </p>
       </div>
@@ -149,13 +149,13 @@ const Settings = () => {
         <div className="card p-6">
           <form onSubmit={handleProfileSubmit(onProfileSubmit)}>
             <div>
-              <h3 className="text-xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <h3 className="text-xl font-bold gradient-text mb-6">
                 👤 Profile Information
               </h3>
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    ✨ Full Name
+                  <label className="form-label font-bold">
+                    Full name
                   </label>
                   <input
                     {...registerProfile('name', { required: 'Name is required' })}
@@ -167,8 +167,8 @@ const Settings = () => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    📧 Email Address
+                  <label className="form-label font-bold">
+                    Email
                   </label>
                   <input
                     {...registerProfile('email', { 
@@ -191,10 +191,10 @@ const Settings = () => {
               <button
                 type="submit"
                 disabled={updateProfileMutation.isLoading}
-                className="btn-success floating-hearts"
+                className="btn-primary"
               >
                 <Save className="w-5 h-5 mr-2" />
-                {updateProfileMutation.isLoading ? '💾 Saving...' : '💾 Save Changes'}
+                {updateProfileMutation.isLoading ? 'Saving…' : 'Save changes'}
               </button>
             </div>
           </form>
@@ -206,13 +206,13 @@ const Settings = () => {
         <div className="card p-6">
           <form onSubmit={handlePasswordSubmit(onPasswordSubmit)}>
             <div>
-              <h3 className="text-xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <h3 className="text-xl font-bold gradient-text mb-6">
                 🔒 Change Password
               </h3>
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    🔐 Current Password
+                  <label className="form-label font-bold">
+                    Current password
                   </label>
                   <input
                     {...registerPassword('currentPassword', { 
@@ -230,8 +230,8 @@ const Settings = () => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    🆕 New Password
+                  <label className="form-label font-bold">
+                    New password
                   </label>
                   <input
                     {...registerPassword('newPassword', { 
@@ -249,8 +249,8 @@ const Settings = () => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    ✅ Confirm New Password
+                  <label className="form-label font-bold">
+                    Confirm new password
                   </label>
                   <input
                     {...registerPassword('confirmPassword', { 
@@ -270,10 +270,10 @@ const Settings = () => {
               <button
                 type="submit"
                 disabled={changePasswordMutation.isLoading}
-                className="btn-success floating-hearts"
+                className="btn-primary"
               >
                 <Lock className="w-5 h-5 mr-2" />
-                {changePasswordMutation.isLoading ? '🔄 Changing...' : '🔒 Change Password'}
+                {changePasswordMutation.isLoading ? 'Updating…' : 'Update password'}
               </button>
             </div>
           </form>
@@ -282,24 +282,24 @@ const Settings = () => {
 
       {/* System Information */}
       <div className="card p-6">
-        <h3 className="text-xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+        <h3 className="text-xl font-bold gradient-text mb-6">
           💻 System Information
         </h3>
           <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-            <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
-              <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>👑 User Role</dt>
-              <dd className="mt-2 text-sm font-medium text-gray-800">{user?.role}</dd>
+            <div className="p-4 bg-gradient-to-r from-cyan-900/25 to-blue-900/25 rounded-xl border border-[var(--border-color)]">
+              <dt className="text-sm font-bold text-gray-400" style={{ fontFamily: 'Poppins, sans-serif' }}>User role</dt>
+              <dd className="mt-2 text-sm font-medium text-gray-100">{user?.role}</dd>
             </div>
-            <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
-              <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>✅ Account Status</dt>
+            <div className="p-4 bg-gradient-to-r from-emerald-900/20 to-cyan-900/20 rounded-xl border border-[var(--border-color)]">
+              <dt className="text-sm font-bold text-gray-400" style={{ fontFamily: 'Poppins, sans-serif' }}>Account status</dt>
               <dd className="mt-2">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-200 text-green-800">
-                  🟢 Active
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  Active
                 </span>
               </dd>
             </div>
             <div className="p-4 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl">
-              <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>🌐 Frontend URL</dt>
+              <dt className="text-sm font-bold text-gray-400" style={{ fontFamily: 'Poppins, sans-serif' }}>Frontend URL</dt>
               <dd className="mt-2">
                 <a href="https://william-malone.com" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 font-medium hover:underline">
                   https://william-malone.com
@@ -307,7 +307,7 @@ const Settings = () => {
               </dd>
             </div>
             <div className="p-4 bg-gradient-to-r from-blue-900/30 to-cyan-900/30 rounded-xl">
-              <dt className="text-sm font-bold text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>🔌 API URL</dt>
+              <dt className="text-sm font-bold text-gray-400" style={{ fontFamily: 'Poppins, sans-serif' }}>API URL</dt>
               <dd className="mt-2">
                 <a href={`${(import.meta as any).env.VITE_API_URL || 'https://api.william-malone.com'}/api`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-medium hover:underline">
                   {`${(import.meta as any).env.VITE_API_URL || 'https://api.william-malone.com'}/api`}

@@ -171,7 +171,7 @@ const Projects = () => {
       <div className="flex justify-center items-center h-64">
         <div className="text-center">
           <div className="spinner mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading your beautiful projects... ✨</p>
+          <p className="text-gray-400 font-medium">Loading your beautiful projects... ✨</p>
         </div>
       </div>
     )
@@ -181,14 +181,14 @@ const Projects = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>🛡️ Security Projects</h1>
-          <p className="mt-2 text-gray-600 font-medium">
+          <h1 className="text-3xl font-bold gradient-text">🛡️ Security Projects</h1>
+          <p className="mt-2 text-gray-400 font-medium">
             Manage your cybersecurity and IT projects 🔐
           </p>
         </div>
         <button
           onClick={() => openModal()}
-          className="btn-primary floating-hearts"
+          className="btn-primary"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Project
@@ -204,14 +204,14 @@ const Projects = () => {
             </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>{project.title}</h3>
+                <h3 className="text-lg font-semibold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>{project.title}</h3>
                 {project.featured && (
                   <span className="px-3 py-1 text-xs font-medium bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-full">
                     ⭐ Featured
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-600 line-clamp-3 font-medium">{project.description}</p>
+              <p className="text-sm text-gray-400 line-clamp-3 font-medium">{project.description}</p>
               <div className="flex flex-wrap gap-2">
                 {Array.isArray(project.technologies) && project.technologies.length > 0 ? (
                   <>
@@ -221,7 +221,7 @@ const Projects = () => {
                       </span>
                     ))}
                     {project.technologies.length > 3 && (
-                      <span className="px-3 py-1 text-xs bg-gray-100 text-gray-500 rounded-full font-medium">
+                      <span className="px-3 py-1 text-xs bg-gray-800/80 text-gray-300 border border-[var(--border-color)] rounded-full font-medium">
                         +{project.technologies.length - 3} more
                       </span>
                     )}

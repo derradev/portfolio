@@ -176,7 +176,7 @@ const Education = () => {
       <div className="flex justify-center items-center h-64">
         <div className="text-center">
           <div className="spinner mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading your education journey... 📚</p>
+          <p className="text-gray-400 font-medium">Loading your education journey... 📚</p>
         </div>
       </div>
     )
@@ -186,14 +186,14 @@ const Education = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>🎓 Education</h1>
-          <p className="mt-2 text-gray-600 font-medium">
+          <h1 className="text-3xl font-bold gradient-text">🎓 Education</h1>
+          <p className="mt-2 text-gray-400 font-medium">
             Manage your educational background and achievements ✨
           </p>
         </div>
         <button
           onClick={() => openModal()}
-          className="btn-primary floating-hearts"
+          className="btn-primary"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Education
@@ -258,12 +258,12 @@ const Education = () => {
             </div>
 
             {edu.description && (
-              <p className="text-gray-600 mb-4 font-medium">{edu.description}</p>
+              <p className="text-gray-400 mb-4 font-medium">{edu.description}</p>
             )}
 
             {edu.achievements && edu.achievements.length > 0 && (
               <div>
-                <h4 className="font-bold text-gray-800 mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <h4 className="font-bold text-gray-100 mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   ✨ Achievements:
                 </h4>
                 <ul className="space-y-2">

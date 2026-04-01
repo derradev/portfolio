@@ -37,7 +37,8 @@ describe('Layout', () => {
   it('should render the layout component', () => {
     const { container } = renderWithRouter(<Layout><div>Test Content</div></Layout>)
     
-    expect(container.textContent).toContain('Admin Panel')
+    expect(container.textContent).toContain('William Malone')
+    expect(container.textContent).toContain('Admin')
     expect(container.textContent).toContain('Test User')
   })
 

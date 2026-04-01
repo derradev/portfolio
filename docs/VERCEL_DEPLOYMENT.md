@@ -6,11 +6,10 @@ Your portfolio is now configured for Vercel and Supabase deployment with your cu
 
 ## 1. Supabase Database Setup
 
-### Run the Database Migration
+### Run the database scripts
 1. Go to your [Supabase Dashboard](https://app.supabase.com)
 2. Open the **SQL Editor**
-3. Copy and paste the entire `packages/backend/supabase-full-setup.sql` script
-4. Click **"Run"** to create all tables and sample data
+3. Run `sql/database_setup.sql` from this repo (full schema), then optionally `sql/seed_data.sql` for sample content
 
 ### Verify Setup
 After running the script, you should have:
@@ -31,16 +30,16 @@ After running the script, you should have:
 Add these to your Vercel project settings (Dashboard → Settings → Environment Variables):
 
 ```bash
-# Database
-DATABASE_CONNECTION_STRING=postgres://postgres.vtkekrttdxohsqqadzwu:PdiqfcDNQ1dHugRH@aws-1-eu-west-2.pooler.supabase.com:5432/postgres?sslmode=require
+# Database (Session mode URI from Supabase → Settings → Database)
+DATABASE_CONNECTION_STRING=postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
 
-# Supabase
-SUPABASE_URL=https://vtkekrttdxohsqqadzwu.supabase.co
-SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0a2VrcnR0ZHhvaHNxcWFkend1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NjIzMDgsImV4cCI6MjA3NDEzODMwOH0.a4KS4UstRF-AO1I2IvpIpgsVkQivDevK5DyoDvaT0pE
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0a2VrcnR0ZHhvaHNxcWFkend1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU2MjMwOCwiZXhwIjoyMDc0MTM4MzA4fQ.kceHemv1QyTM5xu1p-NzOfQn3fqUfNfgofIKUhODx5E
+# Supabase (Settings → API — URL must match the `ref` inside your keys)
+SUPABASE_URL=https://[your-project-ref].supabase.co
+SUPABASE_ANON_KEY=[anon-public-key]
+SUPABASE_SERVICE_ROLE_KEY=[service-role-key]
 
-# Authentication
-JWT_SECRET=8c653503e73f6cd2afc47a6c66ec768ecd56d59f792eea58cf22178dc35de431f49087f1d79fe13218ac9ed131925493944f38c5ab522400759ffdba0769cbee
+# Authentication (generate a long random string; never commit the real value)
+JWT_SECRET=[generate-with-openssl-rand-hex-32]
 
 # Configuration
 NODE_ENV=production

@@ -10,10 +10,7 @@ column education.gpa does not exist
 You need to run the GPA migration script:
 
 ### **Option 1: Quick Migration**
-Run the `migrate_gpa.sql` script in your Supabase SQL editor:
-```sql
--- Copy and paste the entire contents of migrate_gpa.sql
-```
+Run `sql/migrate_gpa.sql` in your Supabase SQL editor (copy the full file).
 
 ### **Option 2: Manual Column Addition**
 If the migration script fails, run this manually:
@@ -34,17 +31,18 @@ WHERE gpa IS NULL;
 ```
 
 ### **Option 3: Fresh Setup**
-If starting fresh, the updated `database_setup.sql` already includes the GPA column.
+If starting fresh, the updated `sql/database_setup.sql` already includes the GPA column.
 
 ## 🛡️ Overview
 
 This document explains how to set up the Supabase database for William Malone's cybersecurity portfolio website.
 
-## 📋 Files Created
+## 📋 Files (repo root)
 
-1. **`database_setup.sql`** - Complete database schema with tables, indexes, and policies
-2. **`seed_data.sql`** - Sample data tailored to William's background and goals
-3. **`setup_database.sh`** - Helper script to run the setup
+1. **`sql/database_setup.sql`** - Complete database schema with tables, indexes, and policies
+2. **`sql/seed_data.sql`** - Sample data tailored to William's background and goals
+3. **`setup_database.sh`** - Helper script for Supabase CLI flows (run from repo root)
+4. **`sql/README.md`** - Short index of the other SQL scripts
 
 ## 🗄️ Database Schema
 
@@ -76,12 +74,12 @@ The database includes the following tables:
    - Select your project
 
 2. **Run Schema Setup**
-   - Open `database_setup.sql`
+   - Open `sql/database_setup.sql`
    - Copy and paste the entire file into the SQL Editor
    - Click "Run" to execute
 
 3. **Add Sample Data**
-   - Open `seed_data.sql`
+   - Open `sql/seed_data.sql`
    - Copy and paste into the SQL Editor
    - Click "Run" to execute
 
@@ -145,14 +143,14 @@ Update your environment files with the Supabase credentials:
 
 ### **Frontend** (`packages/frontend/.env.local`)
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://bughmfyuoikmfvxeeemq.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://vtkekrttdxohsqqadzwu.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 NEXT_PUBLIC_API_URL=https://api.william-malone.com
 ```
 
 ### **Backend** (`packages/backend/.env`)
 ```env
-SUPABASE_URL=https://bughmfyuoikmfvxeeemq.supabase.co
+SUPABASE_URL=https://vtkekrttdxohsqqadzwu.supabase.co
 SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 DATABASE_CONNECTION_STRING=your_connection_string

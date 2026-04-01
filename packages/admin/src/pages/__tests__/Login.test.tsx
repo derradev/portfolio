@@ -38,16 +38,16 @@ describe('Login', () => {
     const { container } = renderWithRouter(<Login />)
     
     expect(container.textContent).toContain('Portfolio Admin')
-    expect(screen.getByPlaceholderText('Enter your email')).toBeTruthy()
-    expect(screen.getByPlaceholderText('Enter your password')).toBeTruthy()
+    expect(screen.getByPlaceholderText('you@example.com')).toBeTruthy()
+    expect(screen.getByPlaceholderText('••••••••')).toBeTruthy()
     expect(screen.getByRole('button', { name: /sign in/i })).toBeTruthy()
   })
 
   it('should update input values when typing', () => {
     renderWithRouter(<Login />)
     
-    const emailInput = screen.getByPlaceholderText('Enter your email')
-    const passwordInput = screen.getByPlaceholderText('Enter your password')
+    const emailInput = screen.getByPlaceholderText('you@example.com')
+    const passwordInput = screen.getByPlaceholderText('••••••••')
     
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
     fireEvent.change(passwordInput, { target: { value: 'password123' } })
@@ -61,8 +61,8 @@ describe('Login', () => {
     
     renderWithRouter(<Login />)
     
-    const emailInput = screen.getByPlaceholderText('Enter your email')
-    const passwordInput = screen.getByPlaceholderText('Enter your password')
+    const emailInput = screen.getByPlaceholderText('you@example.com')
+    const passwordInput = screen.getByPlaceholderText('••••••••')
     const submitButton = screen.getByRole('button', { name: /sign in/i })
     
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
@@ -79,15 +79,17 @@ describe('Login', () => {
     
     renderWithRouter(<Login />)
     
-    const emailInput = screen.getByPlaceholderText('Enter your email')
-    const passwordInput = screen.getByPlaceholderText('Enter your password')
+    const emailInput = screen.getByPlaceholderText('you@example.com')
+    const passwordInput = screen.getByPlaceholderText('••••••••')
     const submitButton = screen.getByRole('button', { name: /sign in/i })
     
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
     fireEvent.change(passwordInput, { target: { value: 'password123' } })
     fireEvent.click(submitButton)
-    
-    expect(screen.getByText('Sign in ✨')).toBeTruthy()
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /signing in/i })).toBeTruthy()
+    })
   })
 
   it('should handle login error', async () => {
@@ -96,8 +98,8 @@ describe('Login', () => {
     
     renderWithRouter(<Login />)
     
-    const emailInput = screen.getByPlaceholderText('Enter your email')
-    const passwordInput = screen.getByPlaceholderText('Enter your password')
+    const emailInput = screen.getByPlaceholderText('you@example.com')
+    const passwordInput = screen.getByPlaceholderText('••••••••')
     const submitButton = screen.getByRole('button', { name: /sign in/i })
     
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } })

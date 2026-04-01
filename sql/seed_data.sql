@@ -1,5 +1,5 @@
 -- Seed Data for William Malone Portfolio
--- Run this after database_setup.sql
+-- Run after database_setup.sql in this directory
 
 -- ============================================
 -- WILLIAM'S EDUCATION

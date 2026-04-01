@@ -1,50 +1,43 @@
-# Demi Taylor Nimmo - Portfolio
+# William Malone — Portfolio monorepo
 
-A modern, full-stack portfolio showcasing my work as a Software Engineer.
+Full-stack portfolio: public Next.js site, Express API on Supabase, and a React admin CMS.
 
-## Architecture
+## Packages
 
-This is a monorepo containing:
-- **Frontend**: Next.js portfolio website
-- **Backend**: Express.js API for content management
-- **Admin**: React-based CMS for content administration
+| Package | Stack | Dev port |
+|---------|-------|----------|
+| `packages/frontend` | Next.js 14, Tailwind | [http://localhost:3000](http://localhost:3000) |
+| `packages/backend` | Express, TypeScript | [http://localhost:3001](http://localhost:3001) |
+| `packages/admin` | Vite, React | [http://localhost:3002](http://localhost:3002) |
 
-## Features
-
-- 🏠 **Homepage**: Professional introduction and overview
-- 💼 **Projects**: Showcase of development work
-- 📚 **Learning**: Track current learning and completed skills
-- 🏢 **Work History**: Professional experience timeline
-- 📝 **Blog**: Technical articles and thoughts
-- ⚙️ **Admin CMS**: Content management system
-
-## Quick Start
+## Quick start
 
 ```bash
-# Install dependencies
 npm install
-
-# Start all services in development
 npm run dev
-
-# Access the applications
-# Frontend: http://localhost:3000
-# Backend API: http://localhost:3001
-# Admin CMS: http://localhost:3002
 ```
 
-## Tech Stack
+- **API**: `http://localhost:3001/api`
+- **Production API**: `https://api.william-malone.com/api` (see [docs/VERCEL_ENV_SETUP.md](./docs/VERCEL_ENV_SETUP.md))
 
-- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Express.js, TypeScript
-- **Database**: SQLite (development), PostgreSQL (production)
-- **Admin**: React, TypeScript, Tailwind CSS
-- **Deployment**: Vercel (frontend), Railway (backend)
+## Repo layout
 
-## Development
+- **`sql/`** — Supabase schema (`database_setup.sql`), seeds, and migration helpers ([sql/README.md](./sql/README.md))
+- **`docs/`** — Setup, deployment, testing, and troubleshooting ([docs/README.md](./docs/README.md))
+- **`cypress/`** — E2E tests (`npm run test:e2e`)
+- **`scripts/`** — Vercel-related shell helpers
 
-Each package has its own README with specific setup instructions.
+## Tech stack
 
-## Author
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS  
+- **Backend**: Node.js, Express, Supabase (PostgreSQL + Auth)  
+- **Deployment**: Vercel (see [docs/VERCEL_DEPLOYMENT.md](./docs/VERCEL_DEPLOYMENT.md))
 
-**Demi Taylor Nimmo** - Full Stack Software Engineer
+## Documentation
+
+Start with [docs/DATABASE_SETUP.md](./docs/DATABASE_SETUP.md) for a new database, then [docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md) for going live.
+
+## Database setup (short path)
+
+1. In Supabase SQL editor, run `sql/database_setup.sql`, then `sql/seed_data.sql`.
+2. Copy env vars from the Supabase dashboard into `packages/backend/.env.development` (see [docs/DATABASE_SETUP.md](./docs/DATABASE_SETUP.md)).

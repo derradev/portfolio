@@ -229,14 +229,14 @@ const Learning = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>🛡️ Cybersecurity Learning</h1>
-          <p className="mt-2 text-gray-600 font-medium">
+          <h1 className="text-3xl font-bold gradient-text">🛡️ Cybersecurity Learning</h1>
+          <p className="mt-2 text-gray-400 font-medium">
             Manage your security certifications and technical skills 🔐
           </p>
         </div>
         <button
           onClick={() => openModal()}
-          className="btn-primary floating-hearts"
+          className="btn-primary"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add {activeTab === 'learning' ? 'Learning Item' : 'Skill'}
@@ -278,7 +278,7 @@ const Learning = () => {
             <div className="flex justify-center items-center h-64">
               <div className="text-center">
                 <div className="spinner mx-auto mb-4"></div>
-                <p className="text-gray-600 font-medium">Loading your learning journey... 📚</p>
+                <p className="text-gray-400 font-medium">Loading your learning journey... 📚</p>
               </div>
             </div>
           ) : (
@@ -359,14 +359,14 @@ const Learning = () => {
             <div className="col-span-full flex justify-center items-center h-64">
               <div className="text-center">
                 <div className="spinner mx-auto mb-4"></div>
-                <p className="text-gray-600 font-medium">Loading your amazing skills... ✨</p>
+                <p className="text-gray-400 font-medium">Loading your amazing skills... ✨</p>
               </div>
             </div>
           ) : (
             skills?.map((skill) => (
               <div key={skill.id} className="card p-6 hover:scale-105 transition-all duration-300">
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-800" style={{ fontFamily: 'Poppins, sans-serif' }}>{skill.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>{skill.name}</h3>
                   <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
                     skill.level === 'advanced' ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white' :
                     skill.level === 'intermediate' ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white' :
@@ -430,7 +430,7 @@ const Learning = () => {
                         {learningErrors.title && <p className="text-red-500 text-sm mt-1">{learningErrors.title.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Description</label>
+                        <label className="block text-sm font-medium text-gray-300">Description</label>
                         <textarea
                           {...registerLearning('description', { required: 'Description is required' })}
                           rows={3}
@@ -439,7 +439,7 @@ const Learning = () => {
                         {learningErrors.description && <p className="text-red-600 text-sm">{learningErrors.description.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Category</label>
+                        <label className="block text-sm font-medium text-gray-300">Category</label>
                         <input
                           {...registerLearning('category', { required: 'Category is required' })}
                           type="text"
@@ -448,7 +448,7 @@ const Learning = () => {
                         {learningErrors.category && <p className="text-red-600 text-sm">{learningErrors.category.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Progress (%)</label>
+                        <label className="block text-sm font-medium text-gray-300">Progress (%)</label>
                         <input
                           {...registerLearning('progress', { required: 'Progress is required', min: 0, max: 100 })}
                           type="number"
@@ -459,7 +459,7 @@ const Learning = () => {
                         {learningErrors.progress && <p className="text-red-600 text-sm">{learningErrors.progress.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Start Date</label>
+                        <label className="block text-sm font-medium text-gray-300">Start Date</label>
                         <input
                           {...registerLearning('start_date', { required: 'Start date is required' })}
                           type="date"
@@ -468,7 +468,7 @@ const Learning = () => {
                         {learningErrors.start_date && <p className="text-red-600 text-sm">{learningErrors.start_date.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Estimated Completion</label>
+                        <label className="block text-sm font-medium text-gray-300">Estimated Completion</label>
                         <input
                           {...registerLearning('estimated_completion')}
                           type="date"
@@ -476,7 +476,7 @@ const Learning = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Resources (comma-separated)</label>
+                        <label className="block text-sm font-medium text-gray-300">Resources (comma-separated)</label>
                         <input
                           {...registerLearning('resources')}
                           type="text"
@@ -485,7 +485,7 @@ const Learning = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Status</label>
+                        <label className="block text-sm font-medium text-gray-300">Status</label>
                         <select
                           {...registerLearning('status')}
                           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
@@ -531,7 +531,7 @@ const Learning = () => {
                   <div className="modal-body">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Name *</label>
+                        <label className="block text-sm font-medium text-gray-300">Name *</label>
                         <input
                           {...registerSkill('name', { required: 'Name is required' })}
                           type="text"
@@ -541,7 +541,7 @@ const Learning = () => {
                         {skillErrors.name && <p className="text-red-600 text-sm">{skillErrors.name.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Description</label>
+                        <label className="block text-sm font-medium text-gray-300">Description</label>
                         <textarea
                           {...registerSkill('description')}
                           rows={3}
@@ -551,7 +551,7 @@ const Learning = () => {
                         {skillErrors.description && <p className="text-red-600 text-sm">{skillErrors.description.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Category *</label>
+                        <label className="block text-sm font-medium text-gray-300">Category *</label>
                         <input
                           {...registerSkill('category', { required: 'Category is required' })}
                           type="text"
@@ -561,7 +561,7 @@ const Learning = () => {
                         {skillErrors.category && <p className="text-red-600 text-sm">{skillErrors.category.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Level *</label>
+                        <label className="block text-sm font-medium text-gray-300">Level *</label>
                         <select
                           {...registerSkill('level', { required: 'Level is required' })}
                           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"

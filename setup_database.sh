@@ -14,8 +14,8 @@ if ! command -v supabase &> /dev/null; then
 fi
 
 # Check if we're in the right directory
-if [ ! -f "database_setup.sql" ]; then
-    echo "❌ database_setup.sql not found. Please run this from the project root."
+if [ ! -f "sql/database_setup.sql" ]; then
+    echo "❌ sql/database_setup.sql not found. Please run this from the project root."
     exit 1
 fi
 
@@ -45,7 +45,7 @@ case $choice in
     3)
         echo "📝 Inserting sample data only..."
         # This would require manual execution or using supabase client
-        echo "⚠️  Please run the seed_data.sql manually in your Supabase dashboard"
+        echo "⚠️  Please run sql/seed_data.sql manually in your Supabase dashboard"
         echo "📊 Supabase Dashboard: https://app.supabase.com"
         ;;
     4)

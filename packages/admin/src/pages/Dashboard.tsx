@@ -26,49 +26,51 @@ const Dashboard = () => {
 
   const statCards = [
     {
-      name: '🛡️ Security Projects',
+      name: 'Projects',
       value: stats?.projects || 0,
       icon: Briefcase,
-      color: 'bg-gradient-to-r from-blue-400 to-blue-600',
+      color: 'bg-gradient-to-r from-cyan-500 to-blue-600',
     },
     {
-      name: '🔐 Learning Items',
+      name: 'Learning',
       value: stats?.learning || 0,
       icon: BookOpen,
-      color: 'bg-gradient-to-r from-green-400 to-emerald-600',
+      color: 'bg-gradient-to-r from-emerald-500 to-cyan-600',
     },
     {
-      name: '📝 Security Blog',
+      name: 'Blog posts',
       value: stats?.blogPosts || 0,
       icon: FileText,
-      color: 'bg-gradient-to-r from-blue-500 to-blue-700',
+      color: 'bg-gradient-to-r from-blue-500 to-indigo-600',
     },
     {
-      name: '👥 Work Experience',
+      name: 'Work history',
       value: stats?.workHistory || 0,
       icon: Users,
-      color: 'bg-gradient-to-r from-orange-400 to-orange-600',
+      color: 'bg-gradient-to-r from-amber-500 to-orange-600',
     },
     {
-      name: '🎓 Education',
+      name: 'Education',
       value: stats?.education || 0,
       icon: GraduationCap,
-      color: 'bg-gradient-to-r from-cyan-500 to-cyan-700',
+      color: 'bg-gradient-to-r from-cyan-400 to-blue-500',
     },
     {
-      name: '🏆 Certifications',
+      name: 'Certifications',
       value: stats?.certifications || 0,
       icon: Award,
-      color: 'bg-gradient-to-r from-indigo-400 to-indigo-600',
+      color: 'bg-gradient-to-r from-indigo-500 to-violet-600',
     },
   ]
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold gradient-text" style={{ fontFamily: 'Playfair Display, serif' }}>🛡️ Security Dashboard</h1>
-        <p className="mt-2 text-gray-600 font-medium">
-          Overview of your cybersecurity portfolio and IT career progression 🔐
+        <h1 className="text-3xl sm:text-4xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          Dashboard · <span className="gradient-text">Overview</span>
+        </h1>
+        <p className="mt-2 text-gray-400 font-medium max-w-2xl">
+          Content counts for your public portfolio at william-malone.com
         </p>
       </div>
 
@@ -86,10 +88,10 @@ const Dashboard = () => {
                 </div>
                 <div className="ml-4 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-600 truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <dt className="text-sm font-medium text-gray-400 truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
                       {item.name}
                     </dt>
-                    <dd className="text-2xl font-bold text-gray-800" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <dd className="text-2xl font-bold text-gray-100">
                       {item.value}
                     </dd>
                   </dl>
@@ -102,8 +104,8 @@ const Dashboard = () => {
 
       {/* Quick Actions */}
       <div className="card p-6">
-        <h3 className="text-xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-          🚀 Quick Actions
+        <h3 className="text-xl font-bold gradient-text mb-6">
+          Quick actions
         </h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <a
@@ -118,10 +120,10 @@ const Dashboard = () => {
               <div className="mt-4">
                 <h3 className="text-lg font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   <span className="absolute inset-0" aria-hidden="true" />
-                  💼 Manage Projects
+                  Manage projects
                 </h3>
                 <p className="mt-2 text-sm text-gray-400">
-                  Add, edit, or remove projects from your portfolio ✨
+                  Add, edit, or remove portfolio projects
                 </p>
               </div>
             </a>
@@ -138,10 +140,10 @@ const Dashboard = () => {
               <div className="mt-4">
                 <h3 className="text-lg font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   <span className="absolute inset-0" aria-hidden="true" />
-                  📝 Write Blog Post
+                  Blog posts
                 </h3>
                 <p className="mt-2 text-sm text-gray-400">
-                  Create and publish new blog articles 💖
+                  Create and publish articles
                 </p>
               </div>
             </a>
@@ -158,10 +160,10 @@ const Dashboard = () => {
               <div className="mt-4">
                 <h3 className="text-lg font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   <span className="absolute inset-0" aria-hidden="true" />
-                  📚 Update Learning
+                  Learning
                 </h3>
                 <p className="mt-2 text-sm text-gray-400">
-                  Track your learning progress and add new skills 🌟
+                  Update learning items and skills
                 </p>
               </div>
             </a>
@@ -178,10 +180,10 @@ const Dashboard = () => {
               <div className="mt-4">
                 <h3 className="text-lg font-bold text-gray-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   <span className="absolute inset-0" aria-hidden="true" />
-                  🎓 Manage Education
+                  Education
                 </h3>
                 <p className="mt-2 text-sm text-gray-400">
-                  Add and update your educational background 📖
+                  Manage education entries
                 </p>
               </div>
             </a>
@@ -190,23 +192,23 @@ const Dashboard = () => {
 
       {/* Portfolio Stats */}
       <div className="card p-6">
-        <h3 className="text-xl font-bold gradient-text mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-          📊 Portfolio Overview
+        <h3 className="text-xl font-bold gradient-text mb-6">
+          Publishing
         </h3>
         <div className="space-y-5">
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl">
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl border border-[var(--border-color)]">
             <span className="text-sm font-medium text-gray-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              🚀 Published Blog Posts
+              Published blog posts
             </span>
-            <span className="text-lg font-bold text-cyan-400" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <span className="text-lg font-bold text-cyan-400">
               {stats?.publishedPosts || 0} / {stats?.blogPosts || 0}
             </span>
           </div>
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-900/30 to-indigo-900/30 rounded-xl">
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-900/30 to-indigo-900/30 rounded-xl border border-[var(--border-color)]">
             <span className="text-sm font-medium text-gray-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              ✨ Total Content Items
+              Total content items
             </span>
-            <span className="text-lg font-bold text-blue-400" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <span className="text-lg font-bold text-blue-400">
               {(stats?.projects || 0) + (stats?.learning || 0) + (stats?.blogPosts || 0) + (stats?.workHistory || 0) + (stats?.education || 0) + (stats?.certifications || 0)}
             </span>
           </div>
